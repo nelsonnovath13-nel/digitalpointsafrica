@@ -86,7 +86,7 @@ export default function Header() {
           {links.map((item, index) => {
             const active = isActive(item);
             const isHovered = hovered === item.label;
-            const responsiveColor = isHovered || active ? item.accent : scrolled ? "#050b1f" : "#050b1f";
+            const responsiveColor = isHovered || active ? item.accent : "#050b1f";
             const shouldGlow = isHovered || active;
 
             const commonClass =
@@ -108,7 +108,6 @@ export default function Header() {
               >
                 {item.label}
 
-                {/* Soft cursor-responsive color aura. */}
                 <motion.span
                   aria-hidden="true"
                   className="pointer-events-none absolute -inset-x-2 -inset-y-1 -z-10 rounded-full"
@@ -124,7 +123,6 @@ export default function Header() {
                   transition={{ duration: 0.22, ease: "easeOut" }}
                 />
 
-                {/* Hover-only indicator. */}
                 <motion.span
                   aria-hidden="true"
                   className="pointer-events-none absolute -bottom-1 left-0 right-0 h-[2px] origin-center rounded-full"
@@ -141,7 +139,6 @@ export default function Header() {
                   transition={{ duration: 0.2, ease: "easeOut" }}
                 />
 
-                {/* Persistent active/clicked indicator. */}
                 {active && (
                   <motion.span
                     layoutId="active-nav-indicator"
