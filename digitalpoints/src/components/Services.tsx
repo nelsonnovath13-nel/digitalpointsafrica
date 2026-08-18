@@ -1,5 +1,5 @@
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const services = [
   {
@@ -123,10 +123,8 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
 export default function Services() {
   const introRef = useRef<HTMLElement>(null);
   const showcaseRef = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.35 });
-  useMotionValueEvent(scrollYProgress, "change", (latest) => setActive(Math.min(services.length - 1, Math.floor(latest * services.length))));
 
   return (
     <>
@@ -143,7 +141,6 @@ export default function Services() {
         <div className="sticky top-0 h-screen overflow-hidden px-4 py-4 sm:px-7 sm:py-6 lg:px-10 lg:py-7"><div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-70" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.13) 1.1px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent 45%, black)", WebkitMaskImage: "linear-gradient(90deg, black, transparent 45%, black)" }} />
           <div className="relative z-10 mx-auto flex h-full max-w-[1500px] flex-col"><div className="shrink-0 px-1 pt-2 sm:px-2 sm:pt-3"><p className="font-poppins text-[10px] font-medium uppercase tracking-[0.34em] text-[#08bdb8] sm:text-xs sm:tracking-[0.38em]">What We Do</p><h2 className="mt-1 font-display text-[clamp(3.4rem,8vw,6.8rem)] font-semibold leading-[0.82] tracking-[-0.07em] text-black sm:mt-1.5">Our Services</h2></div>
             <div className="relative mt-2 min-h-0 flex-1 sm:mt-3 lg:mt-4"><div className="relative h-full w-full overflow-hidden rounded-[26px] sm:rounded-[32px] lg:rounded-[38px]">{services.map((service, index) => <ServiceCard key={service.title} service={service} index={index} progress={smoothProgress} />)}</div></div>
-            <div className="flex shrink-0 items-center justify-between gap-5 px-1 pt-2 sm:px-2 sm:pt-3"><p className="font-poppins text-[9px] font-medium uppercase tracking-[0.18em] text-black/35 sm:text-[10px] sm:tracking-[0.22em]">Scroll to explore</p><div className="flex items-center gap-1.5" aria-hidden="true">{services.map((service, index) => <motion.span key={service.title} animate={{ width: index === active ? 26 : 7, opacity: index === active ? 1 : 0.22 }} transition={{ duration: 0.25 }} className="block h-1.5 rounded-full bg-[#08bdb8]" />)}</div></div>
           </div>
         </div>
       </section>
