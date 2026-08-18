@@ -108,10 +108,10 @@ export default function Services() {
                   scale: 1.025,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[235px] w-[175px] items-start justify-start bg-[#211f1f] p-6 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[255px] sm:w-[190px] sm:p-7 lg:h-[285px] lg:w-[215px] lg:p-8 ${card.position}`}
+                className={`absolute flex h-[190px] w-[140px] items-start justify-start bg-[#211f1f] p-5 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[210px] sm:w-[155px] sm:p-6 lg:h-[250px] lg:w-[185px] lg:p-7 ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[1.4rem] font-normal tracking-[-0.035em] sm:text-[1.55rem] lg:text-[1.7rem]">
+                <span className="font-display text-[1.25rem] font-normal tracking-[-0.035em] sm:text-[1.4rem] lg:text-[1.55rem]">
                   {card.label}
                 </span>
 
@@ -136,7 +136,7 @@ export default function Services() {
           </motion.div>
         </div>
 
-        <div className="mt-0 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+        <div className="-translate-y-3 mt-0 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
           {services.map((service, index) => (
             <motion.div
               key={service}
