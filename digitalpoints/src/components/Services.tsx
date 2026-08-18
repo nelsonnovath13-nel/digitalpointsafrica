@@ -15,7 +15,7 @@ const brandTeal = "#08bdb8";
 const cards = [
   {
     label: "CREATE",
-    desktopPosition: "left-[0%] top-[30%]",
+    desktopPosition: "lg:left-[0%] lg:top-[30%]",
     mobilePosition: "left-[2%] top-[8%]",
     rotate: 9,
     hoverRotate: 5,
@@ -25,7 +25,7 @@ const cards = [
   },
   {
     label: "BRAND",
-    desktopPosition: "right-[0%] top-[0%]",
+    desktopPosition: "lg:right-[0%] lg:top-[0%]",
     mobilePosition: "right-[2%] top-[0%]",
     rotate: -10,
     hoverRotate: -6,
@@ -35,7 +35,7 @@ const cards = [
   },
   {
     label: "PROMOTE",
-    desktopPosition: "left-[38%] bottom-[0%]",
+    desktopPosition: "lg:left-[38%] lg:bottom-[0%]",
     mobilePosition: "left-[25%] bottom-[4%]",
     rotate: 8,
     hoverRotate: 4,
@@ -67,7 +67,7 @@ function FloatingCard({ card, index }: { card: (typeof cards)[number]; index: nu
         delay: 0.12 + index * 0.14,
         ease: [0.22, 1, 0.36, 1],
       }}
-      style={{ x, y, rotate }}
+      style={{ x, y, rotate, transformOrigin: "center" }}
       whileHover={{
         scale: 1.045,
         rotate: card.hoverRotate,
@@ -75,12 +75,6 @@ function FloatingCard({ card, index }: { card: (typeof cards)[number]; index: nu
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
       }}
       className={`absolute flex h-[98px] w-[138px] items-start justify-start bg-[#211f1f] p-3.5 text-white shadow-[0_18px_35px_rgba(0,0,0,0.12)] sm:h-[118px] sm:w-[160px] sm:p-5 lg:h-[125px] lg:w-[170px] lg:p-5 ${card.mobilePosition} ${card.desktopPosition}`}
-      style={{
-        x,
-        y,
-        rotate,
-        transformOrigin: "center",
-      }}
     >
       <span className="font-display text-[0.72rem] font-normal tracking-[-0.035em] sm:text-[0.9rem] lg:text-[0.95rem]">
         {card.label}
