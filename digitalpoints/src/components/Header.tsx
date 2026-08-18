@@ -22,6 +22,7 @@ const links: NavItem[] = [
 export default function Header() {
   const { pathname, hash } = useLocation();
   const isHome = pathname === "/";
+
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);

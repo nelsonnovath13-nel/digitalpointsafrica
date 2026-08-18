@@ -1,76 +1,191 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+const rotatingWords = [
+  "DESIGN",
+  "MARKETING",
+  "VIDEO",
+  "PRINTING",
+  "BRANDING",
+  "EMBROIDERY",
+];
+
+const ROTATE_INTERVAL_MS = 2800;
+const FLASH_DURATION_MS = 260;
+
+const HERO_BG_URL = "/hero-bg.jpg";
 
 export default function Hero() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isFlashing, setIsFlashing] = useState(false);
+
+  useEffect(() => {
+    let flashTimeout: ReturnType<typeof setTimeout>;
+
+    const id = setInterval(() => {
+      // Camera flash starts
+      setIsFlashing(true);
+
+      // Change the word at the peak of the flash
+      flashTimeout = setTimeout(() => {
+        setWordIndex((i) => (i + 1) % rotatingWords.length);
+        setIsFlashing(false);
+      }, FLASH_DURATION_MS);
+    }, ROTATE_INTERVAL_MS);
+
+    return () => {
+      clearInterval(id);
+      clearTimeout(flashTimeout);
+    };
+  }, []);
+
   return (
-    <section className="relative min-h-[100svh] w-full overflow-hidden rounded-b-[2.5rem] bg-ink-950 sm:rounded-b-[4rem]">
-      {/* Gradient base */}
+    <section className="relative min-h-[100svh] w-full overflow-hidden bg-ink-950">
+      {/* Background photograph */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="absolute inset-0 scale-110 bg-[center_30%] bg-cover bg-no-repeat sm:bg-center"
         style={{
-          background:
-            "radial-gradient(120% 90% at 18% 8%, #0d564b 0%, #07090a 55%), linear-gradient(150deg, #0a8873 0%, #07090a 62%)",
+          backgroundImage: `url(${HERO_BG_URL})`,
+          filter: "blur(1.5px)",
         }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.06),transparent_55%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink-950/90" />
 
-      {/* Content — the wrapper itself never intercepts the pointer; only real
-         controls (links/buttons) opt back in with pointer-events-auto, so
-         the geometry field underneath still receives every mouse/touch event. */}
-      <div className="pointer-events-none relative z-10 mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center justify-center px-6 text-center">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="pointer-events-auto mb-6 inline-flex items-center gap-2 rounded-full border border-point-400/30 bg-point-500/10 px-4 py-1.5 text-xs font-medium tracking-wide text-point-200"
-        >
-          Digital Points · Tanzania → Africa
-        </motion.span>
+      {/* Turquoise brand overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundColor: "rgba(0, 199, 195, 0.74)",
+        }}
+      />
 
+      {/* Subtle center light */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(60% 45% at 50% 45%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 70%)",
+        }}
+      />
+
+      {/* Camera flash across the entire Hero */}
+      <AnimatePresence>
+        {isFlashing && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.35 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: FLASH_DURATION_MS / 1000,
+              ease: "easeOut",
+            }}
+            className="pointer-events-none absolute inset-0 z-20 bg-white"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Hero content */}
+      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col items-center justify-center px-6 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl"
+          className="font-display text-[2.2rem] font-semibold leading-[1.06] tracking-tight text-black sm:text-[3rem] md:text-[3.6rem] lg:text-[4.2rem] xl:text-[4.8rem]"
         >
-          We build the systems
-          <br />
-          your growth runs on
+          {/* LINE 1 */}
+          <span className="block whitespace-nowrap">
+            Everything your brand needs
+          </span>
+
+          {/* LINE 2 */}
+          <span className="block">
+            to succeed through
+          </span>
+
+          {/* LINE 3 — DYNAMIC WORD */}
+          <span className="relative block min-h-[1.06em]">
+            {/* Small camera burst behind the changing word */}
+            <AnimatePresence>
+              {isFlashing && (
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    scale: 0.6,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1.7,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 2,
+                  }}
+                  transition={{
+                    duration: FLASH_DURATION_MS / 1000,
+                    ease: "easeOut",
+                  }}
+                  className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[1.4em] w-[4em] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 25%, rgba(255,255,255,0) 70%)",
+                  }}
+                />
+              )}
+            </AnimatePresence>
+
+            {/* Dynamic word */}
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[wordIndex]}
+                initial={{
+                  opacity: 0,
+                  y: 12,
+                  scale: 0.96,
+                  filter: "blur(4px)",
+                  color: "#000000",
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
+                  color: isFlashing ? "#ffffff" : "#000000",
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -12,
+                  scale: 0.96,
+                  filter: "blur(4px)",
+                  color: "#ffffff",
+                }}
+                transition={{
+                  opacity: {
+                    duration: 0.4,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                  y: {
+                    duration: 0.4,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                  scale: {
+                    duration: 0.4,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                  filter: {
+                    duration: 0.4,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                  color: {
+                    duration: FLASH_DURATION_MS / 1000,
+                    ease: "easeOut",
+                  },
+                }}
+                className="relative z-10 inline-block font-extrabold"
+              >
+                {rotatingWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </span>
         </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.22 }}
-          className="mt-6 max-w-xl text-balance text-base text-white/60 sm:text-lg"
-        >
-          Media production, digital products and AI automation for businesses
-          across Tanzania and Africa — engineered to turn attention into
-          customers.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.34 }}
-          className="pointer-events-auto mt-10 flex flex-col items-center gap-4 sm:flex-row"
-        >
-          <a
-            href="https://wa.me/255714214247"
-            target="_blank"
-            rel="noreferrer"
-            className="group inline-flex items-center gap-2 rounded-full bg-point-500 px-7 py-3.5 text-sm font-semibold text-ink-950 transition hover:bg-point-400"
-          >
-            Chat on WhatsApp
-            <span className="transition group-hover:translate-x-0.5">→</span>
-          </a>
-          <a
-            href="#work"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-white/85 transition hover:border-white/30 hover:bg-white/5"
-          >
-            View Our Work
-          </a>
-        </motion.div>
       </div>
     </section>
   );
