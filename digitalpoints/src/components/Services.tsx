@@ -12,9 +12,9 @@ const services = [
 const brandTeal = "#08bdb8";
 
 const cards = [
-  { label: "CREATE", position: "left-[6%] top-[18%]", rotate: 9, hoverRotate: 5 },
-  { label: "BRAND", position: "right-[4%] top-[0%]", rotate: -10, hoverRotate: -6 },
-  { label: "PROMOTE", position: "right-[13%] bottom-[3%]", rotate: 9, hoverRotate: 5 },
+  { label: "CREATE", position: "left-[2%] top-[18%]", rotate: 9, hoverRotate: 5 },
+  { label: "BRAND", position: "right-[21%] top-[0%]", rotate: -10, hoverRotate: -6 },
+  { label: "PROMOTE", position: "right-[28%] bottom-[3%]", rotate: 9, hoverRotate: 5 },
 ];
 
 export default function Services() {
@@ -108,10 +108,10 @@ export default function Services() {
                   scale: 1.025,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[190px] w-[140px] items-start justify-start bg-[#211f1f] p-5 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[210px] sm:w-[155px] sm:p-6 lg:h-[250px] lg:w-[185px] lg:p-7 ${card.position}`}
+                className={`absolute flex h-[190px] w-[140px] items-start justify-start bg-[#211f1f] p-5 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[240px] sm:w-[210px] sm:p-6 lg:h-[315px] lg:w-[275px] lg:p-8 ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[1.25rem] font-normal tracking-[-0.035em] sm:text-[1.4rem] lg:text-[1.55rem]">
+                <span className="font-display text-[1.25rem] font-normal tracking-[-0.035em] sm:text-[1.45rem] lg:text-[1.7rem]">
                   {card.label}
                 </span>
 
