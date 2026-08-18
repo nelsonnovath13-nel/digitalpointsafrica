@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 type NavItem = {
   label: string;
@@ -33,30 +33,23 @@ export default function Header() {
     if (!isHome) return;
 
     const onScroll = () => {
-      setScrolledPastHero(
-        window.scrollY > Math.max(window.innerHeight - 120, 200)
-      );
+      setScrolledPastHero(window.scrollY > Math.max(window.innerHeight - 120, 200));
     };
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-
     return () => {
       document.body.style.overflow = "";
     };
   }, [open]);
 
   const isActive = (item: NavItem) => {
-    if (item.anchor) {
-      return isHome && hash === item.to;
-    }
-
+    if (item.anchor) return isHome && hash === item.to;
     return item.end ? pathname === item.to : pathname.startsWith(item.to);
   };
 
@@ -69,12 +62,11 @@ export default function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-[60] transition-all duration-300 ${
         scrolled
-          ? "border-b border-ink-950/5 bg-cream-50/90 backdrop-blur-md"
+          ? "border-b border-ink-950/10 bg-cream-50/90 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between px-8 lg:px-12">
-        {/* Logo */}
         <Link
           to="/"
           className="group flex shrink-0 items-center"
@@ -90,16 +82,12 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Desktop navigation */}
         <nav className="hidden items-center lg:flex" aria-label="Main navigation">
           {links.map((item, index) => {
             const active = isActive(item);
             const isHovered = hovered === item.label;
-            const textColor = active
-              ? item.accent
-              : scrolled
-                ? "#050b1f"
-                : "#000000";
+            const responsiveColor = isHovered || active ? item.accent : scrolled ? "#050b1f" : "#050b1f";
+            const shouldGlow = isHovered || active;
 
             const commonClass =
               "group relative whitespace-nowrap px-0.5 py-2 text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
@@ -107,38 +95,69 @@ export default function Header() {
             const content = (
               <motion.span
                 className="relative inline-flex items-center"
-                animate={{ color: textColor }}
-                whileHover={{ color: item.accent }}
-                transition={{ duration: 0.2 }}
+                animate={{
+                  color: responsiveColor,
+                  textShadow: shouldGlow
+                    ? `0 0 14px ${item.accent}55`
+                    : "0 0 0 rgba(0,0,0,0)",
+                }}
+                transition={{
+                  color: { duration: 0.22, ease: "easeOut" },
+                  textShadow: { duration: 0.25, ease: "easeOut" },
+                }}
               >
                 {item.label}
 
-                {/* Small professional color pulse on hover */}
+                {/* Soft cursor-responsive color aura. */}
                 <motion.span
                   aria-hidden="true"
-                  className="pointer-events-none absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
-                  style={{ backgroundColor: item.accent }}
-                  initial={{ opacity: 0, scale: 0 }}
+                  className="pointer-events-none absolute -inset-x-2 -inset-y-1 -z-10 rounded-full"
+                  style={{
+                    background: `radial-gradient(circle, ${item.accent}18 0%, transparent 72%)`,
+                  }}
+                  initial={{ opacity: 0, scale: 0.85 }}
                   animate={
-                    isHovered || active
-                      ? { opacity: 1, scale: active ? 1 : [1, 1.8, 1] }
-                      : { opacity: 0, scale: 0 }
+                    isHovered
+                      ? { opacity: 1, scale: 1 }
+                      : { opacity: 0, scale: 0.85 }
                   }
-                  transition={
-                    active
-                      ? { duration: 0.25 }
-                      : { duration: 0.55, repeat: isHovered ? Infinity : 0 }
-                  }
+                  transition={{ duration: 0.22, ease: "easeOut" }}
                 />
 
-                {/* Clear active/clicked indicator */}
+                {/* Hover-only indicator. */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-1 left-0 right-0 h-[2px] origin-center rounded-full"
+                  style={{
+                    backgroundColor: item.accent,
+                    boxShadow: `0 0 9px ${item.accent}70`,
+                  }}
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={
+                    isHovered && !active
+                      ? { opacity: 1, scaleX: 1 }
+                      : { opacity: 0, scaleX: 0 }
+                  }
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                />
+
+                {/* Persistent active/clicked indicator. */}
                 {active && (
                   <motion.span
                     layoutId="active-nav-indicator"
                     aria-hidden="true"
                     className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full"
-                    style={{ backgroundColor: item.accent }}
-                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    style={{
+                      backgroundColor: item.accent,
+                      boxShadow: `0 0 8px ${item.accent}80`,
+                    }}
+                    initial={{ opacity: 0, scaleX: 0.35 }}
+                    animate={{ opacity: 1, scaleX: 1 }}
+                    transition={{
+                      opacity: { duration: 0.18 },
+                      scaleX: { type: "spring", stiffness: 500, damping: 35 },
+                      layout: { type: "spring", stiffness: 500, damping: 35 },
+                    }}
                   />
                 )}
               </motion.span>
@@ -149,12 +168,8 @@ export default function Header() {
                 {index > 0 && (
                   <span
                     aria-hidden="true"
-                    className={`mx-4 select-none text-[17px] font-light leading-none transition-colors duration-300 ${
-                      isHovered || active
-                        ? "text-black/45"
-                        : scrolled
-                          ? "text-ink-950/35"
-                          : "text-black/50"
+                    className={`mx-4 select-none text-[17px] font-light leading-none transition-colors duration-200 ${
+                      scrolled ? "text-ink-950/35" : "text-black/45"
                     }`}
                   >
                     |
@@ -176,11 +191,7 @@ export default function Header() {
                     onMouseEnter={() => setHovered(item.label)}
                     onMouseLeave={() => setHovered(null)}
                   >
-                    <NavLink
-                      to={item.to}
-                      end={item.end}
-                      className={commonClass}
-                    >
+                    <NavLink to={item.to} end={item.end} className={commonClass}>
                       {content}
                     </NavLink>
                   </motion.div>
@@ -190,16 +201,13 @@ export default function Header() {
           })}
         </nav>
 
-        {/* Mobile menu button */}
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
           className={`flex h-10 w-10 items-center justify-center border lg:hidden ${
-            scrolled
-              ? "border-ink-950/20 text-ink-950"
-              : "border-black/25 text-black"
+            scrolled ? "border-ink-950/20 text-ink-950" : "border-black/25 text-black"
           }`}
         >
           <span className="relative block h-3.5 w-5">
@@ -217,7 +225,6 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile navigation */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -233,9 +240,7 @@ export default function Header() {
 
                 return (
                   <div key={item.label}>
-                    {index > 0 && (
-                      <div className="h-px bg-ink-950/10" />
-                    )}
+                    {index > 0 && <div className="h-px bg-ink-950/10" />}
 
                     {item.anchor ? (
                       <a
@@ -247,8 +252,11 @@ export default function Header() {
                         {item.label}
                         {active && (
                           <span
-                            className="h-1.5 w-1.5 rounded-full"
-                            style={{ backgroundColor: item.accent }}
+                            className="h-1.5 w-8 rounded-full"
+                            style={{
+                              backgroundColor: item.accent,
+                              boxShadow: `0 0 8px ${item.accent}70`,
+                            }}
                           />
                         )}
                       </a>
@@ -265,8 +273,11 @@ export default function Header() {
                         {item.label}
                         {active && (
                           <span
-                            className="h-1.5 w-1.5 rounded-full"
-                            style={{ backgroundColor: item.accent }}
+                            className="h-1.5 w-8 rounded-full"
+                            style={{
+                              backgroundColor: item.accent,
+                              boxShadow: `0 0 8px ${item.accent}70`,
+                            }}
                           />
                         )}
                       </NavLink>
