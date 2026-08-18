@@ -35,7 +35,7 @@ const tiles = [
 
 export default function ImageMosaic() {
   return (
-    <section className="relative z-10 -mt-8 bg-cream-50 px-6 pb-24 pt-2 sm:-mt-14">
+    <section className="relative z-10 bg-cream-50 px-6 pb-24 pt-8 sm:pt-10">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-col gap-2 sm:mb-10">
           <span className="text-xs font-medium uppercase tracking-[0.25em] text-point-600">
