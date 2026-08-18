@@ -2,209 +2,277 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-const serviceLinks = [
-  { to: "/services", label: "All Services" },
-  { to: "/training", label: "Training Programs" },
-  { to: "/consultation", label: "Digital Consultation" },
-  { to: "/printing", label: "Printing Services" },
-  { to: "/maintenance", label: "Website Maintenance" },
-];
+type NavItem = {
+  label: string;
+  to: string;
+  end?: boolean;
+  anchor?: boolean;
+  accent: string;
+};
 
-const links = [
-  { to: "/", label: "Home", end: true },
-  { to: "/portfolio", label: "Portfolio" },
-  { to: "/case-studies", label: "Case Studies" },
-  { to: "/video-production", label: "Video Production" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+const links: NavItem[] = [
+  { to: "/", label: "HOME", end: true, accent: "#00c7c3" },
+  { to: "/about", label: "ABOUT US", accent: "#2d8cff" },
+  { to: "/video-production", label: "VIDEO PRODUCTION", accent: "#8a4dff" },
+  { to: "#embroidery", label: "EMBROIDERY", anchor: true, accent: "#f59e0b" },
+  { to: "#promotion", label: "PROMOTION", anchor: true, accent: "#ec4899" },
+  { to: "/contact", label: "CONTACTS", accent: "#10b981" },
 ];
 
 export default function Header() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const isHome = pathname === "/";
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [open, setOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
 
-  // Only the homepage has a dark full-bleed Hero under the header — everywhere
-  // else the page starts on the cream background immediately, so the header
-  // should always render in its solid/dark-text state on those routes.
   const scrolled = !isHome || scrolledPastHero;
 
   useEffect(() => {
     if (!isHome) return;
-    const onScroll = () => setScrolledPastHero(window.scrollY > Math.max(window.innerHeight - 120, 200));
+
+    const onScroll = () => {
+      setScrolledPastHero(
+        window.scrollY > Math.max(window.innerHeight - 120, 200)
+      );
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [open]);
 
-  const navTextClass = scrolled ? "text-ink-950/70 hover:text-ink-950" : "text-white/80 hover:text-white";
-  const navActiveClass = scrolled ? "text-point-700" : "text-point-200";
+  const isActive = (item: NavItem) => {
+    if (item.anchor) {
+      return isHome && hash === item.to;
+    }
+
+    return item.end ? pathname === item.to : pathname.startsWith(item.to);
+  };
+
+  const getAnchorHref = (item: NavItem) => {
+    if (!item.anchor) return item.to;
+    return isHome ? item.to : `/${item.to}`;
+  };
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-[60] transition-colors duration-300 ${
-        scrolled ? "border-b border-ink-950/5 bg-cream-50/90 backdrop-blur-md" : "bg-transparent"
+      className={`fixed inset-x-0 top-0 z-[60] transition-all duration-300 ${
+        scrolled
+          ? "border-b border-ink-950/5 bg-cream-50/90 backdrop-blur-md"
+          : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
+      <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between px-8 lg:px-12">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="group flex shrink-0 items-center"
+          onClick={() => setOpen(false)}
+          aria-label="Digital Points Home"
+        >
           <span
-            className={`font-display text-lg font-semibold tracking-tight transition-colors ${
-              scrolled ? "text-ink-950" : "text-white"
+            className={`font-display text-[1.55rem] font-semibold tracking-tight transition-colors duration-300 ${
+              scrolled ? "text-ink-950" : "text-black"
             }`}
           >
             Digital<span className="text-point-400">Points</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          <div
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
-          >
-            <NavLink
-              to="/services"
-              className={({ isActive }) =>
-                `sweep-underline text-sm font-medium transition ${isActive ? navActiveClass : navTextClass}`
-              }
-            >
-              Services
-            </NavLink>
-            <AnimatePresence>
-              {servicesOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute left-1/2 top-full w-56 -translate-x-1/2 pt-3"
-                >
-                  <div className="rounded-2xl border border-ink-950/5 bg-white p-2 shadow-xl">
-                    {serviceLinks.map((l) => (
-                      <Link
-                        key={l.to}
-                        to={l.to}
-                        className="flex items-center gap-2.5 rounded-lg px-4 py-2.5 text-sm text-ink-950/75 transition hover:bg-cream-100 hover:text-point-700"
-                      >
-                        <span className="h-1.5 w-1.5 rounded-full bg-point-400" />
-                        {l.label}
-                      </Link>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.end}
-              className={({ isActive }) =>
-                `sweep-underline text-sm font-medium transition ${isActive ? navActiveClass : navTextClass}`
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
+        {/* Desktop navigation */}
+        <nav className="hidden items-center lg:flex" aria-label="Main navigation">
+          {links.map((item, index) => {
+            const active = isActive(item);
+            const isHovered = hovered === item.label;
+            const textColor = active
+              ? item.accent
+              : scrolled
+                ? "#050b1f"
+                : "#000000";
+
+            const commonClass =
+              "group relative whitespace-nowrap px-0.5 py-2 text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
+
+            const content = (
+              <motion.span
+                className="relative inline-flex items-center"
+                animate={{ color: textColor }}
+                whileHover={{ color: item.accent }}
+                transition={{ duration: 0.2 }}
+              >
+                {item.label}
+
+                {/* Small professional color pulse on hover */}
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
+                  style={{ backgroundColor: item.accent }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={
+                    isHovered || active
+                      ? { opacity: 1, scale: active ? 1 : [1, 1.8, 1] }
+                      : { opacity: 0, scale: 0 }
+                  }
+                  transition={
+                    active
+                      ? { duration: 0.25 }
+                      : { duration: 0.55, repeat: isHovered ? Infinity : 0 }
+                  }
+                />
+
+                {/* Clear active/clicked indicator */}
+                {active && (
+                  <motion.span
+                    layoutId="active-nav-indicator"
+                    aria-hidden="true"
+                    className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full"
+                    style={{ backgroundColor: item.accent }}
+                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                  />
+                )}
+              </motion.span>
+            );
+
+            return (
+              <div key={item.label} className="flex items-center">
+                {index > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className={`mx-4 select-none text-[17px] font-light leading-none transition-colors duration-300 ${
+                      isHovered || active
+                        ? "text-black/45"
+                        : scrolled
+                          ? "text-ink-950/35"
+                          : "text-black/50"
+                    }`}
+                  >
+                    |
+                  </span>
+                )}
+
+                {item.anchor ? (
+                  <motion.a
+                    href={getAnchorHref(item)}
+                    className={commonClass}
+                    onMouseEnter={() => setHovered(item.label)}
+                    onMouseLeave={() => setHovered(null)}
+                    onClick={() => setOpen(false)}
+                  >
+                    {content}
+                  </motion.a>
+                ) : (
+                  <motion.div
+                    onMouseEnter={() => setHovered(item.label)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    <NavLink
+                      to={item.to}
+                      end={item.end}
+                      className={commonClass}
+                    >
+                      {content}
+                    </NavLink>
+                  </motion.div>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <a
-            href="https://wa.me/255714214247"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden rounded-full bg-point-500 px-5 py-2.5 text-sm font-semibold text-ink-950 transition hover:bg-point-400 sm:inline-flex"
-          >
-            Chat on WhatsApp
-          </a>
-          <button
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border lg:hidden ${
-              scrolled ? "border-ink-950/15 text-ink-950" : "border-white/15 text-white"
-            }`}
-          >
-            <span className="relative block h-3 w-4">
-              <span
-                className={`absolute left-0 top-0 h-[1.5px] w-4 bg-current transition ${open ? "translate-y-[5px] rotate-45" : ""}`}
-              />
-              <span
-                className={`absolute left-0 bottom-0 h-[1.5px] w-4 bg-current transition ${open ? "-translate-y-[5px] -rotate-45" : ""}`}
-              />
-            </span>
-          </button>
-        </div>
+        {/* Mobile menu button */}
+        <button
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+          className={`flex h-10 w-10 items-center justify-center border lg:hidden ${
+            scrolled
+              ? "border-ink-950/20 text-ink-950"
+              : "border-black/25 text-black"
+          }`}
+        >
+          <span className="relative block h-3.5 w-5">
+            <span
+              className={`absolute left-0 top-0 h-px w-5 bg-current transition ${
+                open ? "translate-y-[6px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${
+                open ? "-translate-y-[6px] -rotate-45" : ""
+              }`}
+            />
+          </span>
+        </button>
       </div>
 
+      {/* Mobile navigation */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
             className="overflow-hidden border-t border-ink-950/10 bg-cream-50 lg:hidden"
           >
-            <nav className="flex flex-col px-6 py-4">
-              <button
-                onClick={() => setMobileServicesOpen((v) => !v)}
-                className="flex items-center justify-between border-b border-ink-950/5 py-3 text-sm font-medium text-ink-950/80"
-              >
-                Services
-                <span className={`transition ${mobileServicesOpen ? "rotate-180" : ""}`}>⌄</span>
-              </button>
-              <AnimatePresence>
-                {mobileServicesOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden pl-4"
-                  >
-                    {serviceLinks.map((l) => (
-                      <Link
-                        key={l.to}
-                        to={l.to}
+            <nav className="flex flex-col px-6 py-4" aria-label="Mobile navigation">
+              {links.map((item, index) => {
+                const active = isActive(item);
+
+                return (
+                  <div key={item.label}>
+                    {index > 0 && (
+                      <div className="h-px bg-ink-950/10" />
+                    )}
+
+                    {item.anchor ? (
+                      <a
+                        href={getAnchorHref(item)}
                         onClick={() => setOpen(false)}
-                        className="block border-b border-ink-950/5 py-3 text-sm text-ink-950/70"
+                        className="flex items-center justify-between py-4 text-sm font-medium transition-colors"
+                        style={{ color: active ? item.accent : "#050b1f" }}
                       >
-                        {l.label}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              {links.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.end}
-                  onClick={() => setOpen(false)}
-                  className="border-b border-ink-950/5 py-3 text-sm font-medium text-ink-950/80 last:border-none"
-                >
-                  {l.label}
-                </NavLink>
-              ))}
-              <a
-                href="https://wa.me/255714214247"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 rounded-full bg-point-500 px-5 py-3 text-center text-sm font-semibold text-ink-950"
-              >
-                Chat on WhatsApp
-              </a>
+                        {item.label}
+                        {active && (
+                          <span
+                            className="h-1.5 w-1.5 rounded-full"
+                            style={{ backgroundColor: item.accent }}
+                          />
+                        )}
+                      </a>
+                    ) : (
+                      <NavLink
+                        to={item.to}
+                        end={item.end}
+                        onClick={() => setOpen(false)}
+                        className="flex items-center justify-between py-4 text-sm font-medium transition-colors"
+                        style={({ isActive: routeActive }) => ({
+                          color: routeActive ? item.accent : "#050b1f",
+                        })}
+                      >
+                        {item.label}
+                        {active && (
+                          <span
+                            className="h-1.5 w-1.5 rounded-full"
+                            style={{ backgroundColor: item.accent }}
+                          />
+                        )}
+                      </NavLink>
+                    )}
+                  </div>
+                );
+              })}
             </nav>
           </motion.div>
         )}
