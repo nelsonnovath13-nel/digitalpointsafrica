@@ -13,9 +13,9 @@ const brandTeal = "#08bdb8";
 const ink = "#211f1f";
 
 const cards = [
-  { label: "CREATE", position: "left-[4%] top-[16%]", rotate: 9, hoverRotate: 5 },
-  { label: "BRAND", position: "right-[3%] top-[1%]", rotate: -10, hoverRotate: -6 },
-  { label: "PROMOTE", position: "right-[14%] bottom-[1%]", rotate: 9, hoverRotate: 5 },
+  { label: "CREATE", position: "left-[2%] top-[18%]", rotate: 9, hoverRotate: 5 },
+  { label: "BRAND", position: "right-[2%] top-[0%]", rotate: -10, hoverRotate: -6 },
+  { label: "PROMOTE", position: "right-[11%] bottom-[2%]", rotate: 9, hoverRotate: 5 },
 ];
 
 export default function Services() {
@@ -24,34 +24,35 @@ export default function Services() {
       id="services"
       className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[820px] lg:px-12 lg:py-14"
     >
-      {/* Client-style dotted edge texture. Kept behind the content and clearly visible. */}
+      {/* Soft dotted edge pattern from the client's reference. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0"
+        className="pointer-events-none absolute inset-0 z-0 opacity-90"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 0% 50%, rgba(50,55,55,0.13) 1.15px, transparent 1.25px), radial-gradient(circle at 100% 72%, rgba(50,55,55,0.07) 1px, transparent 1.15px)",
+            "radial-gradient(circle at 0% 48%, rgba(50,55,55,0.13) 1.15px, transparent 1.3px), radial-gradient(circle at 100% 72%, rgba(50,55,55,0.07) 1px, transparent 1.2px)",
           backgroundSize: "18px 18px, 20px 20px",
           maskImage:
-            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.55) 18%, transparent 34%, transparent 76%, rgba(0,0,0,0.28) 92%, black 100%)",
+            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.72) 18%, transparent 38%, transparent 72%, rgba(0,0,0,0.34) 92%, black 100%)",
           WebkitMaskImage:
-            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.55) 18%, transparent 34%, transparent 76%, rgba(0,0,0,0.28) 92%, black 100%)",
+            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.72) 18%, transparent 38%, transparent 72%, rgba(0,0,0,0.34) 92%, black 100%)",
         }}
       />
 
       <div className="relative z-10 mx-auto flex min-h-[740px] max-w-[1760px] flex-col">
-        <div className="grid flex-1 items-start gap-8 lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 xl:grid-cols-[1.1fr_0.9fr] xl:gap-16">
-          {/* LEFT: exact two-line client headline + copy + CTA */}
+        {/* Client reference composition: copy stays on the left and the three cards stay to its right. */}
+        <div className="grid flex-1 items-center gap-8 md:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] md:gap-8 lg:gap-12 xl:grid-cols-[1.05fr_0.95fr] xl:gap-16">
+          {/* LEFT: two-line headline, divider, paragraph and CTA. */}
           <motion.div
             initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="pt-2 lg:pt-4"
+            className="self-center pt-0 lg:pt-2"
           >
-            <h2 className="font-display text-[clamp(3.25rem,5.15vw,6.1rem)] font-semibold leading-[0.93] tracking-[-0.055em] text-[#08bdb8]">
-              <span className="block whitespace-nowrap">From Creative Ideas to</span>
-              <span className="block whitespace-nowrap">Measurable Impact</span>
+            <h2 className="font-display text-[clamp(2.8rem,4.35vw,5.15rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-[#08bdb8]">
+              <span className="block">From Creative Ideas to</span>
+              <span className="block">Measurable Impact</span>
             </h2>
 
             <motion.div
@@ -63,7 +64,7 @@ export default function Services() {
               className="mt-8 h-[2px] w-full max-w-[980px] bg-[#08bdb8]"
             />
 
-            <p className="mt-8 max-w-[940px] font-display text-[clamp(1.15rem,1.55vw,1.65rem)] leading-[1.34] tracking-[-0.018em] text-[#171919]">
+            <p className="mt-8 max-w-[900px] font-display text-[clamp(1.05rem,1.35vw,1.5rem)] leading-[1.34] tracking-[-0.018em] text-[#171919]">
               Digital Points is a creative and digital solutions company helping
               businesses create compelling content, build strong brands, and
               promote them through design, marketing, media, and technology.
@@ -74,19 +75,19 @@ export default function Services() {
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="mt-10 inline-flex items-center justify-center bg-[#08bdb8] px-9 py-4 font-display text-[1.15rem] font-medium text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08bdb8] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f7f3ea]"
+              className="mt-10 inline-flex items-center justify-center bg-[#08bdb8] px-9 py-4 font-display text-[1.1rem] font-medium text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08bdb8] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f7f3ea]"
             >
               View all our works
             </motion.a>
           </motion.div>
 
-          {/* RIGHT: same three-card composition as the client's drawing. */}
+          {/* RIGHT: the same three-card relationship as the client's reference. */}
           <motion.div
             initial={{ opacity: 0, x: 28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto h-[590px] w-full max-w-[620px] lg:h-[600px]"
+            className="relative mx-auto h-[560px] w-full max-w-[600px] self-center md:h-[590px] lg:h-[620px]"
           >
             {cards.map((card, index) => (
               <motion.div
@@ -105,10 +106,10 @@ export default function Services() {
                   scale: 1.025,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[300px] w-[240px] items-start justify-start bg-[#211f1f] p-8 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] lg:h-[320px] lg:w-[255px] xl:h-[335px] xl:w-[270px] ${card.position}`}
+                className={`absolute flex h-[285px] w-[215px] items-start justify-start bg-[#211f1f] p-8 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[305px] sm:w-[230px] lg:h-[335px] lg:w-[270px] ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[1.8rem] font-normal tracking-[-0.035em] lg:text-[2rem] xl:text-[2.15rem]">
+                <span className="font-display text-[1.65rem] font-normal tracking-[-0.035em] sm:text-[1.8rem] lg:text-[2.05rem]">
                   {card.label}
                 </span>
 
@@ -133,8 +134,8 @@ export default function Services() {
           </motion.div>
         </div>
 
-        {/* Six service labels stay in one clean row on desktop, as in the reference. */}
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6 lg:gap-4">
+        {/* Six service labels remain as one horizontal strip on desktop, like the reference. */}
+        <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
           {services.map((service, index) => (
             <motion.div
               key={service}
