@@ -13,21 +13,9 @@ const brandTeal = "#08bdb8";
 const brandOrange = "#ff7a45";
 
 const cards = [
-  {
-    label: "CREATE",
-    className: "left-[8%] top-[18%] -rotate-[10deg]",
-    hoverRotate: -6,
-  },
-  {
-    label: "BRAND",
-    className: "right-[8%] top-[4%] rotate-[10deg]",
-    hoverRotate: 6,
-  },
-  {
-    label: "PROMOTE",
-    className: "right-[16%] bottom-[2%] rotate-[10deg]",
-    hoverRotate: 6,
-  },
+  { label: "CREATE", position: "left-[7%] top-[17%]", rotate: -10, hoverRotate: -6 },
+  { label: "BRAND", position: "right-[7%] top-[2%]", rotate: 10, hoverRotate: 6 },
+  { label: "PROMOTE", position: "right-[15%] top-[50%]", rotate: 10, hoverRotate: 6 },
 ];
 
 export default function Services() {
@@ -36,8 +24,6 @@ export default function Services() {
       id="services"
       className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-20 sm:py-24 lg:py-28"
     >
-      {/* Keep the dotted texture close to the client's reference: concentrated
-          around the outer edges and fading into the clean cream canvas. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-[48%] opacity-60"
@@ -67,8 +53,8 @@ export default function Services() {
       />
 
       <div className="mx-auto max-w-6xl">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.18fr_0.82fr] lg:gap-8 xl:gap-14">
-          {/* Client reference: exactly two headline lines. */}
+        <div className="grid items-center gap-12 xl:grid-cols-[1.18fr_0.82fr] xl:gap-10 2xl:gap-14">
+          {/* The client reference has exactly two headline lines. */}
           <motion.div
             initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -76,7 +62,7 @@ export default function Services() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="min-w-0"
           >
-            <h2 className="font-display font-semibold leading-[0.98] tracking-[-0.045em] text-[#08bdb8] text-[clamp(2.65rem,5.25vw,4.65rem)]">
+            <h2 className="font-display text-[clamp(2.2rem,4.3vw,4.65rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#08bdb8]">
               <span className="block whitespace-nowrap">From Creative Ideas to</span>
               <span className="block whitespace-nowrap">Measurable Impact</span>
             </h2>
@@ -107,20 +93,19 @@ export default function Services() {
             </motion.a>
           </motion.div>
 
-          {/* CREATE / BRAND / PROMOTE — kept close to the client's exact
-              three-card composition instead of introducing a new layout. */}
+          {/* Three cards follow the client's CREATE / BRAND / PROMOTE layout. */}
           <motion.div
             initial={{ opacity: 0, x: 28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto h-[420px] w-full max-w-[470px] sm:h-[500px]"
+            className="relative mx-auto h-[420px] w-full max-w-[470px] sm:h-[520px]"
           >
             {cards.map((card, index) => (
               <motion.div
                 key={card.label}
-                initial={{ opacity: 0, y: 22, rotate: card.label === "CREATE" ? -10 : 10 }}
-                whileInView={{ opacity: 1, y: 0, rotate: card.label === "CREATE" ? -10 : 10 }}
+                initial={{ opacity: 0, y: 22, rotate: card.rotate }}
+                whileInView={{ opacity: 1, y: 0, rotate: card.rotate }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{
                   duration: 0.65,
@@ -133,10 +118,10 @@ export default function Services() {
                   scale: 1.025,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[230px] w-[190px] items-start justify-start bg-[#211f1f] p-6 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[275px] sm:w-[225px] sm:p-8 ${card.className}`}
+                className={`absolute flex h-[210px] w-[175px] items-start justify-start bg-[#211f1f] p-6 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[275px] sm:w-[225px] sm:p-8 ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[1.65rem] font-normal tracking-[-0.025em] sm:text-[2rem]">
+                <span className="font-display text-[1.55rem] font-normal tracking-[-0.025em] sm:text-[2rem]">
                   {card.label}
                 </span>
 
@@ -161,9 +146,8 @@ export default function Services() {
           </motion.div>
         </div>
 
-        {/* The client's reference uses one strong brand colour for this strip.
-            Keep the six services, but avoid unrelated rainbow colours. */}
-        <div className="mt-14 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-16 lg:grid-cols-6 lg:gap-4">
+        {/* One strong brand colour, as in the client's reference. */}
+        <div className="mt-14 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:mt-16 xl:grid-cols-6 xl:gap-4">
           {services.map((service, index) => (
             <motion.div
               key={service}
