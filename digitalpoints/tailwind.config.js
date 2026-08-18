@@ -33,8 +33,9 @@ export default {
         },
       },
       fontFamily: {
-        display: ["'Space Grotesk'", "sans-serif"],
-        body: ["'Inter'", "sans-serif"],
+        display: ["'Mona Sans'", "sans-serif"],
+        body: ["'Mona Sans'", "sans-serif"],
+        poppins: ["'Poppins'", "sans-serif"],
       },
     },
   },
