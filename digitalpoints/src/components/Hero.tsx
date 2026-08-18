@@ -12,7 +12,6 @@ const rotatingWords = [
 
 const ROTATE_INTERVAL_MS = 2800;
 const FLASH_DURATION_MS = 260;
-
 const HERO_BG_URL = "/hero-bg.jpg";
 
 export default function Hero() {
@@ -23,10 +22,7 @@ export default function Hero() {
     let flashTimeout: ReturnType<typeof setTimeout>;
 
     const id = setInterval(() => {
-      // Camera flash starts
       setIsFlashing(true);
-
-      // Change the word at the peak of the flash
       flashTimeout = setTimeout(() => {
         setWordIndex((i) => (i + 1) % rotatingWords.length);
         setIsFlashing(false);
@@ -40,8 +36,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[100svh] w-full overflow-hidden bg-ink-950">
-      {/* Background photograph */}
+    <section className="relative h-[520px] min-h-[520px] w-full overflow-hidden bg-ink-950 sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]">
       <div
         className="absolute inset-0 scale-110 bg-[center_30%] bg-cover bg-no-repeat sm:bg-center"
         style={{
@@ -50,15 +45,11 @@ export default function Hero() {
         }}
       />
 
-      {/* Turquoise brand overlay */}
       <div
         className="absolute inset-0"
-        style={{
-          backgroundColor: "rgba(0, 199, 195, 0.74)",
-        }}
+        style={{ backgroundColor: "rgba(0, 199, 195, 0.74)" }}
       />
 
-      {/* Subtle center light */}
       <div
         className="absolute inset-0"
         style={{
@@ -67,62 +58,35 @@ export default function Hero() {
         }}
       />
 
-      {/* Camera flash across the entire Hero */}
       <AnimatePresence>
         {isFlashing && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.35 }}
             exit={{ opacity: 0 }}
-            transition={{
-              duration: FLASH_DURATION_MS / 1000,
-              ease: "easeOut",
-            }}
+            transition={{ duration: FLASH_DURATION_MS / 1000, ease: "easeOut" }}
             className="pointer-events-none absolute inset-0 z-20 bg-white"
           />
         )}
       </AnimatePresence>
 
-      {/* Hero content */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col items-center justify-center px-6 text-center">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-6 pb-8 pt-14 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-display text-[2.2rem] font-semibold leading-[1.06] tracking-tight text-black sm:text-[3rem] md:text-[3.6rem] lg:text-[4.2rem] xl:text-[4.8rem]"
+          className="font-display text-[2rem] font-semibold leading-[1.04] tracking-tight text-black sm:text-[2.7rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.25rem]"
         >
-          {/* LINE 1 */}
-          <span className="block whitespace-nowrap">
-            Everything your brand needs
-          </span>
-
-          {/* LINE 2 */}
-          <span className="block">
-            to succeed through
-          </span>
-
-          {/* LINE 3 — DYNAMIC WORD */}
-          <span className="relative block min-h-[1.06em]">
-            {/* Small camera burst behind the changing word */}
+          <span className="block whitespace-nowrap">Everything your brand needs</span>
+          <span className="block">to succeed through</span>
+          <span className="relative block min-h-[1.04em]">
             <AnimatePresence>
               {isFlashing && (
                 <motion.span
-                  initial={{
-                    opacity: 0,
-                    scale: 0.6,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1.7,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    scale: 2,
-                  }}
-                  transition={{
-                    duration: FLASH_DURATION_MS / 1000,
-                    ease: "easeOut",
-                  }}
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1.7 }}
+                  exit={{ opacity: 0, scale: 2 }}
+                  transition={{ duration: FLASH_DURATION_MS / 1000, ease: "easeOut" }}
                   className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[1.4em] w-[4em] -translate-x-1/2 -translate-y-1/2 rounded-full"
                   style={{
                     background:
@@ -132,52 +96,18 @@ export default function Hero() {
               )}
             </AnimatePresence>
 
-            {/* Dynamic word */}
             <AnimatePresence mode="wait">
               <motion.span
                 key={rotatingWords[wordIndex]}
-                initial={{
-                  opacity: 0,
-                  y: 12,
-                  scale: 0.96,
-                  filter: "blur(4px)",
-                  color: "#000000",
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  filter: "blur(0px)",
-                  color: isFlashing ? "#ffffff" : "#000000",
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -12,
-                  scale: 0.96,
-                  filter: "blur(4px)",
-                  color: "#ffffff",
-                }}
+                initial={{ opacity: 0, y: 12, scale: 0.96, filter: "blur(4px)", color: "#000000" }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)", color: isFlashing ? "#ffffff" : "#000000" }}
+                exit={{ opacity: 0, y: -12, scale: 0.96, filter: "blur(4px)", color: "#ffffff" }}
                 transition={{
-                  opacity: {
-                    duration: 0.4,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                  y: {
-                    duration: 0.4,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                  scale: {
-                    duration: 0.4,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                  filter: {
-                    duration: 0.4,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                  color: {
-                    duration: FLASH_DURATION_MS / 1000,
-                    ease: "easeOut",
-                  },
+                  opacity: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                  y: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                  scale: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                  filter: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                  color: { duration: FLASH_DURATION_MS / 1000, ease: "easeOut" },
                 }}
                 className="relative z-10 inline-block font-extrabold"
               >
