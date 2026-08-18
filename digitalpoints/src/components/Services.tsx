@@ -12,16 +12,16 @@ const services = [
 const brandTeal = "#08bdb8";
 
 const cards = [
-  { label: "CREATE", position: "left-[2%] top-[18%]", rotate: 9, hoverRotate: 5 },
-  { label: "BRAND", position: "right-[2%] top-[0%]", rotate: -10, hoverRotate: -6 },
-  { label: "PROMOTE", position: "right-[11%] bottom-[2%]", rotate: 9, hoverRotate: 5 },
+  { label: "CREATE", position: "left-[6%] top-[18%]", rotate: 9, hoverRotate: 5 },
+  { label: "BRAND", position: "right-[4%] top-[0%]", rotate: -10, hoverRotate: -6 },
+  { label: "PROMOTE", position: "right-[13%] bottom-[3%]", rotate: 9, hoverRotate: 5 },
 ];
 
 export default function Services() {
   return (
     <section
       id="services"
-      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[820px] lg:px-12 lg:py-14"
+      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-8 sm:px-8 sm:py-10 lg:min-h-[760px] lg:px-12 lg:py-10"
     >
       <div
         aria-hidden="true"
@@ -44,8 +44,8 @@ export default function Services() {
         }}
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[740px] max-w-[1760px] flex-col">
-        <div className="flex flex-1 flex-col justify-center lg:flex-row lg:items-center lg:gap-8">
+      <div className="relative z-10 mx-auto flex min-h-[680px] max-w-[1760px] flex-col">
+        <div className="flex flex-1 -translate-y-6 flex-col justify-center lg:flex-row lg:items-center lg:gap-8">
           <motion.div
             initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -89,7 +89,7 @@ export default function Services() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-12 h-[570px] w-full lg:mt-0 lg:w-[44%] lg:shrink-0"
+            className="relative mt-8 h-[500px] w-full lg:mt-0 lg:w-[44%] lg:shrink-0"
           >
             {cards.map((card, index) => (
               <motion.div
@@ -108,10 +108,10 @@ export default function Services() {
                   scale: 1.025,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[285px] w-[215px] items-start justify-start bg-[#211f1f] p-8 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[305px] sm:w-[230px] lg:h-[330px] lg:w-[250px] ${card.position}`}
+                className={`absolute flex h-[235px] w-[175px] items-start justify-start bg-[#211f1f] p-6 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[255px] sm:w-[190px] sm:p-7 lg:h-[285px] lg:w-[215px] lg:p-8 ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[1.65rem] font-normal tracking-[-0.035em] sm:text-[1.8rem] lg:text-[2rem]">
+                <span className="font-display text-[1.4rem] font-normal tracking-[-0.035em] sm:text-[1.55rem] lg:text-[1.7rem]">
                   {card.label}
                 </span>
 
@@ -136,7 +136,7 @@ export default function Services() {
           </motion.div>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+        <div className="mt-0 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
           {services.map((service, index) => (
             <motion.div
               key={service}
