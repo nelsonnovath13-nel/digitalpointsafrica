@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <ImageMosaic />
       <Services />
+      <ImageMosaic />
       <VideoShowcase />
       <Partners />
       <FinalCTA />
