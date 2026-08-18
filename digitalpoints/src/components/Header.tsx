@@ -59,7 +59,7 @@ export default function Header() {
     >
       <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between px-8 lg:px-12">
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home">
-          <span className={`font-display text-[1.55rem] font-semibold tracking-tight transition-colors duration-300 ${scrolled ? "text-ink-950" : "text-black"}`}>
+          <span className={`font-poppins text-[1.55rem] font-semibold tracking-tight transition-colors duration-300 ${scrolled ? "text-ink-950" : "text-black"}`}>
             Digital<span className="text-point-400">Points</span>
           </span>
         </Link>
@@ -71,7 +71,7 @@ export default function Header() {
             const responsiveColor = isHovered || active ? item.accent : "#050b1f";
             const shouldGlow = isHovered || active;
 
-            const commonClass = "group relative whitespace-nowrap px-0.5 py-2 text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
+            const commonClass = "group relative whitespace-nowrap px-0.5 py-2 font-poppins text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
 
             const content = (
               <motion.span
@@ -126,7 +126,7 @@ export default function Header() {
             return (
               <div key={item.label} className="flex items-center">
                 {index > 0 && (
-                  <span aria-hidden="true" className={`mx-4 select-none text-[17px] font-light leading-none transition-colors duration-200 ${scrolled ? "text-ink-950/35" : "text-black/45"}`}>
+                  <span aria-hidden="true" className={`mx-4 select-none font-poppins text-[17px] font-light leading-none transition-colors duration-200 ${scrolled ? "text-ink-950/35" : "text-black/45"}`}>
                     |
                   </span>
                 )}
@@ -190,7 +190,7 @@ export default function Header() {
                       <a
                         href={getAnchorHref(item)}
                         onClick={() => setOpen(false)}
-                        className="flex items-center justify-between py-4 text-sm font-medium transition-colors"
+                        className="flex items-center justify-between py-4 font-poppins text-sm font-medium transition-colors"
                         style={{ color: active ? item.accent : "#050b1f" }}
                       >
                         {item.label}
@@ -201,7 +201,7 @@ export default function Header() {
                         to={item.to}
                         end={item.end}
                         onClick={() => setOpen(false)}
-                        className="flex items-center justify-between py-4 text-sm font-medium transition-colors"
+                        className="flex items-center justify-between py-4 font-poppins text-sm font-medium transition-colors"
                         style={({ isActive: routeActive }) => ({ color: routeActive ? item.accent : "#050b1f" })}
                       >
                         {item.label}
