@@ -1,8 +1,6 @@
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 
-const brandTeal = "#08bdb8";
-
 const services = [
   {
     title: "Digital Marketing",
