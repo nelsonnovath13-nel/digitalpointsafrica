@@ -10,59 +10,46 @@ const services = [
 ];
 
 const brandTeal = "#08bdb8";
-const brandOrange = "#ff7a45";
+const ink = "#211f1f";
 
 const cards = [
-  { label: "CREATE", position: "left-[7%] top-[17%]", rotate: -10, hoverRotate: -6 },
-  { label: "BRAND", position: "right-[7%] top-[2%]", rotate: 10, hoverRotate: 6 },
-  { label: "PROMOTE", position: "right-[15%] top-[50%]", rotate: 10, hoverRotate: 6 },
+  { label: "CREATE", position: "left-[4%] top-[16%]", rotate: 9, hoverRotate: 5 },
+  { label: "BRAND", position: "right-[3%] top-[1%]", rotate: -10, hoverRotate: -6 },
+  { label: "PROMOTE", position: "right-[14%] bottom-[1%]", rotate: 9, hoverRotate: 5 },
 ];
 
 export default function Services() {
   return (
     <section
       id="services"
-      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-20 sm:py-24 lg:py-28"
+      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[820px] lg:px-12 lg:py-14"
     >
+      {/* Client-style dotted edge texture. Kept behind the content and clearly visible. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-[48%] opacity-60"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(30,35,35,0.12) 1.1px, transparent 1.2px)",
-          backgroundSize: "18px 18px",
+            "radial-gradient(circle at 0% 50%, rgba(50,55,55,0.13) 1.15px, transparent 1.25px), radial-gradient(circle at 100% 72%, rgba(50,55,55,0.07) 1px, transparent 1.15px)",
+          backgroundSize: "18px 18px, 20px 20px",
           maskImage:
-            "radial-gradient(ellipse 72% 68% at 0% 50%, black 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.12) 70%, transparent 100%)",
+            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.55) 18%, transparent 34%, transparent 76%, rgba(0,0,0,0.28) 92%, black 100%)",
           WebkitMaskImage:
-            "radial-gradient(ellipse 72% 68% at 0% 50%, black 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.12) 70%, transparent 100%)",
+            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.55) 18%, transparent 34%, transparent 76%, rgba(0,0,0,0.28) 92%, black 100%)",
         }}
       />
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-[28%] opacity-25"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(30,35,35,0.10) 1px, transparent 1.1px)",
-          backgroundSize: "20px 20px",
-          maskImage:
-            "radial-gradient(ellipse 75% 60% at 100% 50%, black 0%, rgba(0,0,0,0.3) 55%, transparent 100%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 75% 60% at 100% 50%, black 0%, rgba(0,0,0,0.3) 55%, transparent 100%)",
-        }}
-      />
-
-      <div className="mx-auto max-w-6xl">
-        <div className="grid items-center gap-12 xl:grid-cols-[1.18fr_0.82fr] xl:gap-10 2xl:gap-14">
-          {/* The client reference has exactly two headline lines. */}
+      <div className="relative z-10 mx-auto flex min-h-[740px] max-w-[1760px] flex-col">
+        <div className="grid flex-1 items-start gap-8 lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 xl:grid-cols-[1.1fr_0.9fr] xl:gap-16">
+          {/* LEFT: exact two-line client headline + copy + CTA */}
           <motion.div
             initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0"
+            className="pt-2 lg:pt-4"
           >
-            <h2 className="font-display text-[clamp(2.2rem,4.3vw,4.65rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#08bdb8]">
+            <h2 className="font-display text-[clamp(3.25rem,5.15vw,6.1rem)] font-semibold leading-[0.93] tracking-[-0.055em] text-[#08bdb8]">
               <span className="block whitespace-nowrap">From Creative Ideas to</span>
               <span className="block whitespace-nowrap">Measurable Impact</span>
             </h2>
@@ -73,10 +60,10 @@ export default function Services() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
               style={{ transformOrigin: "left" }}
-              className="mt-7 h-[2px] w-full max-w-[720px] bg-[#08bdb8]"
+              className="mt-8 h-[2px] w-full max-w-[980px] bg-[#08bdb8]"
             />
 
-            <p className="mt-7 max-w-[700px] font-display text-lg leading-[1.45] text-[#171919] sm:text-xl lg:text-[1.45rem]">
+            <p className="mt-8 max-w-[940px] font-display text-[clamp(1.15rem,1.55vw,1.65rem)] leading-[1.34] tracking-[-0.018em] text-[#171919]">
               Digital Points is a creative and digital solutions company helping
               businesses create compelling content, build strong brands, and
               promote them through design, marketing, media, and technology.
@@ -87,19 +74,19 @@ export default function Services() {
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="mt-9 inline-flex items-center justify-center bg-[#08bdb8] px-8 py-4 font-display text-lg font-medium text-black transition-colors duration-300 hover:bg-[#06aaa6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08bdb8] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f7f3ea]"
+              className="mt-10 inline-flex items-center justify-center bg-[#08bdb8] px-9 py-4 font-display text-[1.15rem] font-medium text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08bdb8] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f7f3ea]"
             >
               View all our works
             </motion.a>
           </motion.div>
 
-          {/* Three cards follow the client's CREATE / BRAND / PROMOTE layout. */}
+          {/* RIGHT: same three-card composition as the client's drawing. */}
           <motion.div
             initial={{ opacity: 0, x: 28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto h-[420px] w-full max-w-[470px] sm:h-[520px]"
+            className="relative mx-auto h-[590px] w-full max-w-[620px] lg:h-[600px]"
           >
             {cards.map((card, index) => (
               <motion.div
@@ -118,10 +105,10 @@ export default function Services() {
                   scale: 1.025,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[210px] w-[175px] items-start justify-start bg-[#211f1f] p-6 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] sm:h-[275px] sm:w-[225px] sm:p-8 ${card.position}`}
+                className={`absolute flex h-[300px] w-[240px] items-start justify-start bg-[#211f1f] p-8 text-white shadow-[0_22px_45px_rgba(0,0,0,0.07)] lg:h-[320px] lg:w-[255px] xl:h-[335px] xl:w-[270px] ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[1.55rem] font-normal tracking-[-0.025em] sm:text-[2rem]">
+                <span className="font-display text-[1.8rem] font-normal tracking-[-0.035em] lg:text-[2rem] xl:text-[2.15rem]">
                   {card.label}
                 </span>
 
@@ -138,16 +125,16 @@ export default function Services() {
 
             <motion.div
               aria-hidden="true"
-              className="pointer-events-none absolute left-[38%] top-[35%] h-24 w-24 rounded-full blur-3xl"
-              style={{ backgroundColor: brandOrange, opacity: 0.08 }}
+              className="pointer-events-none absolute left-[42%] top-[38%] h-28 w-28 rounded-full blur-3xl"
+              style={{ backgroundColor: brandTeal, opacity: 0.06 }}
               animate={{ x: [0, 14, 0], y: [0, -10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
         </div>
 
-        {/* One strong brand colour, as in the client's reference. */}
-        <div className="mt-14 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:mt-16 xl:grid-cols-6 xl:gap-4">
+        {/* Six service labels stay in one clean row on desktop, as in the reference. */}
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6 lg:gap-4">
           {services.map((service, index) => (
             <motion.div
               key={service}
@@ -156,7 +143,7 @@ export default function Services() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.45, delay: index * 0.055 }}
               whileHover={{ y: -4 }}
-              className="group relative flex min-h-[54px] items-center justify-center overflow-hidden bg-[#08bdb8] px-4 py-3 text-center font-display text-base font-medium text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white sm:text-lg"
+              className="group relative flex min-h-[58px] items-center justify-center overflow-hidden bg-[#08bdb8] px-4 py-3 text-center font-poppins text-[0.98rem] font-medium tracking-[-0.01em] text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white"
             >
               <span className="relative z-10">{service}</span>
               <motion.span
