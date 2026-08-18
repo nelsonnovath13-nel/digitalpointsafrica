@@ -12,57 +12,51 @@ const services = [
 const brandTeal = "#08bdb8";
 
 const cards = [
-  { label: "CREATE", position: "left-[5%] top-[29%]", rotate: 9, hoverRotate: 5 },
-  { label: "BRAND", position: "right-[7%] top-[4%]", rotate: -10, hoverRotate: -6 },
-  { label: "PROMOTE", position: "right-[14%] bottom-[4%]", rotate: 9, hoverRotate: 5 },
+  { label: "CREATE", position: "left-[0%] top-[30%]", rotate: 9, hoverRotate: 5 },
+  { label: "BRAND", position: "right-[0%] top-[0%]", rotate: -10, hoverRotate: -6 },
+  { label: "PROMOTE", position: "left-[38%] bottom-[0%]", rotate: 8, hoverRotate: 4 },
 ];
 
 export default function Services() {
   return (
     <section
       id="services"
-      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-6 sm:px-8 sm:py-7 lg:px-12 lg:py-5"
+      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 pb-7 pt-[92px] sm:px-8 sm:pb-8 sm:pt-[96px] lg:px-12 lg:pb-8 lg:pt-[88px]"
     >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[34%] opacity-80"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(50,55,55,0.16) 1.2px, transparent 1.35px)",
+          backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.16) 1.2px, transparent 1.35px)",
           backgroundSize: "18px 18px",
-          maskImage:
-            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.75) 45%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(90deg, black 0%, rgba(0,0,0,0.75) 45%, transparent 100%)",
+          maskImage: "linear-gradient(90deg, black 0%, rgba(0,0,0,0.75) 45%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(90deg, black 0%, rgba(0,0,0,0.75) 45%, transparent 100%)",
         }}
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[27%] opacity-55"
+        className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[32%] opacity-55"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(50,55,55,0.12) 1.05px, transparent 1.25px)",
+          backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.12) 1.05px, transparent 1.25px)",
           backgroundSize: "20px 20px",
-          maskImage:
-            "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.45) 35%, black 100%)",
-          WebkitMaskImage:
-            "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.45) 35%, black 100%)",
+          maskImage: "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.45) 35%, black 100%)",
+          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.45) 35%, black 100%)",
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1200px]">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:gap-8">
+      <div className="relative z-10 mx-auto max-w-[1500px]">
+        <div className="grid min-h-[315px] grid-cols-1 gap-8 lg:grid-cols-[55%_45%] lg:items-center lg:gap-6">
           <motion.div
             initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full lg:w-[60%] lg:shrink-0"
+            className="w-full"
           >
-            <h2 className="font-display text-[clamp(2.25rem,4vw,4rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-[#08bdb8]">
-              <span className="block whitespace-nowrap">From Creative Ideas to</span>
-              <span className="block whitespace-nowrap">Measurable Impact</span>
+            <h2 className="font-display text-[clamp(2.25rem,3.8vw,4.15rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-[#08bdb8]">
+              <span className="block">From Creative Ideas to</span>
+              <span className="block">Measurable Impact</span>
             </h2>
 
             <motion.div
@@ -71,10 +65,10 @@ export default function Services() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
               style={{ transformOrigin: "left" }}
-              className="mt-5 h-[2px] w-full max-w-[650px] bg-[#08bdb8]"
+              className="mt-5 h-[2px] w-full max-w-[700px] bg-[#08bdb8]"
             />
 
-            <p className="mt-5 max-w-[650px] font-display text-[clamp(0.92rem,1.15vw,1.2rem)] leading-[1.32] tracking-[-0.018em] text-[#171919]">
+            <p className="mt-5 max-w-[700px] font-display text-[clamp(0.92rem,1.05vw,1.15rem)] leading-[1.35] tracking-[-0.018em] text-[#171919]">
               Digital Points is a creative and digital solutions company helping
               businesses create compelling content, build strong brands, and
               promote them through design, marketing, media, and technology.
@@ -96,7 +90,7 @@ export default function Services() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-8 h-[215px] w-full lg:mt-0 lg:w-[40%] lg:shrink-0"
+            className="relative mx-auto h-[275px] w-full max-w-[620px] lg:mt-0"
           >
             {cards.map((card, index) => (
               <motion.div
@@ -115,10 +109,10 @@ export default function Services() {
                   scale: 1.035,
                   transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
                 }}
-                className={`absolute flex h-[78px] w-[92px] items-start justify-start bg-[#211f1f] p-3 text-white shadow-[0_16px_30px_rgba(0,0,0,0.06)] sm:h-[88px] sm:w-[105px] sm:p-3 lg:h-[94px] lg:w-[120px] lg:p-3.5 ${card.position}`}
+                className={`absolute flex h-[108px] w-[145px] items-start justify-start bg-[#211f1f] p-4 text-white shadow-[0_16px_30px_rgba(0,0,0,0.08)] sm:h-[118px] sm:w-[160px] sm:p-5 lg:h-[125px] lg:w-[170px] lg:p-5 ${card.position}`}
                 style={{ transformOrigin: "center" }}
               >
-                <span className="font-display text-[0.72rem] font-normal tracking-[-0.035em] sm:text-[0.78rem] lg:text-[0.8rem]">
+                <span className="font-display text-[0.82rem] font-normal tracking-[-0.035em] sm:text-[0.9rem] lg:text-[0.95rem]">
                   {card.label}
                 </span>
 
@@ -135,7 +129,7 @@ export default function Services() {
 
             <motion.div
               aria-hidden="true"
-              className="pointer-events-none absolute left-[42%] top-[38%] h-24 w-24 rounded-full blur-3xl"
+              className="pointer-events-none absolute left-[45%] top-[38%] h-24 w-24 rounded-full blur-3xl"
               style={{ backgroundColor: brandTeal, opacity: 0.05 }}
               animate={{ x: [0, 10, 0], y: [0, -7, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -143,7 +137,7 @@ export default function Services() {
           </motion.div>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6 lg:gap-2.5">
+        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6 lg:gap-3">
           {services.map((service, index) => (
             <motion.div
               key={service}
@@ -152,7 +146,7 @@ export default function Services() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.45, delay: index * 0.055 }}
               whileHover={{ y: -2 }}
-              className="group relative flex h-[38px] items-center justify-center overflow-hidden bg-[#08bdb8] px-2 text-center font-poppins text-[0.7rem] font-medium tracking-[-0.01em] text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white sm:text-[0.74rem]"
+              className="group relative flex h-[44px] items-center justify-center overflow-hidden bg-[#08bdb8] px-2 text-center font-poppins text-[0.72rem] font-medium tracking-[-0.01em] text-black transition-colors duration-300 hover:bg-[#211f1f] hover:text-white sm:text-[0.76rem] lg:h-[46px] lg:text-[0.78rem]"
             >
               <span className="relative z-10">{service}</span>
               <motion.span
