@@ -25,8 +25,8 @@ const cards = [
   },
   {
     label: "BRAND",
-    desktopPosition: "lg:right-[0%] lg:top-[0%]",
-    mobilePosition: "right-[2%] top-[0%]",
+    desktopPosition: "lg:right-[4%] lg:top-[0%]",
+    mobilePosition: "right-[4%] top-[0%]",
     rotate: -10,
     hoverRotate: -6,
     scrollX: [0, -10, 4],
@@ -56,6 +56,8 @@ function FloatingCard({ card, index }: { card: (typeof cards)[number]; index: nu
   const y = useTransform(scrollYProgress, [0, 0.45, 1], card.scrollY);
   const rotate = useTransform(scrollYProgress, [0, 0.45, 1], card.scrollRotate);
 
+  const isBrand = card.label === "BRAND";
+
   return (
     <motion.div
       ref={ref}
@@ -74,7 +76,11 @@ function FloatingCard({ card, index }: { card: (typeof cards)[number]; index: nu
         y: -6,
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
       }}
-      className={`absolute flex h-[98px] w-[138px] items-start justify-start bg-[#211f1f] p-3.5 text-white shadow-[0_18px_35px_rgba(0,0,0,0.12)] sm:h-[118px] sm:w-[160px] sm:p-5 lg:h-[125px] lg:w-[170px] lg:p-5 ${card.mobilePosition} ${card.desktopPosition}`}
+      className={`absolute flex items-start justify-start bg-[#211f1f] p-3.5 text-white shadow-[0_18px_35px_rgba(0,0,0,0.12)] ${
+        isBrand
+          ? "h-[88px] w-[126px] sm:h-[104px] sm:w-[142px] lg:h-[112px] lg:w-[150px] lg:p-4"
+          : "h-[98px] w-[138px] sm:h-[118px] sm:w-[160px] lg:h-[125px] lg:w-[170px] lg:p-5"
+      } ${card.mobilePosition} ${card.desktopPosition}`}
     >
       <span className="font-display text-[0.72rem] font-normal tracking-[-0.035em] sm:text-[0.9rem] lg:text-[0.95rem]">
         {card.label}
@@ -104,7 +110,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 pb-7 pt-[58px] sm:px-8 sm:pb-8 sm:pt-[70px] lg:px-12 lg:pb-8 lg:pt-[72px]"
+      className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 pb-10 pt-[58px] sm:px-8 sm:pb-10 sm:pt-[70px] lg:px-12 lg:pb-12 lg:pt-[72px]"
     >
       <div
         aria-hidden="true"
@@ -189,7 +195,7 @@ export default function Services() {
           </motion.div>
         </div>
 
-        <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-4 sm:grid-cols-3 lg:mt-6 lg:grid-cols-6 lg:gap-3">
+        <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-3 lg:mt-8 lg:grid-cols-6 lg:gap-3">
           {services.map((service, index) => (
             <motion.div
               key={service}
