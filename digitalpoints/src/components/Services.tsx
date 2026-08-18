@@ -10,7 +10,6 @@ const services = [
 ];
 
 const brandTeal = "#08bdb8";
-const ink = "#211f1f";
 
 const cards = [
   { label: "CREATE", position: "left-[2%] top-[18%]", rotate: 9, hoverRotate: 5 },
@@ -24,7 +23,6 @@ export default function Services() {
       id="services"
       className="relative isolate overflow-hidden bg-[#f7f3ea] px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[820px] lg:px-12 lg:py-14"
     >
-      {/* Visible dotted texture concentrated on both side edges, matching the client reference. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[34%] opacity-80"
@@ -47,7 +45,6 @@ export default function Services() {
       />
 
       <div className="relative z-10 mx-auto flex min-h-[740px] max-w-[1760px] flex-col">
-        {/* Desktop composition: text on the left, cards on the right — never underneath the copy. */}
         <div className="flex flex-1 flex-col justify-center lg:flex-row lg:items-center lg:gap-8">
           <motion.div
             initial={{ opacity: 0, x: -28 }}
@@ -139,7 +136,6 @@ export default function Services() {
           </motion.div>
         </div>
 
-        {/* Client requested six small service blocks in ONE row on desktop. */}
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
           {services.map((service, index) => (
             <motion.div
