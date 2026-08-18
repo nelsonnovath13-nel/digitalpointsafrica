@@ -84,7 +84,6 @@ function FloatingCard({ card, index }: { card: (typeof cards)[number]; index: nu
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
 
   return (
     <section
