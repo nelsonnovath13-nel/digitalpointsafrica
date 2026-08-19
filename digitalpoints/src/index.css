@@ -47,139 +47,135 @@ body {
   transform: scaleX(1);
 }
 
-/* Hero atmosphere enhancement — visual layer only.
-   This selector intentionally targets the existing hero geometry without
-   changing its layout, content, image, controls, or animations. */
+/* HERO ATMOSPHERE ONLY — deliberately isolated to the existing Hero section. */
 section[class*="h-[520px]"][class*="bg-ink-950"]::after {
   content: "";
   position: absolute;
-  inset: -16%;
+  inset: -28%;
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 34% 25% at 14% 28%, rgba(222, 255, 251, 0.34) 0%, rgba(146, 248, 242, 0.20) 34%, transparent 72%),
-    radial-gradient(ellipse 30% 23% at 82% 34%, rgba(0, 66, 76, 0.28) 0%, rgba(0, 91, 101, 0.15) 38%, transparent 74%),
-    radial-gradient(ellipse 42% 20% at 50% 78%, rgba(226, 255, 253, 0.22) 0%, rgba(130, 241, 236, 0.10) 42%, transparent 76%);
-  filter: blur(34px) saturate(125%);
+    radial-gradient(ellipse 42% 32% at 12% 25%, rgba(225, 255, 252, 0.68) 0%, rgba(153, 250, 244, 0.46) 30%, rgba(94, 229, 224, 0.22) 52%, transparent 78%),
+    radial-gradient(ellipse 38% 30% at 86% 32%, rgba(0, 54, 68, 0.54) 0%, rgba(0, 91, 103, 0.34) 34%, rgba(0, 110, 116, 0.16) 54%, transparent 80%),
+    radial-gradient(ellipse 55% 30% at 50% 82%, rgba(235, 255, 253, 0.54) 0%, rgba(154, 247, 242, 0.28) 38%, rgba(91, 226, 222, 0.12) 56%, transparent 82%);
+  filter: blur(48px) saturate(145%);
   mix-blend-mode: screen;
-  opacity: 0.92;
-  transform: translate3d(-2%, 0, 0) scale(1.02);
-  animation: digital-points-hero-fog 23s ease-in-out infinite alternate;
+  opacity: 1;
+  transform: translate3d(-4%, 1%, 0) scale(1.12);
+  animation: digital-points-hero-fog 18s ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
 
-/* A second, independent atmosphere layer. It moves on a different rhythm so
-   the background never feels like one repeating TV-style animation. */
 section[class*="h-[520px]"][class*="bg-ink-950"]::before {
   content: "";
   position: absolute;
-  inset: 8% -22% 18%;
+  inset: -20% -34% -10%;
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 28% 18% at 24% 58%, rgba(255, 255, 255, 0.13), transparent 72%),
-    radial-gradient(ellipse 32% 16% at 68% 45%, rgba(104, 244, 238, 0.16), transparent 72%),
-    radial-gradient(ellipse 24% 15% at 48% 72%, rgba(0, 54, 65, 0.12), transparent 70%);
-  filter: blur(46px);
+    radial-gradient(ellipse 34% 24% at 20% 60%, rgba(255, 255, 255, 0.34), transparent 70%),
+    radial-gradient(ellipse 40% 23% at 70% 43%, rgba(111, 250, 244, 0.36), transparent 70%),
+    radial-gradient(ellipse 32% 22% at 48% 72%, rgba(0, 48, 62, 0.30), transparent 70%),
+    radial-gradient(ellipse 28% 20% at 90% 78%, rgba(216, 255, 252, 0.24), transparent 72%);
+  filter: blur(58px) saturate(140%);
   mix-blend-mode: screen;
-  opacity: 0.78;
-  transform: translate3d(0, 0, 0) scale(1.04);
-  animation: digital-points-hero-mist 31s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  opacity: 0.95;
+  transform: translate3d(3%, 2%, 0) scale(1.16);
+  animation: digital-points-hero-mist 23s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
   will-change: transform, opacity;
 }
 
-/* Fine atmospheric particles live only in the existing bottom motion strip.
-   They are intentionally sparse and soft rather than looking like snowfall. */
+/* Fine atmospheric particles live only in the existing bottom motion strip. */
 section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*="h-[42px]"]::before {
   content: "";
   position: absolute;
-  inset: -55% 0 0;
+  inset: -90% 0 0;
   z-index: 1;
   pointer-events: none;
   background-image:
-    radial-gradient(circle at 8% 100%, rgba(255,255,255,0.65) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 22% 85%, rgba(224,255,252,0.48) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 39% 110%, rgba(255,255,255,0.55) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 57% 90%, rgba(214,255,252,0.48) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 74% 108%, rgba(255,255,255,0.52) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 91% 82%, rgba(220,255,253,0.46) 0 1px, transparent 1.8px);
+    radial-gradient(circle at 8% 100%, rgba(255,255,255,0.85) 0 1.4px, transparent 2.4px),
+    radial-gradient(circle at 22% 85%, rgba(224,255,252,0.72) 0 1.4px, transparent 2.4px),
+    radial-gradient(circle at 39% 110%, rgba(255,255,255,0.78) 0 1.4px, transparent 2.4px),
+    radial-gradient(circle at 57% 90%, rgba(214,255,252,0.72) 0 1.4px, transparent 2.4px),
+    radial-gradient(circle at 74% 108%, rgba(255,255,255,0.75) 0 1.4px, transparent 2.4px),
+    radial-gradient(circle at 91% 82%, rgba(220,255,253,0.70) 0 1.4px, transparent 2.4px);
   background-size: 100% 100%;
-  opacity: 0.78;
-  animation: digital-points-particle-rise 8s ease-in-out infinite alternate;
+  opacity: 0.95;
+  animation: digital-points-particle-rise 6s ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
 
 @keyframes digital-points-hero-fog {
   0% {
-    transform: translate3d(-3%, 1%, 0) scale(1.01) rotate(-0.4deg);
-    opacity: 0.68;
+    transform: translate3d(-8%, 2%, 0) scale(1.08) rotate(-1deg);
+    opacity: 0.78;
   }
-  42% {
-    transform: translate3d(3%, -1.5%, 0) scale(1.06) rotate(0.6deg);
-    opacity: 0.96;
+  35% {
+    transform: translate3d(3%, -3%, 0) scale(1.16) rotate(0.8deg);
+    opacity: 1;
   }
-  72% {
-    transform: translate3d(-1%, 2%, 0) scale(1.03) rotate(-0.2deg);
-    opacity: 0.82;
+  68% {
+    transform: translate3d(-2%, 3%, 0) scale(1.12) rotate(-0.5deg);
+    opacity: 0.88;
   }
   100% {
-    transform: translate3d(4%, -2%, 0) scale(1.08) rotate(0.7deg);
-    opacity: 0.94;
+    transform: translate3d(8%, -4%, 0) scale(1.20) rotate(1deg);
+    opacity: 1;
   }
 }
 
 @keyframes digital-points-hero-mist {
   0% {
-    transform: translate3d(3%, 2%, 0) scale(1.03);
-    opacity: 0.52;
+    transform: translate3d(8%, 4%, 0) scale(1.10);
+    opacity: 0.68;
   }
-  35% {
-    transform: translate3d(-2%, -2%, 0) scale(1.08);
-    opacity: 0.82;
+  34% {
+    transform: translate3d(-6%, -4%, 0) scale(1.20);
+    opacity: 1;
   }
-  70% {
-    transform: translate3d(4%, 1%, 0) scale(1.05);
-    opacity: 0.64;
+  68% {
+    transform: translate3d(6%, 2%, 0) scale(1.15);
+    opacity: 0.80;
   }
   100% {
-    transform: translate3d(-4%, -1%, 0) scale(1.1);
-    opacity: 0.78;
+    transform: translate3d(-8%, -3%, 0) scale(1.24);
+    opacity: 0.96;
   }
 }
 
 @keyframes digital-points-particle-rise {
   0% {
-    transform: translate3d(0, 7px, 0) scale(0.96);
+    transform: translate3d(0, 10px, 0) scale(0.9);
     opacity: 0.25;
   }
   50% {
-    transform: translate3d(4px, -7px, 0) scale(1);
-    opacity: 0.78;
+    transform: translate3d(5px, -12px, 0) scale(1.15);
+    opacity: 1;
   }
   100% {
-    transform: translate3d(-5px, -16px, 0) scale(0.94);
-    opacity: 0.32;
+    transform: translate3d(-7px, -26px, 0) scale(0.88);
+    opacity: 0.35;
   }
 }
 
 @media (max-width: 639px) {
   section[class*="h-[520px]"][class*="bg-ink-950"]::after {
-    inset: -22%;
-    filter: blur(28px) saturate(120%);
-    opacity: 0.84;
-    animation-duration: 26s;
+    inset: -36%;
+    filter: blur(38px) saturate(135%);
+    opacity: 1;
+    animation-duration: 21s;
   }
 
   section[class*="h-[520px]"][class*="bg-ink-950"]::before {
-    inset: 10% -30% 18%;
-    filter: blur(38px);
-    opacity: 0.64;
-    animation-duration: 34s;
+    inset: -26% -44% -12%;
+    filter: blur(46px) saturate(135%);
+    opacity: 0.9;
+    animation-duration: 27s;
   }
 
   section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*="h-[42px]"]::before {
-    opacity: 0.62;
-    animation-duration: 9s;
+    opacity: 0.9;
+    animation-duration: 7s;
   }
 }
 
