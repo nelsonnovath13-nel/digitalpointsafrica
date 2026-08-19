@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const rotatingWords = [
@@ -19,6 +19,17 @@ export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
   const [isFlashing, setIsFlashing] = useState(false);
 
+  const pointerX = useMotionValue(50);
+  const pointerY = useMotionValue(50);
+  const smoothX = useSpring(pointerX, { stiffness: 70, damping: 22, mass: 0.7 });
+  const smoothY = useSpring(pointerY, { stiffness: 70, damping: 22, mass: 0.7 });
+  const smogOneX = useTransform(smoothX, [0, 100], [-55, 55]);
+  const smogOneY = useTransform(smoothY, [0, 100], [-35, 35]);
+  const smogTwoX = useTransform(smoothX, [0, 100], [45, -45]);
+  const smogTwoY = useTransform(smoothY, [0, 100], [30, -30]);
+  const smogThreeX = useTransform(smoothX, [0, 100], [-28, 28]);
+  const smogThreeY = useTransform(smoothY, [0, 100], [24, -24]);
+
   useEffect(() => {
     let flashTimeout: ReturnType<typeof setTimeout>;
 
@@ -36,8 +47,24 @@ export default function Hero() {
     };
   }, []);
 
+  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== "mouse") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set(((event.clientX - rect.left) / rect.width) * 100);
+    pointerY.set(((event.clientY - rect.top) / rect.height) * 100);
+  };
+
+  const handlePointerLeave = () => {
+    pointerX.set(50);
+    pointerY.set(50);
+  };
+
   return (
-    <section className="relative h-[520px] min-h-[520px] w-full overflow-hidden bg-ink-950 sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]">
+    <section
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className="relative h-[520px] min-h-[520px] w-full overflow-hidden bg-ink-950 sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]"
+    >
       <div
         className="absolute inset-0 scale-110 bg-[center_30%] bg-cover bg-no-repeat sm:bg-center"
         style={{
@@ -52,6 +79,39 @@ export default function Hero() {
         className="absolute inset-0"
         style={{
           background: "radial-gradient(60% 45% at 50% 45%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 70%)",
+        }}
+      />
+
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <motion.div
+          className="absolute -left-[14%] top-[7%] h-[38%] w-[46%] rounded-full bg-[#8ff8f2]/20 blur-[55px]"
+          style={{ x: smogOneX, y: smogOneY }}
+          animate={{ scale: [1, 1.06, 1], opacity: [0.42, 0.62, 0.42] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute -right-[12%] top-[28%] h-[34%] w-[42%] rounded-full bg-[#006f73]/18 blur-[60px]"
+          style={{ x: smogTwoX, y: smogTwoY }}
+          animate={{ scale: [1.04, 0.96, 1.04], opacity: [0.32, 0.52, 0.32] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute left-[24%] -bottom-[18%] h-[42%] w-[54%] rounded-full bg-white/10 blur-[70px]"
+          style={{ x: smogThreeX, y: smogThreeY }}
+          animate={{ scale: [0.96, 1.05, 0.96], opacity: [0.24, 0.4, 0.24] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute left-1/2 top-1/2 h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00aaa8]/12 blur-[75px]"
+          animate={{ scale: [1, 1.08, 1], opacity: [0.2, 0.34, 0.2] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          background: "radial-gradient(32% 28% at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 72%)",
         }}
       />
 
@@ -128,7 +188,7 @@ export default function Hero() {
           transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 flex w-full flex-col items-center gap-2.5 sm:mt-8 sm:flex-row sm:justify-center sm:gap-3.5"
         >
-          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+          <motion.div whileHover={{ y: -2, boxShadow: "0 14px 34px rgba(5,11,31,0.16)" }} whileTap={{ scale: 0.975 }}>
             <Link
               to="/portfolio"
               className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white bg-white px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-[#050b1f] shadow-[0_8px_22px_rgba(5,11,31,0.08)] transition-all duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white hover:shadow-[0_10px_28px_rgba(5,11,31,0.16)] active:bg-[#050b1f] active:text-white sm:h-[47px] sm:min-w-[195px] sm:text-[13.5px]"
@@ -137,7 +197,7 @@ export default function Hero() {
             </Link>
           </motion.div>
 
-          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+          <motion.div whileHover={{ y: -2, boxShadow: "0 12px 34px rgba(255,255,255,0.18)" }} whileTap={{ scale: 0.975 }}>
             <Link
               to="/services"
               className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]"
@@ -146,7 +206,7 @@ export default function Hero() {
             </Link>
           </motion.div>
 
-          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+          <motion.div whileHover={{ y: -2, boxShadow: "0 12px 34px rgba(255,255,255,0.18)" }} whileTap={{ scale: 0.975 }}>
             <Link
               to="/contact"
               className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[185px] sm:text-[13.5px]"
@@ -154,6 +214,21 @@ export default function Hero() {
               Start a Project
             </Link>
           </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[38px] overflow-hidden border-t border-white/15 bg-[#050b1f]/10 backdrop-blur-[2px] sm:h-[42px]" aria-label="Creative services motion strip">
+        <motion.div
+          className="flex h-full w-max items-center gap-7 px-4 sm:gap-10 sm:px-6"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        >
+          {[...rotatingWords, ...rotatingWords].map((word, index) => (
+            <div key={`${word}-${index}`} className="flex shrink-0 items-center gap-7 whitespace-nowrap sm:gap-10">
+              <span className="font-poppins text-[9px] font-medium uppercase tracking-[0.22em] text-white/85 sm:text-[10px]">{word}</span>
+              <span className="h-1 w-1 rounded-full bg-white/65" />
+            </div>
+          ))}
         </motion.div>
       </div>
     </section>
