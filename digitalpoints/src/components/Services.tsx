@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 const services = [
   { title: "Digital Marketing", description: "We help businesses reach the right audience through social media, content, paid campaigns, and practical digital strategies designed to increase visibility, engagement, and enquiries.", tags: ["Social Media", "Content Marketing", "Paid Campaigns", "Digital Strategy"], visual: "MARKETING", image: "https://images.squarespace-cdn.com/content/v1/561646c6e4b0f890085faa02/1771484737308-OEDQ33ZIDCUD3NOF49P1/Social%2BMedia%2BManager%2Bwerden.png?format=1000w", imageAlt: "Creative marketing team planning a digital campaign" },
@@ -45,33 +45,42 @@ function HighlightIcon({ title }: { title: Highlight["title"] }) {
 
 function CursorSnow({ active, x, y }: { active: boolean; x: number; y: number }) {
   return (
-    <motion.div aria-hidden="true" initial={false} animate={{ opacity: active ? 1 : 0, x, y, scale: active ? 1 : 0.55 }} transition={{ type: "spring", stiffness: 280, damping: 24, mass: 0.35 }} className="pointer-events-none absolute left-0 top-0 z-50 block h-14 w-14 -translate-x-1/2 -translate-y-1/2 sm:h-16 sm:w-16 md:h-20 md:w-20">
-      <motion.span animate={{ rotate: 360 }} transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }} className="absolute inset-1 rounded-full border border-[#00B7FF]/70 border-dashed shadow-[0_0_22px_rgba(0,183,255,0.34)]" />
-      <motion.span animate={{ rotate: -360 }} transition={{ duration: 3.2, repeat: Infinity, ease: "linear" }} className="absolute inset-3 rounded-full border border-[#2D8CFF]/45 border-dotted" />
-      <span className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00B7FF] shadow-[0_0_18px_7px_rgba(0,183,255,0.26)] sm:h-4 sm:w-4" />
-      <span className="absolute left-2 top-1.5 h-1.5 w-1.5 rounded-full bg-[#2D8CFF] shadow-[0_0_10px_4px_rgba(45,140,255,0.28)]" />
-      <span className="absolute bottom-1.5 right-2 h-1 w-1 rounded-full bg-[#00B7FF] shadow-[0_0_9px_3px_rgba(0,183,255,0.25)]" />
+    <motion.div aria-hidden="true" initial={false} animate={{ opacity: active ? 1 : 0, x, y, scale: active ? 1 : 0.55 }} transition={{ type: "spring", stiffness: 280, damping: 24, mass: 0.35 }} className="pointer-events-none fixed left-0 top-0 z-[100] block h-8 w-8 -translate-x-1/2 -translate-y-1/2 sm:h-10 sm:w-10 md:h-12 md:w-12">
+      <span className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00B7FF] shadow-[0_0_28px_10px_rgba(0,183,255,0.38)] sm:h-7 sm:w-7 md:h-8 md:w-8" />
     </motion.div>
   );
 }
 
-function HighlightCards() {
+function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | null> }) {
   const [expanded, setExpanded] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0, active: false });
   const cardsRef = useRef<HTMLDivElement>(null);
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    const bounds = cardsRef.current?.getBoundingClientRect();
-    if (!bounds) return;
-    setCursor({ x: event.clientX - bounds.left, y: event.clientY - bounds.top, active: true });
-  };
-  const handlePointerEnter = () => { setExpanded(true); setCursor((current) => ({ ...current, active: true })); };
-  const handlePointerLeave = () => { setExpanded(false); setCursor((current) => ({ ...current, active: false })); };
+
+  useEffect(() => {
+    const handlePointerMove = (event: globalThis.PointerEvent) => {
+      const bounds = introRef.current?.getBoundingClientRect();
+      if (!bounds) return;
+      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+      if (inside) setCursor({ x: event.clientX, y: event.clientY, active: true });
+      else setCursor((current) => ({ ...current, active: false }));
+    };
+    const handlePointerLeave = () => setCursor((current) => ({ ...current, active: false }));
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerleave", handlePointerLeave);
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, [introRef]);
+
+  const handlePointerEnter = () => setExpanded(true);
+  const handlePointerLeave = () => setExpanded(false);
 
   return (
-    <div ref={cardsRef} onPointerEnter={handlePointerEnter} onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave} className="relative mx-auto mt-10 w-full max-w-[1120px] touch-pan-x sm:mt-12 lg:mt-14">
+    <div className="relative mx-auto mt-10 w-full max-w-[1120px] touch-pan-x sm:mt-12 lg:mt-14" onPointerEnter={handlePointerEnter} onPointerLeave={handlePointerLeave}>
       <CursorSnow active={cursor.active} x={cursor.x} y={cursor.y} />
 
-      <div className="relative hidden h-[310px] md:block lg:h-[315px]">
+      <div ref={cardsRef} className="relative hidden h-[310px] md:block lg:h-[315px]">
         {highlights.map((highlight, index) => {
           const collapsedX = index === 0 ? "-16%" : index === 1 ? "0%" : "16%";
           const expandedX = index === 0 ? "-115%" : index === 1 ? "0%" : "115%";
@@ -153,7 +162,7 @@ export default function Services() {
             <p className="mt-8 max-w-[920px] font-display text-[clamp(0.9rem,1.25vw,1.18rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-10 lg:max-w-[980px]">Digital Points is a creative and digital solutions company helping businesses create compelling content, build strong brands, and promote them through design, marketing, media, and technology.</p>
             <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#08bdb8] text-black shadow-[0_18px_40px_rgba(8,189,184,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
           </motion.div>
-          <HighlightCards />
+          <HighlightCards introRef={introRef} />
         </div>
       </section>
 
