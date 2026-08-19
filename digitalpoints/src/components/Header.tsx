@@ -18,6 +18,8 @@ const links: NavItem[] = [
   { to: "#promotion", label: "PROMOTION", anchor: true, accent: "#ec4899" },
 ];
 
+const LOGO_DATA_URL = "data:image/webp;base64,{{LOGO_BASE64}}";
+
 export default function Header() {
   const { pathname, hash } = useLocation();
   const isHome = pathname === "/";
@@ -39,15 +41,17 @@ export default function Header() {
   const getAnchorHref = (item: NavItem) => (item.anchor ? (isHome ? item.to : `/${item.to}`) : item.to);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[60] border-b border-white/20 bg-cream-50/20 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_rgba(5,11,31,0.08)]">
+    <header className="fixed inset-x-0 top-0 z-[60]">
       <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between gap-5 px-6 sm:px-8 lg:px-10 xl:px-12">
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home">
-          <span className="font-poppins text-[1.55rem] font-semibold tracking-tight text-[#050b1f] transition-opacity duration-200 group-hover:opacity-80">
-            Digital<span className="text-point-400">Points</span>
-          </span>
+          <img
+            src={LOGO_DATA_URL}
+            alt="Digital Points"
+            className="block h-auto w-[190px] object-contain transition-opacity duration-200 group-hover:opacity-85 sm:w-[205px]"
+          />
         </Link>
 
-        <nav className="hidden items-center rounded-[16px] border border-white/30 bg-white/20 px-5 py-2.5 shadow-[0_10px_30px_rgba(5,11,31,0.06)] backdrop-blur-xl lg:flex" aria-label="Main navigation">
+        <nav className="hidden items-center rounded-[22px] border border-white/30 bg-white/20 px-5 py-2.5 shadow-[0_10px_30px_rgba(5,11,31,0.06)] backdrop-blur-xl lg:flex" aria-label="Main navigation">
           {links.map((item) => {
             const active = isActive(item);
             const isHovered = hovered === item.label;
