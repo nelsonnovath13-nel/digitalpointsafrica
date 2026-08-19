@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const rotatingWords = [
@@ -11,6 +11,20 @@ const rotatingWords = [
   "EMBROIDERY",
 ];
 
+const atmosphericParticles = [
+  { left: "5%", bottom: "4%", size: "3px", delay: 0, duration: 11, drift: -10 },
+  { left: "13%", bottom: "2%", size: "2px", delay: 2.2, duration: 13, drift: 12 },
+  { left: "22%", bottom: "8%", size: "3px", delay: 4.5, duration: 12, drift: -8 },
+  { left: "31%", bottom: "1%", size: "2px", delay: 1.4, duration: 14, drift: 14 },
+  { left: "40%", bottom: "6%", size: "3px", delay: 3.8, duration: 11.5, drift: -12 },
+  { left: "50%", bottom: "3%", size: "2px", delay: 5.2, duration: 13.5, drift: 10 },
+  { left: "59%", bottom: "7%", size: "3px", delay: 2.8, duration: 12.5, drift: -9 },
+  { left: "68%", bottom: "2%", size: "2px", delay: 4.1, duration: 14.5, drift: 11 },
+  { left: "77%", bottom: "6%", size: "3px", delay: 6, duration: 12.8, drift: -10 },
+  { left: "87%", bottom: "3%", size: "2px", delay: 1.8, duration: 13.8, drift: 9 },
+  { left: "95%", bottom: "7%", size: "3px", delay: 5.4, duration: 12.2, drift: -7 },
+];
+
 const ROTATE_INTERVAL_MS = 2800;
 const FLASH_DURATION_MS = 260;
 const HERO_BG_URL = "/hero-bg.jpg";
@@ -18,6 +32,7 @@ const HERO_BG_URL = "/hero-bg.jpg";
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
   const [isFlashing, setIsFlashing] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const pointerX = useMotionValue(50);
   const pointerY = useMotionValue(50);
@@ -84,28 +99,111 @@ export default function Hero() {
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
-          className="absolute -left-[14%] top-[7%] h-[38%] w-[46%] rounded-full bg-[#8ff8f2]/20 blur-[55px]"
-          style={{ x: smogOneX, y: smogOneY }}
-          animate={{ scale: [1, 1.06, 1], opacity: [0.42, 0.62, 0.42] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -left-[18%] top-[1%] h-[46%] w-[55%] rounded-[48%_52%_58%_42%/54%_44%_56%_46%] blur-[58px]"
+          style={{
+            x: smogOneX,
+            y: smogOneY,
+            mixBlendMode: "screen",
+            background:
+              "radial-gradient(ellipse at 42% 52%, rgba(190,255,250,0.48) 0%, rgba(130,247,240,0.28) 34%, rgba(80,220,218,0.08) 56%, rgba(80,220,218,0) 78%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.62 }
+              : { scale: [0.98, 1.1, 0.96, 1.04, 0.98], rotate: [0, 1.8, -1.1, 1, 0], opacity: [0.48, 0.7, 0.54, 0.64, 0.48] }
+          }
+          transition={{ duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
+
         <motion.div
-          className="absolute -right-[12%] top-[28%] h-[34%] w-[42%] rounded-full bg-[#006f73]/18 blur-[60px]"
-          style={{ x: smogTwoX, y: smogTwoY }}
-          animate={{ scale: [1.04, 0.96, 1.04], opacity: [0.32, 0.52, 0.32] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -right-[19%] top-[15%] h-[43%] w-[52%] rounded-[55%_45%_46%_54%/48%_58%_42%_52%] blur-[62px]"
+          style={{
+            x: smogTwoX,
+            y: smogTwoY,
+            mixBlendMode: "multiply",
+            background:
+              "radial-gradient(ellipse at 58% 46%, rgba(0,72,82,0.34) 0%, rgba(0,91,101,0.22) 36%, rgba(0,103,111,0.08) 58%, rgba(0,103,111,0) 80%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.62 }
+              : { scale: [1.02, 0.94, 1.08, 0.98, 1.02], rotate: [0, -1.6, 1.1, -0.8, 0], opacity: [0.48, 0.68, 0.52, 0.62, 0.48] }
+          }
+          transition={{ duration: 31, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
+
         <motion.div
-          className="absolute left-[24%] -bottom-[18%] h-[42%] w-[54%] rounded-full bg-white/10 blur-[70px]"
-          style={{ x: smogThreeX, y: smogThreeY }}
-          animate={{ scale: [0.96, 1.05, 0.96], opacity: [0.24, 0.4, 0.24] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute left-[12%] -bottom-[25%] h-[50%] w-[70%] rounded-[42%_58%_52%_48%/58%_42%_58%_42%] blur-[68px]"
+          style={{
+            x: smogThreeX,
+            y: smogThreeY,
+            mixBlendMode: "screen",
+            background:
+              "radial-gradient(ellipse at 50% 38%, rgba(236,255,254,0.3) 0%, rgba(178,247,244,0.16) 36%, rgba(122,235,232,0.06) 58%, rgba(122,235,232,0) 80%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.42 }
+              : { scale: [0.96, 1.08, 0.99, 1.05, 0.96], rotate: [0, 1.1, -0.9, 0.6, 0], opacity: [0.32, 0.48, 0.36, 0.44, 0.32] }
+          }
+          transition={{ duration: 34, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
+
         <motion.div
-          className="absolute left-1/2 top-1/2 h-[34%] w-[34%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00aaa8]/12 blur-[75px]"
-          animate={{ scale: [1, 1.08, 1], opacity: [0.2, 0.34, 0.2] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute left-[31%] top-[30%] h-[42%] w-[39%] rounded-[58%_42%_48%_52%/44%_56%_44%_56%] blur-[72px]"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 50%, rgba(127,250,245,0.22) 0%, rgba(91,235,231,0.11) 38%, rgba(91,235,231,0) 78%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.3 }
+              : { x: [0, -18, 14, -8, 0], y: [0, 12, -10, 7, 0], scale: [0.96, 1.1, 0.98, 1.06, 0.96], opacity: [0.22, 0.36, 0.26, 0.32, 0.22] }
+          }
+          transition={{ duration: 29, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
+
+        <motion.div
+          className="absolute left-[-8%] top-[48%] h-[22%] w-[42%] rounded-[52%_48%_62%_38%/48%_58%_42%_52%] blur-[48px]"
+          style={{
+            background:
+              "linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(214,255,252,0.14) 40%, rgba(214,255,252,0.04) 62%, rgba(214,255,252,0) 100%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.24 }
+              : { x: [0, 100, 180, 250], y: [0, -8, 6, 0], scaleX: [0.9, 1.08, 1.18, 0.9], opacity: [0.14, 0.28, 0.2, 0.14] }
+          }
+          transition={{ duration: 38, repeat: Infinity, repeatType: "mirror", ease: [0.42, 0, 0.58, 1] }}
+        />
+
+        <div className="absolute inset-x-0 bottom-[42px] h-[30%] overflow-hidden sm:bottom-[46px]" aria-hidden="true">
+          {atmosphericParticles.map((particle, index) => (
+            <motion.span
+              key={`${particle.left}-${index}`}
+              className={`absolute rounded-full bg-white/90 blur-[0.5px] ${index > 7 ? "hidden sm:block" : ""}`}
+              style={{
+                left: particle.left,
+                bottom: particle.bottom,
+                width: particle.size,
+                height: particle.size,
+                boxShadow: "0 0 14px rgba(235,255,254,0.55)",
+              }}
+              initial={{ opacity: 0, x: 0, y: 0 }}
+              animate={
+                shouldReduceMotion
+                  ? { opacity: 0.12 }
+                  : { opacity: [0, 0.34, 0.2, 0], x: [0, particle.drift, particle.drift * -0.55, 0], y: [0, -22, -58, -92] }
+              }
+              transition={{
+                duration: particle.duration,
+                delay: particle.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <div
