@@ -28,9 +28,9 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
 @media (min-width: 768px) {
   #services-intro { padding-bottom: 96px !important; }
   #services-intro > div.relative.z-10 { width: 100% !important; max-width: 1500px !important; margin-left: auto !important; margin-right: auto !important; }
-  #services-intro .touch-pan-x { width: min(100%, 1280px) !important; max-width: 1280px !important; margin-left: auto !important; margin-right: auto !important; margin-top: 44px !important; }
-  #services-intro .touch-pan-x > div.hidden { width: 100% !important; max-width: 1280px !important; height: 340px !important; margin-left: auto !important; margin-right: auto !important; overflow: visible !important; }
-  #services-intro .touch-pan-x > div.hidden > article { width: 30% !important; min-width: 0 !important; max-width: 400px !important; height: 300px !important; top: 50% !important; left: 50% !important; translate: 0 0 !important; }
+  #services-intro .touch-pan-x { width: min(100%, 1080px) !important; max-width: 1080px !important; margin-left: auto !important; margin-right: auto !important; margin-top: 44px !important; }
+  #services-intro .touch-pan-x > div.hidden { width: 100% !important; max-width: 1080px !important; height: 340px !important; margin-left: auto !important; margin-right: auto !important; overflow: visible !important; }
+  #services-intro .touch-pan-x > div.hidden > article { width: 30% !important; min-width: 0 !important; max-width: 320px !important; height: 300px !important; top: 50% !important; left: 50% !important; translate: 0 0 !important; }
   #services-intro .touch-pan-x > div.hidden > article:nth-child(1),
   #services-intro .touch-pan-x > div.hidden > article:nth-child(3) { translate: 0 0 !important; }
   #services-showcase > .sticky { padding-top: 22px !important; }
