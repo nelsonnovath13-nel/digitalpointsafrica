@@ -18,7 +18,37 @@ const links: NavItem[] = [
   { to: "#promotion", label: "PROMOTION", anchor: true, accent: "#ec4899" },
 ];
 
-const LOGO_DATA_URL = "data:image/webp;base64,{{LOGO_BASE64}}";
+function DigitalPointsLogo() {
+  return (
+    <svg
+      viewBox="0 0 520 118"
+      role="img"
+      aria-labelledby="digital-points-logo-title"
+      className="block h-auto w-[190px] sm:w-[205px]"
+    >
+      <title id="digital-points-logo-title">Digital Points</title>
+      <defs>
+        <linearGradient id="dp-logo-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#64e5e1" />
+          <stop offset="48%" stopColor="#22d0cc" />
+          <stop offset="100%" stopColor="#00aaa8" />
+        </linearGradient>
+      </defs>
+
+      <g fill="url(#dp-logo-gradient)">
+        <rect x="0" y="0" width="34" height="92" rx="2" />
+        <rect x="0" y="0" width="86" height="28" rx="2" />
+        <rect x="52" y="28" width="34" height="28" rx="2" />
+        <rect x="0" y="64" width="52" height="28" rx="2" />
+        <rect x="86" y="0" width="34" height="92" rx="2" />
+        <rect x="52" y="64" width="34" height="28" rx="2" />
+      </g>
+
+      <text x="146" y="49" fill="#3a3a3a" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">DIGITAL</text>
+      <text x="176" y="100" fill="#08c9c5" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">POINTS</text>
+    </svg>
+  );
+}
 
 export default function Header() {
   const { pathname, hash } = useLocation();
@@ -44,11 +74,7 @@ export default function Header() {
     <header className="fixed inset-x-0 top-0 z-[60]">
       <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between gap-5 px-6 sm:px-8 lg:px-10 xl:px-12">
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home">
-          <img
-            src={LOGO_DATA_URL}
-            alt="Digital Points"
-            className="block h-auto w-[190px] object-contain transition-opacity duration-200 group-hover:opacity-85 sm:w-[205px]"
-          />
+          <DigitalPointsLogo />
         </Link>
 
         <nav className="hidden items-center rounded-[22px] border border-white/30 bg-white/20 px-5 py-2.5 shadow-[0_10px_30px_rgba(5,11,31,0.06)] backdrop-blur-xl lg:flex" aria-label="Main navigation">
