@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, type PointerEvent } from "react";
 
 const services = [
   { title: "Digital Marketing", description: "We help businesses reach the right audience through social media, content, paid campaigns, and practical digital strategies designed to increase visibility, engagement, and enquiries.", tags: ["Social Media", "Content Marketing", "Paid Campaigns", "Digital Strategy"], visual: "MARKETING", image: "https://images.squarespace-cdn.com/content/v1/561646c6e4b0f890085faa02/1771484737308-OEDQ33ZIDCUD3NOF49P1/Social%2BMedia%2BManager%2Bwerden.png?format=1000w", imageAlt: "Creative marketing team planning a digital campaign" },
@@ -15,13 +15,12 @@ type Service = (typeof services)[number];
 type Highlight = {
   title: "CREATE" | "BRAND" | "GROW";
   description: string;
-  rotation: number;
 };
 
 const highlights: Highlight[] = [
-  { title: "CREATE", description: "We turn ideas into clear, creative content that gives your brand something worth noticing.", rotation: -6 },
-  { title: "BRAND", description: "We shape memorable identities that make your business easier to recognise, trust, and remember.", rotation: 4 },
-  { title: "GROW", description: "We turn attention into momentum through smarter marketing, stronger reach, and measurable results.", rotation: 7 },
+  { title: "CREATE", description: "We turn ideas into clear, creative content that gives your brand something worth noticing." },
+  { title: "BRAND", description: "We shape memorable identities that make your business easier to recognise, trust, and remember." },
+  { title: "GROW", description: "We turn attention into momentum through smarter marketing, stronger reach, and measurable results." },
 ];
 
 function HighlightIcon({ title }: { title: Highlight["title"] }) {
@@ -62,13 +61,13 @@ function CursorSnow({ active, x, y }: { active: boolean; x: number; y: number })
       initial={false}
       animate={{ opacity: active ? 1 : 0, x, y, scale: active ? 1 : 0.55 }}
       transition={{ type: "spring", stiffness: 280, damping: 24, mass: 0.35 }}
-      className="pointer-events-none absolute left-0 top-0 z-50 hidden h-20 w-20 -translate-x-1/2 -translate-y-1/2 md:block"
+      className="pointer-events-none absolute left-0 top-0 z-50 block h-14 w-14 -translate-x-1/2 -translate-y-1/2 sm:h-16 sm:w-16 md:h-20 md:w-20"
     >
       <motion.span animate={{ rotate: 360 }} transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }} className="absolute inset-1 rounded-full border border-[#00B7FF]/70 border-dashed shadow-[0_0_22px_rgba(0,183,255,0.34)]" />
       <motion.span animate={{ rotate: -360 }} transition={{ duration: 3.2, repeat: Infinity, ease: "linear" }} className="absolute inset-3 rounded-full border border-[#2D8CFF]/45 border-dotted" />
-      <span className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00B7FF] shadow-[0_0_18px_7px_rgba(0,183,255,0.26)]" />
-      <span className="absolute left-3 top-2 h-1.5 w-1.5 rounded-full bg-[#2D8CFF] shadow-[0_0_10px_4px_rgba(45,140,255,0.28)]" />
-      <span className="absolute bottom-2 right-3 h-1 w-1 rounded-full bg-[#00B7FF] shadow-[0_0_9px_3px_rgba(0,183,255,0.25)]" />
+      <span className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00B7FF] shadow-[0_0_18px_7px_rgba(0,183,255,0.26)] sm:h-4 sm:w-4" />
+      <span className="absolute left-2 top-1.5 h-1.5 w-1.5 rounded-full bg-[#2D8CFF] shadow-[0_0_10px_4px_rgba(45,140,255,0.28)]" />
+      <span className="absolute bottom-1.5 right-2 h-1 w-1 rounded-full bg-[#00B7FF] shadow-[0_0_9px_3px_rgba(0,183,255,0.25)]" />
     </motion.div>
   );
 }
@@ -78,18 +77,26 @@ function HighlightCards() {
   const [cursor, setCursor] = useState({ x: 0, y: 0, active: false });
   const cardsRef = useRef<HTMLDivElement>(null);
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     const bounds = cardsRef.current?.getBoundingClientRect();
     if (!bounds) return;
     setCursor({ x: event.clientX - bounds.left, y: event.clientY - bounds.top, active: true });
   };
 
-  const handlePointerLeave = () => setCursor((current) => ({ ...current, active: false }));
+  const handlePointerEnter = () => {
+    setExpanded(true);
+    setCursor((current) => ({ ...current, active: true }));
+  };
+
+  const handlePointerLeave = () => {
+    setExpanded(false);
+    setCursor((current) => ({ ...current, active: false }));
+  };
 
   return (
     <div
       ref={cardsRef}
-      onPointerEnter={() => setCursor((current) => ({ ...current, active: true }))}
+      onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       className="relative mx-auto mt-20 w-full max-w-[1120px] touch-pan-x sm:mt-24 lg:mt-28"
@@ -98,13 +105,12 @@ function HighlightCards() {
 
       <div className="relative hidden h-[350px] md:block">
         {highlights.map((highlight, index) => {
-          const collapsedX = index === 0 ? "13%" : index === 1 ? "0%" : "-13%";
-          const expandedX = index === 0 ? "-4%" : index === 1 ? "0%" : "4%";
+          const collapsedX = index === 0 ? "-18%" : index === 1 ? "0%" : "18%";
+          const expandedX = index === 0 ? "-58%" : index === 1 ? "0%" : "58%";
           const collapsedRotate = index === 0 ? -8 : index === 1 ? 2 : 8;
           return (
             <motion.article
               key={highlight.title}
-              onMouseEnter={() => setExpanded(true)}
               animate={{ x: expanded ? expandedX : collapsedX, rotate: expanded ? 0 : collapsedRotate, scale: expanded ? 1 : 0.98 }}
               transition={{ type: "spring", stiffness: 170, damping: 22, mass: 0.8 }}
               style={{ zIndex: index + 1 }}
@@ -124,9 +130,9 @@ function HighlightCards() {
         })}
       </div>
 
-      <div className="flex gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
+      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
         {highlights.map((highlight, index) => (
-          <article key={highlight.title} className="relative flex h-[410px] min-w-[calc(100vw-40px)] snap-center snap-always flex-col overflow-hidden rounded-[6px] bg-[#211f1f] p-8 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)] first:ml-0">
+          <article key={highlight.title} className="relative flex h-[410px] min-w-[calc(100vw-40px)] snap-center flex-col overflow-hidden rounded-[6px] bg-[#211f1f] p-8 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)]">
             <div className="flex items-start justify-between">
               <h3 className="font-display text-[2rem] font-semibold tracking-[-0.055em]">{highlight.title}</h3>
               <span className="font-poppins text-[9px] uppercase tracking-[0.3em] text-white/35">0{index + 1}</span>
@@ -202,7 +208,7 @@ export default function Services() {
   const showcaseRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 65, damping: 28, mass: 0.65 });
-  const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%");
+  const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
 
