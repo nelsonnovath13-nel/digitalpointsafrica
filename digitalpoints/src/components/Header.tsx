@@ -16,26 +16,13 @@ const links: NavItem[] = [
   { to: "/video-production", label: "VIDEO PRODUCTION", accent: "#8a4dff" },
   { to: "#embroidery", label: "EMBROIDERY", anchor: true, accent: "#f59e0b" },
   { to: "#promotion", label: "PROMOTION", anchor: true, accent: "#ec4899" },
-  { to: "/contact", label: "CONTACTS", accent: "#10b981" },
 ];
 
 export default function Header() {
   const { pathname, hash } = useLocation();
   const isHome = pathname === "/";
-  const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
-  const scrolled = !isHome || scrolledPastHero;
-
-  useEffect(() => {
-    if (!isHome) return;
-    const onScroll = () => {
-      setScrolledPastHero(window.scrollY > Math.max(window.innerHeight - 120, 200));
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -52,26 +39,22 @@ export default function Header() {
   const getAnchorHref = (item: NavItem) => (item.anchor ? (isHome ? item.to : `/${item.to}`) : item.to);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-[60] transition-all duration-300 ${
-        scrolled ? "border-b border-ink-950/10 bg-cream-50/90 backdrop-blur-md" : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between px-8 lg:px-12">
+    <header className="fixed inset-x-0 top-0 z-[60] border-b border-white/20 bg-cream-50/20 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_rgba(5,11,31,0.08)]">
+      <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between gap-5 px-6 sm:px-8 lg:px-10 xl:px-12">
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home">
-          <span className={`font-poppins text-[1.55rem] font-semibold tracking-tight transition-colors duration-300 ${scrolled ? "text-ink-950" : "text-black"}`}>
+          <span className="font-poppins text-[1.55rem] font-semibold tracking-tight text-[#050b1f] transition-opacity duration-200 group-hover:opacity-80">
             Digital<span className="text-point-400">Points</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center lg:flex" aria-label="Main navigation">
-          {links.map((item, index) => {
+        <nav className="hidden items-center rounded-[16px] border border-white/30 bg-white/20 px-5 py-2.5 shadow-[0_10px_30px_rgba(5,11,31,0.06)] backdrop-blur-xl lg:flex" aria-label="Main navigation">
+          {links.map((item) => {
             const active = isActive(item);
             const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : "#050b1f";
             const shouldGlow = isHovered || active;
 
-            const commonClass = "group relative whitespace-nowrap px-0.5 py-2 font-poppins text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
+            const commonClass = "group relative whitespace-nowrap px-2.5 py-2 font-poppins text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
 
             const content = (
               <motion.span
@@ -123,87 +106,59 @@ export default function Header() {
               </motion.span>
             );
 
-            return (
-              <div key={item.label} className="flex items-center">
-                {index > 0 && (
-                  <span aria-hidden="true" className={`mx-4 select-none font-poppins text-[17px] font-light leading-none transition-colors duration-200 ${scrolled ? "text-ink-950/35" : "text-black/45"}`}>
-                    |
-                  </span>
-                )}
-
-                {item.anchor ? (
-                  <motion.a
-                    href={getAnchorHref(item)}
-                    className={commonClass}
-                    onMouseEnter={() => setHovered(item.label)}
-                    onMouseLeave={() => setHovered(null)}
-                    onClick={() => setOpen(false)}
-                  >
-                    {content}
-                  </motion.a>
-                ) : (
-                  <motion.div onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)}>
-                    <NavLink to={item.to} end={item.end} className={commonClass}>
-                      {content}
-                    </NavLink>
-                  </motion.div>
-                )}
-              </div>
+            return item.anchor ? (
+              <motion.a key={item.label} href={getAnchorHref(item)} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)} onClick={() => setOpen(false)}>
+                {content}
+              </motion.a>
+            ) : (
+              <motion.div key={item.label} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)}>
+                <NavLink to={item.to} end={item.end} className={commonClass}>
+                  {content}
+                </NavLink>
+              </motion.div>
             );
           })}
         </nav>
 
-        <button
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-          className={`flex h-10 w-10 items-center justify-center border lg:hidden ${scrolled ? "border-ink-950/20 text-ink-950" : "border-black/25 text-black"}`}
-        >
-          <span className="relative block h-3.5 w-5">
-            <span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} />
-            <span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} />
-          </span>
-        </button>
+        <div className="flex items-center gap-3">
+          <motion.div
+            animate={{ boxShadow: ["0 0 0 0 rgba(0,199,195,0)", "0 0 0 7px rgba(0,199,195,0.10)", "0 0 0 0 rgba(0,199,195,0)"] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            className="hidden rounded-[12px] lg:block"
+          >
+            <Link to="/contact" className="group inline-flex h-[50px] items-center gap-2.5 rounded-[10px] border border-black/10 bg-cream-50/90 px-6 font-poppins text-[14px] font-semibold tracking-[0.01em] text-[#050b1f] shadow-[0_8px_24px_rgba(5,11,31,0.10)] backdrop-blur-md transition-all duration-200 hover:bg-[#08bdb8] hover:text-black" onClick={() => setOpen(false)}>
+              <span className="h-2 w-2 rounded-full bg-[#08bdb8] shadow-[0_0_10px_rgba(8,189,184,0.65)] transition-colors duration-200 group-hover:bg-[#050b1f]" />
+              CONTACTS
+            </Link>
+          </motion.div>
+
+          <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-black/20 bg-cream-50/55 text-[#050b1f] backdrop-blur-md lg:hidden">
+            <span className="relative block h-3.5 w-5">
+              <span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} />
+              <span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} />
+            </span>
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden border-t border-ink-950/10 bg-cream-50 lg:hidden"
-          >
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden border-t border-black/10 bg-cream-50/90 backdrop-blur-xl lg:hidden">
             <nav className="flex flex-col px-6 py-4" aria-label="Mobile navigation">
-              {links.map((item, index) => {
+              {[...links, { to: "/contact", label: "CONTACTS", accent: "#10b981" }].map((item, index) => {
                 const active = isActive(item);
-                const mobileIndicator = active ? (
-                  <span className="h-1.5 w-8 rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}70` }} />
-                ) : null;
+                const mobileIndicator = active ? <span className="h-1.5 w-8 rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}70` }} /> : null;
 
                 return (
                   <div key={item.label}>
                     {index > 0 && <div className="h-px bg-ink-950/10" />}
                     {item.anchor ? (
-                      <a
-                        href={getAnchorHref(item)}
-                        onClick={() => setOpen(false)}
-                        className="flex items-center justify-between py-4 font-poppins text-sm font-medium transition-colors"
-                        style={{ color: active ? item.accent : "#050b1f" }}
-                      >
+                      <a href={getAnchorHref(item)} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 font-poppins text-sm font-medium" style={{ color: active ? item.accent : "#050b1f" }}>
                         {item.label}
                         {mobileIndicator}
                       </a>
                     ) : (
-                      <NavLink
-                        to={item.to}
-                        end={item.end}
-                        onClick={() => setOpen(false)}
-                        className="flex items-center justify-between py-4 font-poppins text-sm font-medium transition-colors"
-                        style={({ isActive: routeActive }) => ({ color: routeActive ? item.accent : "#050b1f" })}
-                      >
+                      <NavLink to={item.to} end={item.end} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 font-poppins text-sm font-medium" style={({ isActive: routeActive }) => ({ color: routeActive ? item.accent : "#050b1f" })}>
                         {item.label}
                         {mobileIndicator}
                       </NavLink>
