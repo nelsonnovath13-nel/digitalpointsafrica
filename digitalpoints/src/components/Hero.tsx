@@ -67,16 +67,16 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-6 pb-8 pt-14 text-center">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8">
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-display text-[2rem] font-semibold leading-[1.04] tracking-tight text-black sm:text-[2.7rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.25rem]"
+          className="font-display text-[1.72rem] font-semibold leading-[1.07] tracking-[-0.035em] text-black sm:text-[2.3rem] md:text-[2.8rem] lg:text-[3.35rem] xl:text-[3.65rem]"
         >
           <span className="block whitespace-nowrap">Everything your brand needs</span>
           <span className="block">to succeed through</span>
-          <span className="relative block min-h-[1.04em]">
+          <span className="relative block min-h-[1.07em]">
             <AnimatePresence>
               {isFlashing && (
                 <motion.span
@@ -114,25 +114,34 @@ export default function Hero() {
         </motion.h1>
 
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4"
+          transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-6 flex w-full flex-col items-center gap-2.5 sm:mt-8 sm:flex-row sm:justify-center sm:gap-3.5"
         >
-          <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}>
-            <Link to="/portfolio" className="inline-flex min-w-[190px] items-center justify-center border border-white/80 bg-white px-6 py-3.5 font-poppins text-sm font-medium text-[#050b1f] shadow-[0_10px_28px_rgba(5,11,31,0.08)] transition-all duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white">
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+            <Link
+              to="/portfolio"
+              className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white bg-white px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-[#050b1f] shadow-[0_8px_22px_rgba(5,11,31,0.08)] transition-all duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white hover:shadow-[0_10px_28px_rgba(5,11,31,0.16)] active:bg-[#050b1f] active:text-white sm:h-[47px] sm:min-w-[195px] sm:text-[13.5px]"
+            >
               View our Portfolio
             </Link>
           </motion.div>
 
-          <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}>
-            <Link to="/services" className="inline-flex min-w-[210px] items-center justify-center border border-white/80 bg-white px-6 py-3.5 font-poppins text-sm font-medium text-[#050b1f] shadow-[0_10px_28px_rgba(5,11,31,0.08)] transition-all duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white">
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+            <Link
+              to="/services"
+              className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]"
+            >
               Explore Our Services
             </Link>
           </motion.div>
 
-          <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}>
-            <Link to="/contact" className="inline-flex min-w-[190px] items-center justify-center border border-white/80 bg-white px-6 py-3.5 font-poppins text-sm font-medium text-[#050b1f] shadow-[0_10px_28px_rgba(5,11,31,0.08)] transition-all duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white">
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+            <Link
+              to="/contact"
+              className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[185px] sm:text-[13.5px]"
+            >
               Start a Project
             </Link>
           </motion.div>
