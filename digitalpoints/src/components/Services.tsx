@@ -69,7 +69,7 @@ export default function Services() {
             <span className="absolute bottom-[8%] right-[7%] font-poppins text-[9px] font-medium uppercase tracking-[0.38em] text-black/20">DIGITAL POINTS / CREATIVE STUDIO</span>
           </div>
           <div className="relative z-10 mx-auto flex h-full max-w-[1500px] flex-col">
-            <div className="shrink-0 px-1 pt-2 sm:px-2 sm:pt-3"><p className="font-poppins text-[10px] font-medium uppercase tracking-[0.34em] text-[#08bdb8] sm:text-xs sm:tracking-[0.38em]">What We Do</p><h2 className="mt-1 font-display text-[clamp(3.4rem,8vw,6.8rem)] font-semibold leading-[0.82] tracking-[-0.07em] text-black sm:mt-1.5">Our Services</h2></div>
+            <div className="shrink-0 px-1 pt-2 sm:px-2 sm:pt-3"><p className="font-poppins text-[10px] font-medium uppercase tracking-[0.34em] text-[#08bdb8] sm:text-xs sm:tracking-[0.38em]">What We Do</p><h2 className="mt-2 whitespace-nowrap font-display text-[clamp(3.25rem,12.5vw,10rem)] font-semibold leading-[0.78] tracking-[-0.075em] text-black sm:mt-2.5">Our Services</h2></div>
             <div className="relative mt-2 min-h-0 flex-1 sm:mt-3 lg:mt-4"><div className="relative h-full w-full overflow-hidden rounded-[26px] sm:rounded-[32px] lg:rounded-[38px]">{services.map((service, index) => <ServiceCard key={service.title} service={service} index={index} progress={smoothProgress} />)}</div></div>
           </div>
         </div>
