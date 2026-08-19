@@ -24,14 +24,38 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
 
   return (
     <motion.article aria-label={service.title} style={{ x, opacity, scale, rotate, zIndex: services.length - index }} className="absolute inset-0 overflow-hidden rounded-[26px] bg-[#08bdb8] shadow-[0_30px_90px_rgba(0,0,0,0.16)] sm:rounded-[32px] lg:rounded-[38px]">
-      <div className="relative flex h-full flex-col p-6 sm:p-9 lg:p-12 xl:p-14">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border-[40px] border-black/[0.035] sm:h-96 sm:w-96" />
-        <div className="pointer-events-none absolute -bottom-28 -left-28 h-72 w-72 rounded-full border-[35px] border-white/[0.16] sm:h-96 sm:w-96" />
-        <div className="relative z-20 flex items-center justify-between gap-5"><div className="flex items-center gap-3 text-[#145b59] sm:gap-4"><span className="h-px w-10 bg-[#145b59]/70 sm:w-16" /><span className="font-poppins text-[10px] font-medium uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.32em]">Our Services</span></div><span className="hidden font-poppins text-[10px] font-medium uppercase tracking-[0.28em] text-black/30 sm:block">{service.visual}</span></div>
-        <div className="relative z-20 mt-7 max-w-5xl sm:mt-10 lg:mt-12"><h3 className="font-display text-[clamp(2.5rem,7vw,6.7rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-black">{service.title}</h3><p className="mt-5 max-w-4xl font-display text-[clamp(1rem,1.75vw,1.48rem)] leading-[1.42] tracking-[-0.02em] text-[#101818] sm:mt-7">{service.description}</p></div>
-        <div className="relative z-20 mt-6 flex flex-wrap gap-2 sm:mt-8">{service.tags.map((tag) => <span key={tag} className="border border-black/10 bg-black/[0.045] px-3 py-2 font-poppins text-[10px] font-medium text-black sm:px-3.5 sm:text-xs">{tag}</span>)}</div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[43%] overflow-hidden"><motion.img src={service.image} alt={service.imageAlt} loading={index === 0 ? "eager" : "lazy"} className="h-full w-full object-cover object-center" initial={{ scale: 1.08 }} whileInView={{ scale: 1 }} viewport={{ once: false, amount: 0.2 }} transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} /><div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" /><div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#08bdb8]/80 to-transparent" /></div>
-        <div className="relative z-30 mt-auto flex items-end justify-between gap-5 pb-[38%] pt-8"><div className="hidden max-w-md sm:block"><div className="h-px w-full bg-black/15" /><p className="mt-3 font-poppins text-[10px] uppercase tracking-[0.18em] text-black/45">Creative solutions built around your business</p></div><span className="inline-flex w-fit bg-[#211f1f] px-5 py-3 font-poppins text-xs font-semibold text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)] sm:px-6 sm:py-3.5 sm:text-sm">Learn More</span></div>
+      <div className="relative grid h-full grid-rows-[minmax(0,1fr)_34%] sm:grid-rows-[minmax(0,1fr)_36%] lg:grid-cols-[57%_43%] lg:grid-rows-1">
+        <div className="relative z-20 flex min-h-0 flex-col p-6 sm:p-9 lg:p-10 xl:p-12">
+          <div className="pointer-events-none absolute -left-28 -top-24 h-72 w-72 rounded-full border-[40px] border-white/[0.14] sm:h-96 sm:w-96" />
+          <div className="pointer-events-none absolute -right-28 bottom-[-8rem] h-80 w-80 rounded-full border-[38px] border-black/[0.035] sm:h-96 sm:w-96 lg:hidden" />
+          <div className="relative z-20 flex items-center justify-between gap-5">
+            <div className="flex items-center gap-3 text-[#145b59] sm:gap-4">
+              <span className="h-px w-10 bg-[#145b59]/70 sm:w-16" />
+              <span className="font-poppins text-[10px] font-medium uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.32em]">Our Services</span>
+            </div>
+          </div>
+          <div className="relative z-20 mt-7 max-w-4xl sm:mt-9 lg:mt-10 xl:mt-12">
+            <h3 className="font-display text-[clamp(2.5rem,6vw,5.8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-black">{service.title}</h3>
+            <p className="mt-5 max-w-3xl font-display text-[clamp(0.98rem,1.55vw,1.38rem)] leading-[1.42] tracking-[-0.02em] text-[#101818] sm:mt-6 lg:max-w-2xl">{service.description}</p>
+          </div>
+          <div className="relative z-20 mt-5 flex flex-wrap gap-2 sm:mt-7 lg:max-w-2xl">
+            {service.tags.map((tag) => <span key={tag} className="border border-black/10 bg-black/[0.045] px-3 py-2 font-poppins text-[10px] font-medium text-black sm:px-3.5 sm:text-xs">{tag}</span>)}
+          </div>
+          <div className="relative z-30 mt-auto flex items-end justify-between gap-5 pt-7">
+            <div className="hidden max-w-sm sm:block">
+              <div className="h-px w-full bg-black/15" />
+              <p className="mt-3 font-poppins text-[10px] uppercase tracking-[0.18em] text-black/45">Creative solutions built around your business</p>
+            </div>
+            <span className="inline-flex w-fit bg-[#211f1f] px-5 py-3 font-poppins text-xs font-semibold text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)] sm:px-6 sm:py-3.5 sm:text-sm">Learn More</span>
+          </div>
+        </div>
+        <div className="relative z-10 min-h-0 overflow-hidden lg:h-full">
+          <motion.img src={service.image} alt={service.imageAlt} loading={index === 0 ? "eager" : "lazy"} className="h-full w-full object-cover object-center" initial={{ scale: 1.08 }} whileInView={{ scale: 1 }} viewport={{ once: false, amount: 0.2 }} transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-[#08bdb8]/35" />
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#08bdb8]/45 to-transparent lg:hidden" />
+          <div className="absolute right-5 top-5 hidden font-poppins text-[10px] font-medium uppercase tracking-[0.28em] text-white/75 lg:block">{service.visual}</div>
+          <div className="absolute bottom-5 right-5 hidden h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-black/10 backdrop-blur-sm lg:flex"><span className="h-1.5 w-1.5 rounded-full bg-[#08bdb8]" /></div>
+        </div>
       </div>
     </motion.article>
   );
