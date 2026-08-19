@@ -76,22 +76,22 @@ export default function Services() {
 
   return (
     <>
-      <section ref={introRef} id="services-intro" aria-label="Services introduction" className="relative isolate overflow-hidden bg-[#f7f3ea] px-5 pb-10 pt-12 sm:px-8 sm:pb-12 sm:pt-16 lg:px-12 lg:pb-12 lg:pt-16">
+      <section ref={introRef} id="services-intro" aria-label="Services introduction" className="relative isolate min-h-[690px] overflow-hidden bg-[#f7f3ea] px-5 pb-20 pt-16 sm:min-h-[740px] sm:px-8 sm:pb-24 sm:pt-20 lg:min-h-[780px] lg:px-12 lg:pb-28 lg:pt-24">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[38%] opacity-75" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.15) 1.15px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent)", WebkitMaskImage: "linear-gradient(90deg, black, transparent)" }} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[30%] opacity-50" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.11) 1px, transparent 1.2px)", backgroundSize: "20px 20px", maskImage: "linear-gradient(90deg, transparent, black)", WebkitMaskImage: "linear-gradient(90deg, transparent, black)" }} />
         <div className="relative z-10 mx-auto max-w-[1500px]">
           <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-70px" }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="flex w-full flex-col items-center text-center">
-            <h2 className="whitespace-nowrap font-display text-[clamp(1rem,2.7vw,2.6rem)] font-semibold leading-[1] tracking-[-0.055em] text-[#08bdb8]">From Creative Ideas to Measurable Impact</h2>
-            <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.65, delay: 0.12 }} style={{ transformOrigin: "center" }} className="mt-4 h-[2px] w-full max-w-[960px] bg-[#08bdb8] sm:mt-5" />
-            <p className="mt-5 max-w-[1100px] font-display text-[clamp(0.82rem,1.05vw,1.1rem)] font-normal leading-[1.5] tracking-[-0.012em] text-[#171919] sm:mt-6">Digital Points is a creative and digital solutions company helping businesses create compelling content, build strong brands, and promote them through design, marketing, media, and technology.</p>
-            <motion.a href="/portfolio" whileHover={{ y: -3 }} whileTap={{ scale: 0.97 }} className="group relative mt-6 inline-flex min-h-[46px] items-center justify-center overflow-hidden bg-[#08bdb8] px-6 py-3 font-display text-[0.9rem] font-medium text-black shadow-[0_12px_28px_rgba(8,189,184,0.16)] transition-transform duration-300 sm:mt-7 sm:min-h-[50px] sm:px-7 sm:text-[0.95rem]">
-              <span aria-hidden="true" className="absolute inset-0 origin-left scale-x-0 bg-[#211f1f] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-active:scale-x-100" />
-              <span className="relative z-10 transition-colors duration-300 group-hover:text-white group-active:text-white">View all our works</span>
-              <span aria-hidden="true" className="relative z-10 ml-2 translate-x-0 text-sm opacity-70 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100 group-active:translate-x-1 group-active:opacity-100">↗</span>
-            </motion.a>
+            <h2 className="whitespace-nowrap font-display text-[clamp(1rem,4.6vw,4.6rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[#08bdb8]">From Creative Ideas to Measurable Impact</h2>
+            <p className="mt-10 max-w-[1120px] font-display text-[clamp(0.9rem,1.35vw,1.25rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-12">Digital Points is a creative and digital solutions company helping businesses create compelling content, build strong brands, and promote them through design, marketing, media, and technology.</p>
+            <div className="mt-12 [perspective:900px] sm:mt-14">
+              <motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base">
+                <span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span>
+                <span className="absolute inset-0 flex items-center justify-center bg-[#08bdb8] text-black shadow-[0_18px_40px_rgba(8,189,184,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span>
+              </motion.a>
+            </div>
           </motion.div>
 
-          <div className="relative mx-auto mt-9 h-[150px] w-full max-w-[980px] sm:mt-11 sm:h-[190px] lg:mt-12 lg:h-[220px]" aria-label="Creative services highlights">
+          <div className="relative mx-auto mt-24 h-[150px] w-full max-w-[980px] sm:mt-28 sm:h-[190px] lg:mt-32 lg:h-[220px]" aria-label="Creative services highlights">
             <motion.div initial={{ opacity: 0, y: 28, scale: 0.88, rotate: 9 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 6 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="absolute left-[3%] top-[18%] z-10 flex h-[72px] w-[112px] items-start justify-start bg-[#211f1f] p-3 text-white shadow-[0_18px_35px_rgba(0,0,0,0.14)] sm:h-[96px] sm:w-[148px] sm:p-4 lg:h-[118px] lg:w-[178px] lg:p-5">
               <span className="font-display text-[0.68rem] tracking-[-0.035em] sm:text-[0.82rem] lg:text-[0.95rem]">CREATE</span><span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[2px] bg-[#08bdb8]" />
             </motion.div>
