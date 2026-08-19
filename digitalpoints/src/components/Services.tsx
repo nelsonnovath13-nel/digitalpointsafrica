@@ -23,7 +23,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2.5, 0, index === services.length - 1 ? 0 : -2.5]);
 
   return (
-    <motion.article aria-label={service.title} style={{ x, opacity, scale, rotate, zIndex: services.length - index }} className="absolute inset-0 overflow-hidden rounded-[26px] bg-[#08bdb8] shadow-[0_30px_90px_rgba(0,0,0,0.16)] sm:rounded-[32px] lg:rounded-[38px]">
+    <motion.article aria-label={service.title} style={{ x, opacity, scale, rotate, zIndex: services.length - index }} className="absolute inset-x-0 top-[2.5vh] bottom-[2.5vh] overflow-hidden rounded-[26px] bg-[#08bdb8] shadow-[0_30px_90px_rgba(0,0,0,0.16)] sm:top-[3vh] sm:bottom-[3vh] sm:rounded-[32px] lg:top-[4vh] lg:bottom-[4vh] lg:rounded-[38px]">
       <div className="relative grid h-full grid-rows-[minmax(0,1fr)_34%] sm:grid-rows-[minmax(0,1fr)_36%] lg:grid-cols-[57%_43%] lg:grid-rows-1">
         <div className="relative z-20 flex min-h-0 flex-col p-6 sm:p-9 lg:p-10 xl:p-12">
           <div className="pointer-events-none absolute -left-28 -top-24 h-72 w-72 rounded-full border-[40px] border-white/[0.14] sm:h-96 sm:w-96" />
@@ -46,7 +46,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
               <div className="h-px w-full bg-black/15" />
               <p className="mt-3 font-poppins text-[10px] uppercase tracking-[0.18em] text-black/45">Creative solutions built around your business</p>
             </div>
-            <span className="inline-flex w-fit bg-[#211f1f] px-5 py-3 font-poppins text-xs font-semibold text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)] sm:px-6 sm:py-3.5 sm:text-sm">Learn More</span>
+            <motion.a href={`/contact?service=${encodeURIComponent(service.title)}`} aria-label={`Learn more about ${service.title}`} whileHover={{ y: -3 }} whileTap={{ scale: 0.97 }} className="inline-flex w-fit whitespace-nowrap bg-[#211f1f] px-5 py-3 font-poppins text-xs font-semibold text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)] transition-colors hover:bg-black sm:px-6 sm:py-3.5 sm:text-sm">Learn More</motion.a>
           </div>
         </div>
         <div className="relative z-10 min-h-0 overflow-hidden lg:h-full">
