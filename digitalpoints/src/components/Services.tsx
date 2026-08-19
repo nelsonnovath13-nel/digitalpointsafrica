@@ -17,31 +17,32 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const x = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
+  const x = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"][index === 0 ? 0 : 0] as any);
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
-  const scale = useTransform(progress, [start, center, end], [0.96, 1, 0.96]);
-  const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2.5, 0, index === services.length - 1 ? 0 : -2.5]);
+  const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
+  const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
 
   return (
-    <motion.article aria-label={service.title} style={{ x, opacity, scale, rotate, zIndex: services.length - index }} className="absolute inset-x-0 top-[2.5vh] bottom-[2.5vh] overflow-hidden rounded-[26px] bg-[#08bdb8] shadow-[0_30px_90px_rgba(0,0,0,0.16)] sm:top-[3vh] sm:bottom-[3vh] sm:rounded-[32px] lg:top-[4vh] lg:bottom-[4vh] lg:rounded-[38px]">
-      <div className="relative grid h-full grid-rows-[minmax(0,1fr)_34%] sm:grid-rows-[minmax(0,1fr)_36%] lg:grid-cols-[57%_43%] lg:grid-rows-1">
-        <div className="relative z-20 flex min-h-0 flex-col p-6 sm:p-9 lg:p-10 xl:p-12">
+    <motion.article aria-label={service.title} style={{ x: cardX, opacity, scale, rotate, zIndex: services.length - index }} className="absolute inset-x-0 top-[2vh] bottom-[2vh] overflow-hidden rounded-[24px] bg-[#08bdb8] shadow-[0_30px_90px_rgba(0,0,0,0.16)] sm:top-[2.5vh] sm:bottom-[2.5vh] sm:rounded-[32px] lg:top-[3vh] lg:bottom-[3vh] lg:rounded-[38px]">
+      <div className="relative grid h-full grid-rows-[minmax(0,1fr)_40%] sm:grid-rows-[minmax(0,1fr)_39%] lg:grid-cols-[57%_43%] lg:grid-rows-1">
+        <div className="relative z-20 flex min-h-0 flex-col p-5 sm:p-8 lg:p-10 xl:p-12">
           <div className="pointer-events-none absolute -left-28 -top-24 h-72 w-72 rounded-full border-[40px] border-white/[0.14] sm:h-96 sm:w-96" />
           <div className="pointer-events-none absolute -right-28 bottom-[-8rem] h-80 w-80 rounded-full border-[38px] border-black/[0.035] sm:h-96 sm:w-96 lg:hidden" />
           <div className="relative z-20 flex items-center justify-between gap-5">
             <div className="flex items-center gap-3 text-[#145b59] sm:gap-4">
               <span className="h-px w-10 bg-[#145b59]/70 sm:w-16" />
-              <span className="font-poppins text-[10px] font-medium uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.32em]">Our Services</span>
+              <span className="font-poppins text-[9px] font-medium uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.32em]">Our Services</span>
             </div>
           </div>
-          <div className="relative z-20 mt-7 max-w-4xl sm:mt-9 lg:mt-10 xl:mt-12">
-            <h3 className="font-display text-[clamp(2.5rem,6vw,5.8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-black">{service.title}</h3>
-            <p className="mt-5 max-w-3xl font-display text-[clamp(0.98rem,1.55vw,1.38rem)] leading-[1.42] tracking-[-0.02em] text-[#101818] sm:mt-6 lg:max-w-2xl">{service.description}</p>
+          <div className="relative z-20 mt-5 max-w-4xl sm:mt-7 lg:mt-8 xl:mt-10">
+            <h3 className="font-display text-[clamp(2.25rem,5.4vw,5.4rem)] font-semibold leading-[0.9] tracking-[-0.065em] text-black">{service.title}</h3>
+            <p className="mt-4 max-w-3xl font-display text-[clamp(0.9rem,1.35vw,1.3rem)] leading-[1.4] tracking-[-0.02em] text-[#101818] sm:mt-5 lg:max-w-2xl">{service.description}</p>
           </div>
-          <div className="relative z-20 mt-5 flex flex-wrap gap-2 sm:mt-7 lg:max-w-2xl">
-            {service.tags.map((tag) => <span key={tag} className="border border-black/10 bg-black/[0.045] px-3 py-2 font-poppins text-[10px] font-medium text-black sm:px-3.5 sm:text-xs">{tag}</span>)}
+          <div className="relative z-20 mt-4 flex flex-wrap gap-1.5 sm:mt-6 sm:gap-2 lg:max-w-2xl">
+            {service.tags.map((tag) => <span key={tag} className="border border-black/10 bg-black/[0.045] px-2.5 py-1.5 font-poppins text-[9px] font-medium text-black sm:px-3.5 sm:py-2 sm:text-xs">{tag}</span>)}
           </div>
-          <div className="relative z-30 mt-auto flex items-end justify-between gap-5 pt-7">
+          <div className="relative z-30 mt-6 flex items-end justify-between gap-5 sm:mt-7 lg:mt-auto lg:pt-7">
             <div className="hidden max-w-sm sm:block">
               <div className="h-px w-full bg-black/15" />
               <p className="mt-3 font-poppins text-[10px] uppercase tracking-[0.18em] text-black/45">Creative solutions built around your business</p>
@@ -65,7 +66,7 @@ export default function Services() {
   const introRef = useRef<HTMLElement>(null);
   const showcaseRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.35 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 65, damping: 28, mass: 0.65 });
   const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
@@ -82,7 +83,7 @@ export default function Services() {
       </section>
 
       <section ref={showcaseRef} id="services-showcase" aria-label="Our Services" className="relative bg-[#f7f3ea]" style={{ height: `${services.length * 100}vh` }}>
-        <div className="sticky top-0 h-screen overflow-hidden px-4 py-4 sm:px-7 sm:py-6 lg:px-10 lg:py-7">
+        <div className="sticky top-0 h-screen overflow-hidden px-4 py-3 sm:px-7 sm:py-5 lg:px-10 lg:py-6">
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-70" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.13) 1.1px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent 45%, black)", WebkitMaskImage: "linear-gradient(90deg, black, transparent 45%, black)" }} />
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
             <motion.div style={{ x: ambientX, scale: ambientScale, opacity: ambientOpacity }} className="absolute -left-[12%] top-[16%] whitespace-nowrap font-display text-[34vw] font-semibold leading-none tracking-[-0.1em] text-black/[0.035] sm:text-[27vw] lg:text-[23vw]">DP</motion.div>
@@ -93,8 +94,8 @@ export default function Services() {
             <span className="absolute bottom-[8%] right-[7%] font-poppins text-[9px] font-medium uppercase tracking-[0.38em] text-black/20">DIGITAL POINTS / CREATIVE STUDIO</span>
           </div>
           <div className="relative z-10 mx-auto flex h-full max-w-[1500px] flex-col">
-            <div className="shrink-0 px-1 pt-2 sm:px-2 sm:pt-3"><p className="font-poppins text-[10px] font-medium uppercase tracking-[0.34em] text-[#08bdb8] sm:text-xs sm:tracking-[0.38em]">What We Do</p><h2 className="mt-2 whitespace-nowrap font-display text-[clamp(3.25rem,12.5vw,10rem)] font-semibold leading-[0.78] tracking-[-0.075em] text-black sm:mt-2.5">Our Services</h2></div>
-            <div className="relative mt-2 min-h-0 flex-1 sm:mt-3 lg:mt-4"><div className="relative h-full w-full overflow-hidden rounded-[26px] sm:rounded-[32px] lg:rounded-[38px]">{services.map((service, index) => <ServiceCard key={service.title} service={service} index={index} progress={smoothProgress} />)}</div></div>
+            <div className="shrink-0 px-1 pt-1 sm:px-2 sm:pt-2"><p className="font-poppins text-[9px] font-medium uppercase tracking-[0.34em] text-[#08bdb8] sm:text-xs sm:tracking-[0.38em]">What We Do</p><h2 className="mt-1.5 whitespace-nowrap font-display text-[clamp(3.25rem,10vw,8rem)] font-semibold leading-[0.78] tracking-[-0.075em] text-black sm:mt-2">Our Services</h2></div>
+            <div className="relative mt-2 min-h-0 flex-1 sm:mt-3 lg:mt-3"><div className="relative h-full w-full overflow-hidden rounded-[24px] sm:rounded-[32px] lg:rounded-[38px]">{services.map((service, index) => <ServiceCard key={service.title} service={service} index={index} progress={smoothProgress} />)}</div></div>
           </div>
         </div>
       </section>
