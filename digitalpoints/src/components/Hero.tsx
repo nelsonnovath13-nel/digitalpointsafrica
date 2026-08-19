@@ -107,7 +107,7 @@ export default function Hero() {
           animate={
             shouldReduceMotion
               ? { opacity: 0.42 }
-              : { x: [0, 18, -8, 0], y: [0, -10, 7, 0], scale: [1, 1.08, 0.98, 1], opacity: [0.34, 0.52, 0.4, 0.34] }
+              : { scale: [1, 1.08, 0.98, 1], rotate: [0, 1.2, -0.8, 0], opacity: [0.34, 0.52, 0.4, 0.34] }
           }
           transition={{ duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
@@ -123,7 +123,7 @@ export default function Hero() {
           animate={
             shouldReduceMotion
               ? { opacity: 0.28 }
-              : { x: [0, -16, 9, 0], y: [0, 9, -7, 0], scale: [1.02, 0.96, 1.06, 1.02], opacity: [0.26, 0.4, 0.3, 0.26] }
+              : { scale: [1.02, 0.96, 1.06, 1.02], rotate: [0, -1, 0.7, 0], opacity: [0.26, 0.4, 0.3, 0.26] }
           }
           transition={{ duration: 31, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
@@ -139,7 +139,7 @@ export default function Hero() {
           animate={
             shouldReduceMotion
               ? { opacity: 0.2 }
-              : { x: [0, 14, -11, 0], y: [0, -8, 5, 0], scale: [0.98, 1.05, 1.01, 0.98], opacity: [0.16, 0.28, 0.2, 0.16] }
+              : { scale: [0.98, 1.05, 1.01, 0.98], rotate: [0, 0.8, -0.6, 0], opacity: [0.16, 0.28, 0.2, 0.16] }
           }
           transition={{ duration: 34, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
