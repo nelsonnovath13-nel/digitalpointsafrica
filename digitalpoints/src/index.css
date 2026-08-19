@@ -98,6 +98,34 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
   section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*="h-[42px]"]::before { inset: -260% 0 -20%; opacity: 1; animation-duration: 6s; }
 }
 
+/* SERVICES INTRO — keep the three desktop highlight cards centered and fully visible. */
+@media (min-width: 768px) {
+  #services-intro [class*="max-w-[1120px]"] {
+    max-width: 1280px;
+    margin-top: 24px;
+  }
+
+  #services-intro [class*="max-w-[1120px]"] > div.hidden {
+    height: 300px;
+  }
+
+  #services-intro [class*="max-w-[1120px]"] > div.hidden > article {
+    width: min(30%, 360px);
+    min-width: 280px;
+    translate: 0 -14px;
+  }
+
+  /* Framer Motion currently separates the cards by ±115% of each card's own width.
+     Counter only the outer cards so the expanded group stays visually centered. */
+  #services-intro [class*="max-w-[1120px]"] > div.hidden > article:nth-child(1) {
+    translate: 25% -14px;
+  }
+
+  #services-intro [class*="max-w-[1120px]"] > div.hidden > article:nth-child(3) {
+    translate: -25% -14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
