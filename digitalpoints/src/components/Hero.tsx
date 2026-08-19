@@ -72,11 +72,11 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-display text-[1.72rem] font-semibold leading-[1.07] tracking-[-0.035em] text-black sm:text-[2.3rem] md:text-[2.8rem] lg:text-[3.35rem] xl:text-[3.65rem]"
+          className="font-display text-[1.55rem] font-semibold leading-[1.08] tracking-[-0.035em] text-black sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]"
         >
           <span className="block whitespace-nowrap">Everything your brand needs</span>
           <span className="block">to succeed through</span>
-          <span className="relative block min-h-[1.07em]">
+          <span className="relative block min-h-[1.08em]">
             <AnimatePresence>
               {isFlashing && (
                 <motion.span
@@ -112,6 +112,15 @@ export default function Hero() {
             </AnimatePresence>
           </span>
         </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-4 max-w-[920px] px-2 font-poppins text-[12px] font-normal leading-[1.45] tracking-[-0.01em] text-black/90 sm:mt-5 sm:text-[14px] md:text-[15px] lg:text-[16px] lg:leading-[1.5]"
+        >
+          We bring together creativity, technology, and strategy to build brands that connect, engage and grow.
+        </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 14 }}
