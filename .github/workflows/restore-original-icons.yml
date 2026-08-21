@@ -20,17 +20,14 @@ jobs:
           from pathlib import Path
           p = Path('digitalpoints/src/components/Services.tsx')
           s = p.read_text()
-
           old_type = '''type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string; icon: string };'''
           new_type = '''type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string };'''
           if old_type not in s:
               raise SystemExit('Highlight type marker not found')
           s = s.replace(old_type, new_type, 1)
-
           s = s.replace(''' icon: "/icons/create.svg" },''', ''' },''', 1)
           s = s.replace(''' icon: "/icons/brand.svg" },''', ''' },''', 1)
           s = s.replace(''' icon: "/icons/grow.svg" },''', ''' },''', 1)
-
           start = s.index('function HighlightIcon(')
           end = s.index('\n\nfunction MobileHighlightCard', start)
           original_icon_component = '''function HighlightIcon({ title }: { title: Highlight["title"] }) {
@@ -58,12 +55,9 @@ jobs:
             );
           }'''
           s = s[:start] + original_icon_component + s[end:]
-
           s = s.replace('<HighlightIcon src={highlight.icon} />', '<HighlightIcon title={highlight.title} />')
-
           p.write_text(s)
           PY
-
           rm .github/workflows/restore-original-icons.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
