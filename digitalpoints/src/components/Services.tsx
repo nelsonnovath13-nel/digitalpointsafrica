@@ -53,7 +53,7 @@ function HighlightCards() {
 
       {/* Desktop: larger premium card cluster that fills the right column without touching the text column. */}
       <div className="relative hidden h-[390px] min-[900px]:block" onMouseLeave={() => setHoveredIndex(null)}>
-        <div className="absolute right-0 top-1/2 h-[330px] w-[min(52vw,650px)] -translate-y-1/2">
+        <div className="absolute right-[clamp(-240px,-10vw,-140px)] top-1/2 h-[330px] w-[min(52vw,650px)] -translate-y-1/2">
           {highlights.map((highlight, index) => {
             const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
             const hovered = hoveredIndex === index;
