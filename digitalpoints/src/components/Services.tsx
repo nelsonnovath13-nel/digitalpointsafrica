@@ -25,7 +25,7 @@ function HighlightIcon({ src }: { src: string }) {
 function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index: number }) {
   const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
   return (
-    <article className="relative flex min-h-[100svh] w-full snap-start flex-col justify-center overflow-hidden bg-[#141414] px-6 py-20 text-[#F4EFE6] sm:px-8">
+    <article className="sticky top-0 z-10 flex h-[100svh] w-full flex-col justify-center overflow-hidden bg-[#141414] px-6 py-20 text-[#F4EFE6] sm:px-8" style={{ zIndex: index + 1 }}>
       <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }} />
       <div className="relative z-10 mx-auto flex w-full max-w-[430px] flex-col">
         <motion.h3 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.65, once: true }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(46px,14vw,68px)] font-bold leading-[0.92] tracking-[-0.035em]">{highlight.title}</motion.h3>
@@ -47,7 +47,7 @@ function HighlightCards() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   return (
     <div className="relative mx-auto w-full">
-      <div className="flex flex-col min-[900px]:hidden">
+      <div className="relative min-[900px]:hidden" style={{ height: `${highlights.length * 100}svh` }}>
         {highlights.map((highlight, index) => <MobileHighlightCard key={highlight.title} highlight={highlight} index={index} />)}
       </div>
       <div className="relative hidden h-[390px] min-[900px]:block" onMouseLeave={() => setHoveredIndex(null)}>
@@ -79,7 +79,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%");
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
@@ -105,7 +105,7 @@ export default function Services() {
   const showcaseRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 65, damping: 28, mass: 0.65 });
-  const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
+  const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%");
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
 
