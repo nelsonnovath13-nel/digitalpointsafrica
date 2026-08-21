@@ -11,15 +11,36 @@ const services = [
 ] as const;
 
 type Service = (typeof services)[number];
-type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string; icon: string };
+type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string };
 const highlights: Highlight[] = [
-  { title: "CREATE", description: "We turn ideas into creative digital solutions, compelling visuals, engaging videos, and designs that capture attention.", icon: "/icons/create.svg" },
-  { title: "BRAND", description: "We transform ideas into strong, professional, and memorable brands through branding, graphic design, marketing, and printing.", icon: "/icons/brand.svg" },
-  { title: "GROW", description: "We help brands connect with their audience, increase their visibility, and create opportunities for sustainable business growth.", icon: "/icons/grow.svg" },
+  { title: "CREATE", description: "We turn ideas into creative digital solutions, compelling visuals, engaging videos, and designs that capture attention." },
+  { title: "BRAND", description: "We transform ideas into strong, professional, and memorable brands through branding, graphic design, marketing, and printing." },
+  { title: "GROW", description: "We help brands connect with their audience, increase their visibility, and create opportunities for sustainable business growth." },
 ];
 
-function HighlightIcon({ src }: { src: string }) {
-  return <img src={src} alt="" aria-hidden="true" className="h-[64px] w-[64px] object-contain" />;
+function HighlightIcon({ title }: { title: Highlight["title"] }) {
+  if (title === "CREATE") return (
+    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-[64px] w-[64px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28">
+      <path d="M18 34h84M28 27l-10 7 10 7M92 27l10 7-10 7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M57 43 39 77c-2 4 1 8 5 8h14l8-31-9-11Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M57 85h8v8h-8z" fill="currentColor" />
+      <path d="M20 43c3 15 10 24 19 30M100 43c-3 15-10 24-19 30" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+  if (title === "BRAND") return (
+    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-[64px] w-[64px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28">
+      <path d="m30 35 30-17 37 37-17 30a12 12 0 0 1-17 3L27 61a12 12 0 0 1 3-26Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="m47 32 10 10" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="51" cy="34" r="5" fill="currentColor" />
+    </svg>
+  );
+  return (
+    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-[64px] w-[64px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28">
+      <path d="M18 87h12V73h12v14h12V63h12v24h12V51h12v36h12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M22 49c20 1 35-7 48-20 9-9 18-10 31-15" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="m91 14 10 0 0 10" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
 }
 
 function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index: number }) {
@@ -31,7 +52,7 @@ function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index
         <motion.h3 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.65, once: true }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(46px,14vw,68px)] font-bold leading-[0.92] tracking-[-0.035em]">{highlight.title}</motion.h3>
         <motion.div initial={{ opacity: 0, scale: 0.88 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ amount: 0.55, once: true }} transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-10 flex h-[126px] w-[126px] items-center justify-center sm:my-12 sm:h-[136px] sm:w-[136px]">
           <div className="absolute inset-0 rounded-full border border-white/20"><span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} /></div>
-          <HighlightIcon src={highlight.icon} />
+          <HighlightIcon title={highlight.title} />
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5, once: true }} transition={{ duration: 0.55, delay: 0.14, ease: [0.22, 1, 0.36, 1] }} className="text-center">
           <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[350px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
@@ -62,7 +83,7 @@ function HighlightCards() {
               <motion.button key={highlight.title} type="button" onMouseEnter={() => setHoveredIndex(index)} animate={{ x, y: hovered ? "-2%" : y, rotate: hovered ? 0 : rotate, scale: hovered ? 1.045 : 1 }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 flex h-[150px] w-[clamp(205px,17vw,245px)] items-center gap-4 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#141414] px-5 text-left text-[#F4EFE6] shadow-[0_24px_55px_-18px_rgba(0,0,0,0.5)]" style={{ zIndex: hovered ? 30 : 10 + index }}>
                 <span className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(circle at 78% 18%, ${color}28, transparent 58%)` }} />
                 <span className="pointer-events-none absolute bottom-0 left-5 right-5 h-[3px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px ${color}66` }} />
-                <span className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full border border-white/15"><span className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon src={highlight.icon} /></span>
+                <span className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full border border-white/15"><span className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon title={highlight.title} /></span>
                 <span className="relative min-w-0 flex-1"><span style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="block text-[21px] font-bold leading-none tracking-[-0.025em]">{highlight.title}</span><span className="mt-2 block font-poppins text-[9px] uppercase tracking-[0.22em] text-white/45">0{index + 1} / POINT</span><span className="mt-3 block font-poppins text-[11px] text-white/45">Explore</span></span>
                 <span className="relative self-start pt-1 text-lg text-white/45 transition-transform duration-300" style={{ transform: hovered ? "translate(2px,-2px)" : "none" }}>↗</span>
               </motion.button>
