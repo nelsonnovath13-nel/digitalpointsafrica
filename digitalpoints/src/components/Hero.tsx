@@ -204,8 +204,21 @@ export default function Hero() {
             <Link to="/services" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Explore Our Services</Link>
           </motion.div>
           <motion.div whileHover={{ y: -2, boxShadow: "0 12px 34px rgba(255,255,255,0.18)" }} whileTap={{ scale: 0.975 }}>
-            <Link to="/contact" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Start a Project</Link>
+            <Link to="/contact" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-[#050b1f] active:text-white sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Start a Project</Link>
           </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[42px] overflow-hidden border-t border-white/15 bg-[#050b1f]/10 backdrop-blur-[3px] sm:h-[46px]" aria-label="Creative services motion strip">
+        <div className="absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-[#00c7c3]/55 to-transparent sm:w-24" aria-hidden="true" />
+        <div className="absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-[#00c7c3]/55 to-transparent sm:w-24" aria-hidden="true" />
+        <motion.div className="flex h-full w-max items-center" animate={{ x: ["0%", "-50%"] }} transition={{ duration: 34, repeat: Infinity, ease: "linear" }}>
+          {[...rotatingWords, ...rotatingWords].map((word, index) => (
+            <motion.div key={`${word}-${index}`} className="flex h-full shrink-0 items-center px-5 sm:px-7" animate={{ y: [0, -1.5, 0], opacity: [0.72, 1, 0.72] }} transition={{ duration: 3.8 + (index % 3) * 0.6, repeat: Infinity, ease: "easeInOut", delay: (index % rotatingWords.length) * 0.35 }}>
+              <span className="font-poppins text-[8px] font-semibold uppercase tracking-[0.3em] text-white/90 sm:text-[9px] sm:tracking-[0.34em]">{word}</span>
+              <span className="ml-5 h-[3px] w-[3px] rotate-45 rounded-[1px] bg-white/70 sm:ml-7" />
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>
