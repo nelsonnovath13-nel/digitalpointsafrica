@@ -1,0 +1,39 @@
+name: One-time highlight card position fix
+
+on:
+  push:
+    branches:
+      - feat/digital-points-way-final-2026-08-21
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, 'fix: move Digital Points Way cards right') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Move desktop highlight cluster right
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('digitalpoints/src/components/Services.tsx')
+          s = p.read_text()
+          old = 'className="absolute right-0 top-1/2 h-[330px] w-[min(52vw,650px)] -translate-y-1/2"'
+          new = 'className="absolute right-[clamp(-240px,-11vw,-80px)] top-1/2 h-[330px] w-[min(52vw,650px)] -translate-y-1/2"'
+          if old not in s:
+              raise SystemExit('Expected desktop highlight cluster position was not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add digitalpoints/src/components/Services.tsx
+          git commit -m "fix: move Digital Points Way cards right"
+          git push
