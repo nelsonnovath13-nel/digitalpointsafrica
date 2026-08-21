@@ -19,26 +19,35 @@ const highlights: Highlight[] = [
 ];
 
 function HighlightIcon({ title }: { title: Highlight["title"] }) {
+  const common = { viewBox: "0 0 120 120", fill: "none", stroke: "currentColor", strokeLinecap: "round" as const, strokeLinejoin: "round" as const, strokeWidth: 3.2 };
   if (title === "CREATE") return (
-    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-[64px] w-[64px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="M18 34h84M28 27l-10 7 10 7M92 27l10 7-10 7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M57 43 39 77c-2 4 1 8 5 8h14l8-31-9-11Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M57 85h8v8h-8z" fill="currentColor" />
-      <path d="M20 43c3 15 10 24 19 30M100 43c-3 15-10 24-19 30" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <svg {...common} aria-hidden="true" className="h-[88px] w-[88px] sm:h-[108px] sm:w-[108px] lg:h-[122px] lg:w-[122px]">
+      <path d="M17 29H103" strokeWidth="3" />
+      <circle cx="17" cy="29" r="4" fill="currentColor" stroke="none" />
+      <circle cx="103" cy="29" r="4" fill="currentColor" stroke="none" />
+      <path d="M18 31C27 72 43 73 60 73C77 73 93 72 102 31" />
+      <path d="M60 43L47 68L60 75L73 68L60 43Z" fill="currentColor" stroke="none" />
+      <path d="M60 43V67" stroke="black" strokeWidth="2.5" />
+      <circle cx="60" cy="67" r="3.2" fill="black" stroke="none" />
+      <path d="M48 75H72L70 87H50L48 75Z" fill="currentColor" stroke="none" />
+      <path d="M50 90H70" strokeWidth="4" />
     </svg>
   );
   if (title === "BRAND") return (
-    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-[64px] w-[64px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="m30 35 30-17 37 37-17 30a12 12 0 0 1-17 3L27 61a12 12 0 0 1 3-26Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="m47 32 10 10" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      <circle cx="51" cy="34" r="5" fill="currentColor" />
+    <svg {...common} aria-hidden="true" className="h-[88px] w-[88px] sm:h-[108px] sm:w-[108px] lg:h-[122px] lg:w-[122px]">
+      <path d="M36 25L91 80L77 96L22 41L36 25Z" />
+      <path d="M36 25L29 32L38 41" />
+      <circle cx="38" cy="38" r="5" fill="currentColor" stroke="none" />
+      <path d="M82 71L96 85" strokeWidth="4" />
     </svg>
   );
   return (
-    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-[64px] w-[64px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="M18 87h12V73h12v14h12V63h12v24h12V51h12v36h12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M22 49c20 1 35-7 48-20 9-9 18-10 31-15" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="m91 14 10 0 0 10" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg {...common} aria-hidden="true" className="h-[88px] w-[88px] sm:h-[108px] sm:w-[108px] lg:h-[122px] lg:w-[122px]">
+      <path d="M18 91V77C18 74 20 72 23 72H31C34 72 36 74 36 77V91" />
+      <path d="M42 91V61C42 58 44 56 47 56H55C58 56 60 58 60 61V91" />
+      <path d="M66 91V44C66 41 68 39 71 39H79C82 39 84 41 84 44V91" />
+      <path d="M20 55C39 54 58 46 72 34C82 26 91 18 101 14" />
+      <path d="M91 14H101V24" />
     </svg>
   );
 }
@@ -51,7 +60,6 @@ function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index
       <div className="relative z-10 mx-auto flex w-full max-w-[430px] flex-col">
         <motion.h3 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.65, once: true }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(46px,14vw,68px)] font-bold leading-[0.92] tracking-[-0.035em]">{highlight.title}</motion.h3>
         <motion.div initial={{ opacity: 0, scale: 0.88 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ amount: 0.55, once: true }} transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-10 flex h-[126px] w-[126px] items-center justify-center sm:my-12 sm:h-[136px] sm:w-[136px]">
-          <div className="absolute inset-0 rounded-full border border-white/20"><span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} /></div>
           <HighlightIcon title={highlight.title} />
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5, once: true }} transition={{ duration: 0.55, delay: 0.14, ease: [0.22, 1, 0.36, 1] }} className="text-center">
@@ -80,12 +88,13 @@ function HighlightCards() {
             const y = index === 0 ? "19%" : index === 1 ? "7%" : "19%";
             const rotate = index === 0 ? -5 : index === 1 ? 0 : 5;
             return (
-              <motion.button key={highlight.title} type="button" onMouseEnter={() => setHoveredIndex(index)} animate={{ x, y: hovered ? "-2%" : y, rotate: hovered ? 0 : rotate, scale: hovered ? 1.045 : 1 }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 flex h-[150px] w-[clamp(205px,17vw,245px)] items-center gap-4 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#141414] px-5 text-left text-[#F4EFE6] shadow-[0_24px_55px_-18px_rgba(0,0,0,0.5)]" style={{ zIndex: hovered ? 30 : 10 + index }}>
+              <motion.button key={highlight.title} type="button" onMouseEnter={() => setHoveredIndex(index)} animate={{ x, y: hovered ? "-2%" : y, rotate: hovered ? 0 : rotate, scale: hovered ? 1.045 : 1 }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 flex h-[250px] w-[clamp(205px,17vw,245px)] flex-col items-center justify-start overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#141414] px-5 pt-5 text-center text-[#F4EFE6] shadow-[0_24px_55px_-18px_rgba(0,0,0,0.5)]" style={{ zIndex: hovered ? 30 : 10 + index }}>
                 <span className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(circle at 78% 18%, ${color}28, transparent 58%)` }} />
+                <span className="relative z-10 block font-poppins text-[9px] uppercase tracking-[0.22em] text-white/45">0{index + 1} / POINT</span>
+                <span style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="relative z-10 mt-2 block text-[21px] font-bold leading-none tracking-[-0.025em]">{highlight.title}</span>
+                <span className="relative z-10 mt-6 flex h-[126px] w-[126px] items-center justify-center"><HighlightIcon title={highlight.title} /></span>
+                <span className="relative z-10 mt-auto mb-4 font-poppins text-[11px] text-white/45">Explore ↗</span>
                 <span className="pointer-events-none absolute bottom-0 left-5 right-5 h-[3px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px ${color}66` }} />
-                <span className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full border border-white/15"><span className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon title={highlight.title} /></span>
-                <span className="relative min-w-0 flex-1"><span style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="block text-[21px] font-bold leading-none tracking-[-0.025em]">{highlight.title}</span><span className="mt-2 block font-poppins text-[9px] uppercase tracking-[0.22em] text-white/45">0{index + 1} / POINT</span><span className="mt-3 block font-poppins text-[11px] text-white/45">Explore</span></span>
-                <span className="relative self-start pt-1 text-lg text-white/45 transition-transform duration-300" style={{ transform: hovered ? "translate(2px,-2px)" : "none" }}>↗</span>
               </motion.button>
             );
           })}
