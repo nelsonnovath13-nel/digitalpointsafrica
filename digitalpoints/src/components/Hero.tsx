@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const rotatingWords = [
-  "DESIGN",
+  "DESIGNS",
   "MARKETING",
   "VIDEO",
   "PRINTING",
@@ -25,13 +25,16 @@ const atmosphericParticles = [
   { left: "95%", bottom: "7%", size: "3px", delay: 5.4, duration: 12.2, drift: -7 },
 ];
 
-const ROTATE_INTERVAL_MS = 2800;
-const FLASH_DURATION_MS = 260;
+const TYPE_SPEED_MS = 95;
+const DELETE_SPEED_MS = 58;
+const WORD_HOLD_MS = 1250;
+const BETWEEN_WORDS_MS = 320;
 const HERO_BG_URL = "/hero-bg.jpg";
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
-  const [isFlashing, setIsFlashing] = useState(false);
+  const [typedWord, setTypedWord] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   const pointerX = useMotionValue(50);
@@ -46,21 +49,43 @@ export default function Hero() {
   const smogThreeY = useTransform(smoothY, [0, 100], [24, -24]);
 
   useEffect(() => {
-    let flashTimeout: ReturnType<typeof setTimeout>;
+    if (shouldReduceMotion) {
+      setTypedWord(rotatingWords[wordIndex]);
+      return;
+    }
+
+    const target = rotatingWords[wordIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedWord.length < target.length) {
+      timeout = setTimeout(() => {
+        setTypedWord(target.slice(0, typedWord.length + 1));
+      }, TYPE_SPEED_MS);
+    } else if (!isDeleting && typedWord.length === target.length) {
+      timeout = setTimeout(() => setIsDeleting(true), WORD_HOLD_MS);
+    } else if (isDeleting && typedWord.length > 0) {
+      timeout = setTimeout(() => {
+        setTypedWord(target.slice(0, typedWord.length - 1));
+      }, DELETE_SPEED_MS);
+    } else {
+      timeout = setTimeout(() => {
+        setIsDeleting(false);
+        setWordIndex((index) => (index + 1) % rotatingWords.length);
+      }, BETWEEN_WORDS_MS);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [isDeleting, shouldReduceMotion, typedWord, wordIndex]);
+
+  useEffect(() => {
+    if (!shouldReduceMotion) return;
 
     const id = setInterval(() => {
-      setIsFlashing(true);
-      flashTimeout = setTimeout(() => {
-        setWordIndex((i) => (i + 1) % rotatingWords.length);
-        setIsFlashing(false);
-      }, FLASH_DURATION_MS);
-    }, ROTATE_INTERVAL_MS);
+      setWordIndex((index) => (index + 1) % rotatingWords.length);
+    }, 2800);
 
-    return () => {
-      clearInterval(id);
-      clearTimeout(flashTimeout);
-    };
-  }, []);
+    return () => clearInterval(id);
+  }, [shouldReduceMotion]);
 
   const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
     if (event.pointerType !== "mouse") return;
@@ -213,18 +238,6 @@ export default function Hero() {
         }}
       />
 
-      <AnimatePresence>
-        {isFlashing && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: FLASH_DURATION_MS / 1000, ease: "easeOut" }}
-            className="pointer-events-none absolute inset-0 z-20 bg-white"
-          />
-        )}
-      </AnimatePresence>
-
       <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8">
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
@@ -232,42 +245,16 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="font-display text-[1.55rem] font-semibold leading-[1.08] tracking-[-0.035em] text-black sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]"
         >
-          <span className="block whitespace-nowrap">Everything your brand needs</span>
-          <span className="block">to succeed through</span>
-          <span className="relative block min-h-[1.08em]">
-            <AnimatePresence>
-              {isFlashing && (
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.6 }}
-                  animate={{ opacity: 1, scale: 1.7 }}
-                  exit={{ opacity: 0, scale: 2 }}
-                  transition={{ duration: FLASH_DURATION_MS / 1000, ease: "easeOut" }}
-                  className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[1.4em] w-[4em] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={{
-                    background: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 25%, rgba(255,255,255,0) 70%)",
-                  }}
-                />
-              )}
-            </AnimatePresence>
-
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={rotatingWords[wordIndex]}
-                initial={{ opacity: 0, y: 12, scale: 0.96, filter: "blur(4px)", color: "#000000" }}
-                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)", color: isFlashing ? "#ffffff" : "#000000" }}
-                exit={{ opacity: 0, y: -12, scale: 0.96, filter: "blur(4px)", color: "#ffffff" }}
-                transition={{
-                  opacity: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-                  y: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-                  scale: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-                  filter: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-                  color: { duration: FLASH_DURATION_MS / 1000, ease: "easeOut" },
-                }}
-                className="relative z-10 inline-block font-extrabold"
-              >
-                {rotatingWords[wordIndex]}
-              </motion.span>
-            </AnimatePresence>
+          <span className="block whitespace-nowrap">We make your brand stand out through</span>
+          <span className="relative block min-h-[1.08em]" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
+            <span className="inline-flex min-w-[9ch] items-baseline justify-center font-extrabold">
+              {typedWord}
+              <span
+                aria-hidden="true"
+                className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-black/90 align-baseline"
+                style={{ animation: "hero-type-caret 0.9s steps(1, end) infinite" }}
+              />
+            </span>
           </span>
         </motion.h1>
 
