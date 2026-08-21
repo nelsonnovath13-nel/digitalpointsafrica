@@ -72,7 +72,7 @@ export default function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
-      <div className="mx-auto flex h-[76px] max-w-[1800px] items-center justify-between gap-5 px-6 sm:px-8 lg:rounded-[24px] lg:border lg:border-white/30 lg:bg-white/20 lg:px-5 lg:shadow-[0_10px_30px_rgba(5,11,31,0.06)] lg:backdrop-blur-xl xl:px-6">
+      <div className="flex h-[76px] w-full items-center justify-between gap-5 border-b border-white/20 bg-white/20 px-6 shadow-[0_10px_30px_rgba(5,11,31,0.06)] backdrop-blur-xl sm:px-8 lg:px-5 xl:px-6">
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home">
           <DigitalPointsLogo />
         </Link>
