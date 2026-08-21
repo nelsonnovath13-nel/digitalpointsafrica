@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const services = [
   { title: "Digital Marketing", description: "We help businesses reach the right audience through social media, content, paid campaigns, and practical digital strategies designed to increase visibility, engagement, and enquiries.", tags: ["Social Media", "Content Marketing", "Paid Campaigns", "Digital Strategy"], visual: "MARKETING", image: "https://images.squarespace-cdn.com/content/v1/561646c6e4b0f890085faa02/1771484737308-OEDQ33ZIDCUD3NOF49P1/Social%2BMedia%2BManager%2Bwerden.png?format=1000w", imageAlt: "Creative marketing team planning a digital campaign" },
@@ -18,104 +18,73 @@ const highlights: Highlight[] = [
   { title: "GROW", description: "We help brands connect with their audience, increase their visibility, and create opportunities for sustainable business growth." },
 ];
 
-function HighlightIcon({ title }: { title: Highlight["title"] }) {
-  if (title === "CREATE") return (
-    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="M18 34h84M28 27l-10 7 10 7M92 27l10 7-10 7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M57 43 39 77c-2 4 1 8 5 8h14l8-31-9-11Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M57 85h8v8h-8z" fill="currentColor" />
-      <path d="M20 43c3 15 10 24 19 30M100 43c-3 15-10 24-19 30" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
-  );
-  if (title === "BRAND") return (
-    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="m30 35 30-17 37 37-17 30a12 12 0 0 1-17 3L27 61a12 12 0 0 1 3-26Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="m47 32 10 10" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      <circle cx="51" cy="34" r="5" fill="currentColor" />
-    </svg>
-  );
+function HighlightPlaceholder() {
   return (
-    <svg viewBox="0 0 120 120" aria-hidden="true" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="M18 87h12V73h12v14h12V63h12v24h12V51h12v36h12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M22 49c20 1 35-7 48-20 9-9 18-10 31-15" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="m91 14 10 0 0 10" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div aria-hidden="true" className="flex h-[92px] w-[92px] items-center justify-center rounded-full border border-white/20">
+      <span className="h-9 w-9 rounded-[6px] border border-white/45" />
+    </div>
   );
 }
 
-function HighlightCards({ introRef: _introRef }: { introRef: React.RefObject<HTMLElement | null> }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [desktopExpanded, setDesktopExpanded] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const mobileScrollerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const root = mobileScrollerRef.current;
-    if (!root) return;
-    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-dpw-mobile-card]"));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        const index = cards.indexOf(visible.target as HTMLElement);
-        if (index >= 0) setActiveIndex(index);
-      },
-      { root, threshold: [0.45, 0.65, 0.85] },
-    );
-    cards.forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, []);
-
-  const accent = (index: number) => index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
+function MobileHighlightCard({ highlight, index, progress }: { highlight: Highlight; index: number; progress: ReturnType<typeof useSpring> }) {
+  const start = index / highlights.length;
+  const center = (index + 0.5) / highlights.length;
+  const end = (index + 1) / highlights.length;
+  const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
+  const y = useTransform(progress, [start, center, end], ["8%", "0%", "-8%"]);
+  const opacity = useTransform(progress, [start, start + 0.04, end - 0.04, end], [index === 0 ? 1 : 0, 1, 1, index === highlights.length - 1 ? 1 : 0]);
+  const scale = useTransform(progress, [start, center, end], [0.96, 1, 0.96]);
 
   return (
-    <div className="relative mx-auto mt-10 w-full sm:mt-12 lg:mt-14">
-      <div ref={mobileScrollerRef} className="relative flex h-[100dvh] snap-y snap-mandatory flex-col overflow-y-auto overscroll-y-contain bg-[#141414] [scrollbar-width:none] max-[899px]:-mx-5 max-[899px]:w-[calc(100%+40px)] [&::-webkit-scrollbar]:hidden min-[900px]:hidden">
-        <div className="pointer-events-none absolute right-4 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-4">
-          {highlights.map((highlight, index) => <span key={highlight.title} className={`block w-[6px] rounded-full transition-all duration-500 ${activeIndex === index ? "h-[22px] bg-[#F4EFE6]" : "h-[6px] bg-white/30"}`} />)}
+    <motion.article style={{ y, opacity, scale }} className="sticky top-0 flex h-[100dvh] min-h-[100dvh] w-full flex-col justify-center overflow-hidden bg-[#141414] px-7 py-20 text-[#F4EFE6]">
+      <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }} />
+      <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-col">
+        <motion.h3 initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.6 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(48px,15vw,72px)] font-bold leading-[0.92] tracking-[-0.035em]">{highlight.title}</motion.h3>
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ amount: 0.55 }} transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-12 flex h-[132px] w-[132px] items-center justify-center">
+          <div className="absolute inset-0 rounded-full border border-white/20"><span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} /></div>
+          <HighlightPlaceholder />
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5 }} transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }} className="text-center">
+          <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[340px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
+          <div className="mx-auto mt-[18px] h-[3px] w-full max-w-[340px] overflow-hidden rounded-full bg-white/[0.12]"><span className="block h-full w-full" style={{ backgroundColor: color }} /></div>
+        </motion.div>
+      </div>
+      <span className="absolute bottom-[34px] right-7 h-[10px] w-[10px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 18px 6px ${color}99` }} />
+    </motion.article>
+  );
+}
+
+function HighlightCards() {
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const { scrollYProgress: mobileProgress } = useScroll({ target: mobileTrackRef, offset: ["start start", "end end"] });
+  const mobileSmoothProgress = useSpring(mobileProgress, { stiffness: 100, damping: 30, mass: 0.35 });
+
+  return (
+    <div className="relative mx-auto w-full">
+      <div ref={mobileTrackRef} className="relative hidden h-[300dvh] min-[900px]:hidden">
+        <div className="absolute inset-x-0 top-0 h-full">
+          {highlights.map((highlight, index) => <MobileHighlightCard key={highlight.title} highlight={highlight} index={index} progress={mobileSmoothProgress} />)}
         </div>
-        {highlights.map((highlight, index) => {
-          const color = accent(index);
-          const isActive = activeIndex === index;
-          return (
-            <article key={highlight.title} data-dpw-mobile-card className="relative flex min-h-[100dvh] h-[100dvh] snap-center snap-always flex-col justify-center overflow-hidden bg-[#141414] px-7 py-[84px] text-[#F4EFE6]" style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }}>
-              <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-col">
-                <div className="w-fit overflow-hidden">
-                  <motion.h3 initial={{ y: "105%" }} animate={{ y: isActive ? "0%" : "105%" }} transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(48px,15vw,72px)] font-bold leading-[0.92] tracking-[-0.035em] text-[#F4EFE6]">{highlight.title}</motion.h3>
-                </div>
-                <motion.div initial={{ opacity: 0, scale: 0.7, rotate: -25 }} animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.7, rotate: isActive ? 0 : -25 }} transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-[34px] flex h-[132px] w-[132px] items-center justify-center">
-                  <motion.div animate={{ rotate: isActive ? 360 : 0 }} transition={{ duration: 16, repeat: Infinity, ease: "linear" }} className="absolute inset-0 rounded-full border border-white/20" style={{ borderColor: "rgba(244,239,230,.22)" }}>
-                    <span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} />
-                  </motion.div>
-                  <div className="relative z-10 flex h-[74px] w-[74px] items-center justify-center text-[#F4EFE6]"><HighlightIcon title={highlight.title} /></div>
-                </motion.div>
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }} transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }} className="text-center">
-                  <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[340px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
-                  <div className="mx-auto mt-[18px] h-[3px] w-full max-w-[340px] overflow-hidden rounded-full bg-white/[0.12]"><motion.div initial={{ scaleX: 0 }} animate={{ scaleX: isActive ? 1 : 0 }} transition={{ duration: 1.1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }} style={{ originX: 0, backgroundColor: color }} className="h-full w-full rounded-full" /></div>
-                </motion.div>
-              </div>
-              <motion.span initial={{ opacity: 0, scale: 1 }} animate={{ opacity: isActive ? 1 : 0, scale: isActive ? [1, 1.35, 1] : 1 }} transition={{ duration: 2.4, delay: 0.8, repeat: isActive ? Infinity : 0, ease: "easeInOut" }} className="absolute bottom-[34px] right-7 h-[18px] w-[18px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 24px 8px ${color}99` }} />
-            </article>
-          );
-        })}
       </div>
 
-      <div className="relative mx-auto hidden h-[520px] max-w-[1180px] items-center justify-center min-[900px]:flex" onMouseEnter={() => setDesktopExpanded(true)} onMouseLeave={() => { setDesktopExpanded(false); setHoveredIndex(null); }}>
+      <motion.div initial={{ y: 72, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto hidden h-[560px] w-full max-w-[1320px] items-center justify-center min-[900px]:flex" onMouseLeave={() => setHoveredIndex(null)}>
         {highlights.map((highlight, index) => {
-          const color = accent(index);
+          const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
           const hovered = hoveredIndex === index;
-          const resting = { x: index === 0 ? -14 : index === 1 ? 0 : 14, y: index === 1 ? -4 : 6, rotate: index === 0 ? -5 : index === 1 ? 1 : 6 };
-          const spread = { x: index === 0 ? -330 : index === 1 ? 0 : 330, y: index === 1 ? -26 : 0, rotate: index === 0 ? -6 : index === 1 ? 0 : 6 };
-          const position = desktopExpanded ? spread : resting;
+          const restingX = index === 0 ? -300 : index === 1 ? 0 : 300;
+          const restingY = index === 1 ? 0 : 18;
+          const restingRotate = index === 0 ? -5 : index === 1 ? 0 : 5;
+          const fanX = index === 0 ? -320 : index === 1 ? 0 : 320;
           return (
-            <motion.article key={highlight.title} animate={{ x: position.x, y: hovered && desktopExpanded ? position.y - 14 : position.y, rotate: hovered && desktopExpanded ? 0 : position.rotate, scale: hovered && desktopExpanded ? 1.02 : 1 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }} onMouseEnter={() => setHoveredIndex(index)} className="absolute left-1/2 top-1/2 flex h-[440px] w-[320px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] bg-[#141414] p-[34px_30px] text-[#F4EFE6] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]" style={{ zIndex: hovered ? 20 : 3 - index }}>
+            <motion.article key={highlight.title} initial={{ y: 34, opacity: 0, scale: 0.97 }} animate={{ x: hovered ? fanX : restingX, y: hovered ? -12 : restingY, rotate: hovered ? 0 : restingRotate, opacity: 1, scale: hovered ? 1.015 : 1 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} onMouseEnter={() => setHoveredIndex(index)} className="absolute left-1/2 top-1/2 flex h-[440px] w-[min(29vw,360px)] min-w-[280px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] bg-[#141414] p-[34px_30px] text-[#F4EFE6] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]" style={{ zIndex: hovered ? 20 : 3 - index }}>
               <h3 style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[38px] font-bold leading-none tracking-[-0.01em]">{highlight.title}</h3>
-              <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20"><span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon title={highlight.title} /></div>
-              <div><p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[14.5px] leading-[1.55] text-white/80">{highlight.description}</p><div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]"><motion.div initial={{ scaleX: 0 }} animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} style={{ originX: 0, backgroundColor: color }} className="h-full w-full rounded-full" /></div></div>
+              <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20"><span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightPlaceholder /></div>
+              <div><p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[14.5px] leading-[1.55] text-white/80">{highlight.description}</p><div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]"><span className="block h-full w-full" style={{ backgroundColor: color }} /></div></div>
             </motion.article>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -125,7 +94,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]) ;
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
@@ -149,7 +118,6 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
 }
 
 export default function Services() {
-  const introRef = useRef<HTMLElement>(null);
   const showcaseRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 65, damping: 28, mass: 0.65 });
@@ -159,7 +127,7 @@ export default function Services() {
 
   return (
     <>
-      <section ref={introRef} id="services-intro" aria-label="Services introduction" className="relative isolate min-h-[690px] overflow-hidden bg-[#f7f3ea] px-5 pb-12 pt-16 sm:min-h-[700px] sm:px-8 sm:pb-16 sm:pt-20 lg:min-h-[700px] lg:px-12 lg:pb-16 lg:pt-24">
+      <section id="services-intro" aria-label="Services introduction" className="relative isolate min-h-[690px] overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:min-h-[700px] sm:px-8 sm:pt-20 lg:min-h-[700px] lg:px-12 lg:pt-24">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[38%] opacity-75" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.15) 1.15px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent)", WebkitMaskImage: "linear-gradient(90deg, black, transparent)" }} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[30%] opacity-50" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.11) 1px, transparent 1.2px)", backgroundSize: "20px 20px", maskImage: "linear-gradient(90deg, transparent, black)", WebkitMaskImage: "linear-gradient(90deg, transparent, black)" }} />
         <div className="relative z-10 mx-auto max-w-[1500px]">
@@ -171,7 +139,7 @@ export default function Services() {
             </p>
             <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#22D3C7] text-black shadow-[0_18px_40px_rgba(34,211,199,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
           </motion.div>
-          <HighlightCards introRef={introRef} />
+          <HighlightCards />
         </div>
       </section>
 
