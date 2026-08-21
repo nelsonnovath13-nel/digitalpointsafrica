@@ -1,0 +1,39 @@
+name: Balance Digital Points cards
+
+on:
+  push:
+    branches:
+      - fix/digital-points-way-balanced-spacing-2026-08-21
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, 'fix: balance Digital Points Way cards') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reduce excessive card spread
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('digitalpoints/src/components/Services.tsx')
+          s = p.read_text()
+          old = 'const collapsedX = index === 0 ? "-32%" : index === 1 ? "0%" : "32%";'
+          new = 'const collapsedX = index === 0 ? "-24%" : index === 1 ? "0%" : "24%";'
+          if old not in s:
+              raise SystemExit('Expected current 32% spacing rule was not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+      - name: Remove temporary workflow
+        shell: bash
+        run: rm .github/workflows/balance-digital-points-cards.yml
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add digitalpoints/src/components/Services.tsx .github/workflows/balance-digital-points-cards.yml
+          git commit -m "fix: balance Digital Points Way cards"
+          git push
