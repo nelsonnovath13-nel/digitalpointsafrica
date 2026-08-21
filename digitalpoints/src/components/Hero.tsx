@@ -3,12 +3,12 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import { Link } from "react-router-dom";
 
 const rotatingWords = [
-  "DESIGNS",
-  "MARKETING",
-  "VIDEO",
-  "PRINTING",
-  "BRANDING",
-  "EMBROIDERY",
+  "Designs",
+  "Marketing",
+  "Video",
+  "Printing",
+  "Branding",
+  "Embroidery",
 ];
 
 const atmosphericParticles = [
@@ -29,7 +29,6 @@ const TYPE_SPEED_MS = 95;
 const DELETE_SPEED_MS = 58;
 const WORD_HOLD_MS = 1250;
 const BETWEEN_WORDS_MS = 320;
-const HERO_BG_URL = "/hero-bg.jpg";
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
@@ -41,12 +40,14 @@ export default function Hero() {
   const pointerY = useMotionValue(50);
   const smoothX = useSpring(pointerX, { stiffness: 70, damping: 22, mass: 0.7 });
   const smoothY = useSpring(pointerY, { stiffness: 70, damping: 22, mass: 0.7 });
-  const smogOneX = useTransform(smoothX, [0, 100], [-55, 55]);
-  const smogOneY = useTransform(smoothY, [0, 100], [-35, 35]);
-  const smogTwoX = useTransform(smoothX, [0, 100], [45, -45]);
-  const smogTwoY = useTransform(smoothY, [0, 100], [30, -30]);
-  const smogThreeX = useTransform(smoothX, [0, 100], [-28, 28]);
-  const smogThreeY = useTransform(smoothY, [0, 100], [24, -24]);
+  const smogOneX = useTransform(smoothX, [0, 100], [-90, 90]);
+  const smogOneY = useTransform(smoothY, [0, 100], [-52, 52]);
+  const smogOneRotate = useTransform(smoothX, [0, 100], [-4.5, 4.5]);
+  const smogTwoX = useTransform(smoothX, [0, 100], [72, -72]);
+  const smogTwoY = useTransform(smoothY, [0, 100], [46, -46]);
+  const smogTwoRotate = useTransform(smoothX, [0, 100], [3.5, -3.5]);
+  const smogThreeX = useTransform(smoothX, [0, 100], [-48, 48]);
+  const smogThreeY = useTransform(smoothY, [0, 100], [36, -36]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
@@ -105,14 +106,6 @@ export default function Hero() {
       onPointerLeave={handlePointerLeave}
       className="relative h-[520px] min-h-[520px] w-full overflow-hidden bg-ink-950 sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]"
     >
-      <div
-        className="absolute inset-0 scale-110 bg-[center_30%] bg-cover bg-no-repeat sm:bg-center"
-        style={{
-          backgroundImage: `url(${HERO_BG_URL})`,
-          filter: "blur(1.5px)",
-        }}
-      />
-
       <div className="absolute inset-0" style={{ backgroundColor: "rgba(0, 199, 195, 0.74)" }} />
 
       <div
@@ -124,80 +117,82 @@ export default function Hero() {
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
-          className="absolute -left-[18%] top-[1%] h-[46%] w-[55%] rounded-[48%_52%_58%_42%/54%_44%_56%_46%] blur-[58px]"
+          className="absolute -left-[18%] top-[1%] h-[50%] w-[62%] rounded-[48%_52%_58%_42%/54%_44%_56%_46%] blur-[58px]"
           style={{
             x: smogOneX,
             y: smogOneY,
+            rotate: smogOneRotate,
             mixBlendMode: "screen",
             background:
-              "radial-gradient(ellipse at 42% 52%, rgba(190,255,250,0.48) 0%, rgba(130,247,240,0.28) 34%, rgba(80,220,218,0.08) 56%, rgba(80,220,218,0) 78%)",
+              "radial-gradient(ellipse at 42% 52%, rgba(245,255,254,0.72) 0%, rgba(190,255,250,0.54) 28%, rgba(130,247,240,0.34) 48%, rgba(80,220,218,0.12) 66%, rgba(80,220,218,0) 84%)",
           }}
           animate={
             shouldReduceMotion
-              ? { opacity: 0.62 }
-              : { scale: [0.98, 1.1, 0.96, 1.04, 0.98], rotate: [0, 1.8, -1.1, 1, 0], opacity: [0.48, 0.7, 0.54, 0.64, 0.48] }
+              ? { opacity: 0.8 }
+              : { scale: [0.96, 1.12, 0.94, 1.07, 0.96], rotate: [0, 2.4, -1.6, 1.4, 0], opacity: [0.68, 0.9, 0.72, 0.84, 0.68] }
           }
           transition={{ duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
 
         <motion.div
-          className="absolute -right-[19%] top-[15%] h-[43%] w-[52%] rounded-[55%_45%_46%_54%/48%_58%_42%_52%] blur-[62px]"
+          className="absolute -right-[19%] top-[13%] h-[48%] w-[59%] rounded-[55%_45%_46%_54%/48%_58%_42%_52%] blur-[62px]"
           style={{
             x: smogTwoX,
             y: smogTwoY,
+            rotate: smogTwoRotate,
             mixBlendMode: "multiply",
             background:
-              "radial-gradient(ellipse at 58% 46%, rgba(0,72,82,0.34) 0%, rgba(0,91,101,0.22) 36%, rgba(0,103,111,0.08) 58%, rgba(0,103,111,0) 80%)",
+              "radial-gradient(ellipse at 58% 46%, rgba(0,52,66,0.46) 0%, rgba(0,72,82,0.34) 32%, rgba(0,91,101,0.22) 52%, rgba(0,103,111,0.08) 68%, rgba(0,103,111,0) 84%)",
           }}
           animate={
             shouldReduceMotion
-              ? { opacity: 0.62 }
-              : { scale: [1.02, 0.94, 1.08, 0.98, 1.02], rotate: [0, -1.6, 1.1, -0.8, 0], opacity: [0.48, 0.68, 0.52, 0.62, 0.48] }
+              ? { opacity: 0.72 }
+              : { scale: [1.02, 0.92, 1.1, 0.96, 1.02], rotate: [0, -2.2, 1.6, -1.1, 0], opacity: [0.62, 0.82, 0.66, 0.76, 0.62] }
           }
           transition={{ duration: 31, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
 
         <motion.div
-          className="absolute left-[12%] -bottom-[25%] h-[50%] w-[70%] rounded-[42%_58%_52%_48%/58%_42%_58%_42%] blur-[68px]"
+          className="absolute left-[8%] -bottom-[25%] h-[54%] w-[76%] rounded-[42%_58%_52%_48%/58%_42%_58%_42%] blur-[68px]"
           style={{
             x: smogThreeX,
             y: smogThreeY,
             mixBlendMode: "screen",
             background:
-              "radial-gradient(ellipse at 50% 38%, rgba(236,255,254,0.3) 0%, rgba(178,247,244,0.16) 36%, rgba(122,235,232,0.06) 58%, rgba(122,235,232,0) 80%)",
+              "radial-gradient(ellipse at 50% 38%, rgba(248,255,255,0.5) 0%, rgba(236,255,254,0.32) 30%, rgba(178,247,244,0.2) 48%, rgba(122,235,232,0.08) 68%, rgba(122,235,232,0) 84%)",
           }}
           animate={
             shouldReduceMotion
-              ? { opacity: 0.42 }
-              : { scale: [0.96, 1.08, 0.99, 1.05, 0.96], rotate: [0, 1.1, -0.9, 0.6, 0], opacity: [0.32, 0.48, 0.36, 0.44, 0.32] }
+              ? { opacity: 0.54 }
+              : { scale: [0.94, 1.1, 0.97, 1.08, 0.94], rotate: [0, 1.5, -1.2, 0.9, 0], opacity: [0.42, 0.62, 0.48, 0.56, 0.42] }
           }
           transition={{ duration: 34, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
 
         <motion.div
-          className="absolute left-[31%] top-[30%] h-[42%] w-[39%] rounded-[58%_42%_48%_52%/44%_56%_44%_56%] blur-[72px]"
+          className="absolute left-[28%] top-[27%] h-[46%] w-[44%] rounded-[58%_42%_48%_52%/44%_56%_44%_56%] blur-[72px]"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 50%, rgba(127,250,245,0.22) 0%, rgba(91,235,231,0.11) 38%, rgba(91,235,231,0) 78%)",
+              "radial-gradient(ellipse at 50% 50%, rgba(190,255,252,0.3) 0%, rgba(127,250,245,0.2) 38%, rgba(91,235,231,0.08) 60%, rgba(91,235,231,0) 82%)",
           }}
           animate={
             shouldReduceMotion
-              ? { opacity: 0.3 }
-              : { x: [0, -18, 14, -8, 0], y: [0, 12, -10, 7, 0], scale: [0.96, 1.1, 0.98, 1.06, 0.96], opacity: [0.22, 0.36, 0.26, 0.32, 0.22] }
+              ? { opacity: 0.38 }
+              : { x: [0, -24, 18, -10, 0], y: [0, 15, -12, 8, 0], scale: [0.94, 1.12, 0.96, 1.08, 0.94], opacity: [0.3, 0.48, 0.34, 0.42, 0.3] }
           }
           transition={{ duration: 29, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
 
         <motion.div
-          className="absolute left-[-8%] top-[48%] h-[22%] w-[42%] rounded-[52%_48%_62%_38%/48%_58%_42%_52%] blur-[48px]"
+          className="absolute left-[-8%] top-[46%] h-[24%] w-[48%] rounded-[52%_48%_62%_38%/48%_58%_42%_52%] blur-[48px]"
           style={{
             background:
-              "linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(214,255,252,0.14) 40%, rgba(214,255,252,0.04) 62%, rgba(214,255,252,0) 100%)",
+              "linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(235,255,253,0.24) 40%, rgba(214,255,252,0.1) 62%, rgba(214,255,252,0) 100%)",
           }}
           animate={
             shouldReduceMotion
-              ? { opacity: 0.24 }
-              : { x: [0, 100, 180, 250], y: [0, -8, 6, 0], scaleX: [0.9, 1.08, 1.18, 0.9], opacity: [0.14, 0.28, 0.2, 0.14] }
+              ? { opacity: 0.3 }
+              : { x: [0, 110, 195, 270], y: [0, -10, 7, 0], scaleX: [0.88, 1.1, 1.2, 0.88], opacity: [0.2, 0.38, 0.28, 0.2] }
           }
           transition={{ duration: 38, repeat: Infinity, repeatType: "mirror", ease: [0.42, 0, 0.58, 1] }}
         />
@@ -245,13 +240,14 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="font-display text-[1.55rem] font-semibold leading-[1.08] tracking-[-0.035em] text-black sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]"
         >
-          <span className="block whitespace-nowrap">We make your brand stand out through</span>
-          <span className="relative block min-h-[1.08em]" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
+          <span className="block whitespace-nowrap">We make your brand</span>
+          <span className="block whitespace-nowrap">stand out through</span>
+          <span className="relative block min-h-[1.08em] text-white" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
             <span className="inline-flex min-w-[9ch] items-baseline justify-center font-extrabold">
               {typedWord}
               <span
                 aria-hidden="true"
-                className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-black/90 animate-pulse align-baseline"
+                className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-white/90 animate-pulse align-baseline"
               />
             </span>
           </span>
