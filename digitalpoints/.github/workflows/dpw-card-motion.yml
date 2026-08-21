@@ -1,0 +1,174 @@
+name: Apply Digital Points Way card motion
+
+on:
+  push:
+    branches:
+      - feat/digital-points-way-card-motion-2026-08-21
+
+permissions:
+  contents: write
+
+jobs:
+  update-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: digitalpoints/package-lock.json
+
+      - name: Replace Digital Points Way cards
+        env:
+          CARD_BLOCK: |
+            function HighlightCards() {
+              const [activeIndex, setActiveIndex] = useState(0);
+              const [desktopExpanded, setDesktopExpanded] = useState(false);
+              const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+              const mobileScrollerRef = useRef<HTMLDivElement>(null);
+
+              useEffect(() => {
+                const root = mobileScrollerRef.current;
+                if (!root) return;
+                const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-dpw-mobile-card]"));
+                const observer = new IntersectionObserver(
+                  (entries) => {
+                    const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+                    if (!visible) return;
+                    const index = cards.indexOf(visible.target as HTMLElement);
+                    if (index >= 0) setActiveIndex(index);
+                  },
+                  { root, threshold: [0.45, 0.65, 0.85] },
+                );
+                cards.forEach((card) => observer.observe(card));
+                return () => observer.disconnect();
+              }, []);
+
+              const accent = (index: number) => index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
+
+              return (
+                <div className="relative mx-auto mt-10 w-full sm:mt-12 lg:mt-14">
+                  <div ref={mobileScrollerRef} className="relative flex h-[100dvh] snap-y snap-mandatory flex-col overflow-y-auto overscroll-y-contain bg-[#141414] [scrollbar-width:none] max-[899px]:-mx-5 max-[899px]:w-[calc(100%+40px)] [&::-webkit-scrollbar]:hidden min-[900px]:hidden">
+                    <div className="pointer-events-none absolute right-4 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-4">
+                      {highlights.map((highlight, index) => (
+                        <span key={highlight.title} className={`block w-[6px] rounded-full transition-all duration-500 ${activeIndex === index ? "h-[22px] bg-[#F4EFE6]" : "h-[6px] bg-white/30"}`} />
+                      ))}
+                    </div>
+
+                    {highlights.map((highlight, index) => {
+                      const color = accent(index);
+                      const isActive = activeIndex === index;
+                      return (
+                        <article
+                          key={highlight.title}
+                          data-dpw-mobile-card
+                          className="relative flex min-h-[100dvh] h-[100dvh] snap-center snap-always flex-col justify-center overflow-hidden bg-[#141414] px-7 py-[84px] text-[#F4EFE6]"
+                          style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }}
+                        >
+                          <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-col">
+                            <div className="overflow-hidden w-fit">
+                              <motion.h3
+                                initial={{ y: "105%" }}
+                                animate={{ y: isActive ? "0%" : "105%" }}
+                                transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                                style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(48px,15vw,72px)] font-bold leading-[0.92] tracking-[-0.035em] text-[#F4EFE6]"
+                              >
+                                {highlight.title}
+                              </motion.h3>
+                            </div>
+
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.7, rotate: -25 }}
+                              animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.7, rotate: isActive ? 0 : -25 }}
+                              transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                              className="relative mx-auto my-[34px] flex h-[132px] w-[132px] items-center justify-center"
+                            >
+                              <motion.div
+                                animate={{ rotate: isActive ? 360 : 0 }}
+                                transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-0 rounded-full border border-white/20"
+                                style={{ borderColor: "rgba(244,239,230,.22)" }}
+                              >
+                                <span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} />
+                              </motion.div>
+                              <div className="relative z-10 flex h-[74px] w-[74px] items-center justify-center text-[#F4EFE6]">
+                                <HighlightIcon title={highlight.title} />
+                              </div>
+                            </motion.div>
+
+                            <motion.div
+                              initial={{ opacity: 0, y: 16 }}
+                              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }}
+                              transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                              className="text-center"
+                            >
+                              <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[340px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
+                              <div className="mx-auto mt-[18px] h-[3px] w-full max-w-[340px] overflow-hidden rounded-full bg-white/[0.12]">
+                                <motion.div
+                                  initial={{ scaleX: 0 }}
+                                  animate={{ scaleX: isActive ? 1 : 0 }}
+                                  transition={{ duration: 1.1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                                  style={{ originX: 0, backgroundColor: color }}
+                                  className="h-full w-full rounded-full"
+                                />
+                              </div>
+                            </motion.div>
+                          </div>
+
+                          <motion.span
+                            initial={{ opacity: 0, scale: 1 }}
+                            animate={{ opacity: isActive ? 1 : 0, scale: isActive ? [1, 1.35, 1] : 1 }}
+                            transition={{ duration: 2.4, delay: 0.8, repeat: isActive ? Infinity : 0, ease: "easeInOut" }}
+                            className="absolute bottom-[34px] right-7 h-[18px] w-[18px] rounded-full"
+                            style={{ backgroundColor: color, boxShadow: `0 0 24px 8px ${color}99` }}
+                          />
+                        </article>
+                      );
+                    })}
+                  </div>
+
+                  <div
+                    className="relative mx-auto hidden h-[520px] max-w-[1180px] items-center justify-center min-[900px]:flex"
+                    onMouseEnter={() => setDesktopExpanded(true)}
+                    onMouseLeave={() => {
+                      setDesktopExpanded(false);
+                      setHoveredIndex(null);
+                    }}
+                  >
+                    {highlights.map((highlight, index) => {
+                      const color = accent(index);
+                      const hovered = hoveredIndex === index;
+                      const resting = { x: index === 0 ? -14 : index === 1 ? 0 : 14, y: index === 1 ? -4 : 6, rotate: index === 0 ? -5 : index === 1 ? 1 : 6 };
+                      const spread = { x: index === 0 ? -330 : index === 1 ? 0 : 330, y: index === 1 ? -26 : 0, rotate: index === 0 ? -6 : index === 1 ? 0 : 6 };
+                      const position = desktopExpanded ? spread : resting;
+                      return (
+                        <motion.article
+                          key={highlight.title}
+                          animate={{ x: position.x, y: hovered && desktopExpanded ? position.y - 14 : position.y, rotate: hovered && desktopExpanded ? 0 : position.rotate, scale: hovered && desktopExpanded ? 1.02 : 1 }}
+                          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                          onMouseEnter={() => setHoveredIndex(index)}
+                          className="absolute left-1/2 top-1/2 flex h-[440px] w-[320px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] bg-[#141414] p-[34px_30px] text-[#F4EFE6] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
+                          style={{ zIndex: hovered ? 20 : 3 - index }}
+                        >
+                          <h3 style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[38px] font-bold leading-none tracking-[-0.01em]">{highlight.title}</h3>
+                          <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20">
+                            <span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} />
+                            <HighlightIcon title={highlight.title} />
+                          </div>
+                          <div>
+                            <p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[14.5px] leading-[1.55] text-white/80">{highlight.description}</p>
+                            <div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]">
+                              <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} style={{ originX: 0, backgroundColor: color }} className="h-full w-full rounded-full" />
+                            </div>
+                          </div>
+                        </motion.article>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
