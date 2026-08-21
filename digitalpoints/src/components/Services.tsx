@@ -24,7 +24,6 @@ function HighlightIcon({ src }: { src: string }) {
 
 function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index: number }) {
   const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
-
   return (
     <article className="relative flex min-h-[100svh] w-full snap-start flex-col justify-center overflow-hidden bg-[#141414] px-6 py-20 text-[#F4EFE6] sm:px-8">
       <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }} />
@@ -46,13 +45,11 @@ function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index
 
 function HighlightCards() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
   return (
     <div className="relative mx-auto w-full">
       <div className="flex flex-col min-[900px]:hidden">
         {highlights.map((highlight, index) => <MobileHighlightCard key={highlight.title} highlight={highlight} index={index} />)}
       </div>
-
       <div className="relative hidden h-[360px] min-[900px]:block" onMouseLeave={() => setHoveredIndex(null)}>
         <div className="absolute right-[2%] top-1/2 h-[280px] w-[min(48vw,560px)] -translate-y-1/2">
           {highlights.map((highlight, index) => {
@@ -61,7 +58,6 @@ function HighlightCards() {
             const x = index === 0 ? "0%" : index === 1 ? "27%" : "54%";
             const y = index === 0 ? "20%" : index === 1 ? "0%" : "20%";
             const rotate = index === 0 ? -5 : index === 1 ? 0 : 5;
-
             return (
               <motion.button key={highlight.title} type="button" onMouseEnter={() => setHoveredIndex(index)} animate={{ x, y: hovered ? "-9%" : y, rotate: hovered ? 0 : rotate, scale: hovered ? 1.07 : 1 }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 flex h-[92px] w-[min(16vw,180px)] min-w-[150px] items-center gap-4 rounded-[16px] border border-black/10 bg-[#141414] px-5 text-left text-[#F4EFE6] shadow-[0_18px_42px_rgba(0,0,0,0.18)]" style={{ zIndex: hovered ? 30 : 10 + index }}>
                 <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15"><span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 12px 3px ${color}` }} /><HighlightIcon src={highlight.icon} /></span>
@@ -81,11 +77,10 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%");
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
-
   return (
     <motion.article aria-label={service.title} style={{ x: cardX, opacity, scale, rotate, zIndex: services.length - index }} className="absolute inset-x-0 top-[2vh] bottom-[2vh] overflow-hidden rounded-[24px] bg-[#08bdb8] shadow-[0_30px_90px_rgba(0,0,0,0.16)] sm:top-[2.5vh] sm:bottom-[2.5vh] sm:rounded-[32px] lg:top-[1.5vh] lg:bottom-[1.5vh] lg:rounded-[38px]">
       <div className="relative grid h-full grid-rows-[auto_minmax(0,1fr)] sm:grid-rows-[minmax(0,1fr)_39%] lg:grid-cols-[57%_43%] lg:grid-rows-1">
@@ -111,7 +106,6 @@ export default function Services() {
   const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
-
   return (
     <>
       <section id="services-intro" aria-label="Services introduction" className="relative isolate overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
@@ -128,7 +122,6 @@ export default function Services() {
           </div>
         </div>
       </section>
-
       <section ref={showcaseRef} id="services-showcase" aria-label="Our Services" className="relative bg-[#f7f3ea]" style={{ height: `${services.length * 100}vh` }}>
         <div className="sticky top-0 h-screen overflow-hidden px-4 py-3 sm:px-7 sm:py-5 lg:px-10 lg:py-4">
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-70" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.13) 1.1px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent 45%, black)", WebkitMaskImage: "linear-gradient(90deg, black, transparent 45%, black)" }} />
