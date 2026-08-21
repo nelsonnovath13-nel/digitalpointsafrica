@@ -202,32 +202,42 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.24, ease: [0.22, 1, 0.36, 1] }} className="mt-4 max-w-[980px] px-2 font-poppins text-[12px] font-normal leading-[1.45] tracking-[-0.01em] text-black/90 sm:mt-5 sm:text-[14px] md:text-[15px] lg:text-[16px] lg:leading-[1.5]">
-          <span className="block md:whitespace-nowrap">We bring together creativity, technology and strategy to build brands</span>
-          <span className="block md:whitespace-nowrap">that connect, engage and grow.</span>
+          We bring together creativity, technology and strategy to build brands that connect, engage, and grow.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }} className="mt-6 flex w-full flex-col items-center gap-2.5 sm:mt-8 sm:flex-row sm:justify-center sm:gap-3.5">
           <motion.div whileHover={{ y: -2, boxShadow: "0 14px 34px rgba(5,11,31,0.16)" }} whileTap={{ scale: 0.975 }}>
-            <Link to="/portfolio" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white bg-white px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-[#050b1f] shadow-[0_8px_22px_rgba(5,11,31,0.08)] transition-all duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white hover:shadow-[0_10px_28px_rgba(5,11,31,0.16)] active:bg-[#050b1f] active:text-white sm:h-[47px] sm:min-w-[195px] sm:text-[13.5px]">View our Portfolio</Link>
+            <Link to="/portfolio" className="flex h-[62px] w-full min-w-[240px] items-center justify-center bg-white px-8 font-poppins text-[16px] font-medium text-ink-950 shadow-[0_10px_30px_rgba(5,11,31,0.08)] transition-colors hover:bg-white/90 sm:h-[66px] sm:w-[270px] sm:text-[17px]">
+              View our Portfolio
+            </Link>
           </motion.div>
-          <motion.div whileHover={{ y: -2, boxShadow: "0 12px 34px rgba(255,255,255,0.18)" }} whileTap={{ scale: 0.975 }}>
-            <Link to="/services" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Explore Our Services</Link>
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+            <Link to="/services" className="flex h-[62px] w-full min-w-[240px] items-center justify-center border border-white/80 bg-transparent px-8 font-poppins text-[16px] font-medium text-white transition-colors hover:bg-white/10 sm:h-[66px] sm:w-[270px] sm:text-[17px]">
+              Explore Our Services
+            </Link>
           </motion.div>
-          <motion.div whileHover={{ y: -2, boxShadow: "0 12px 34px rgba(255,255,255,0.18)" }} whileTap={{ scale: 0.975 }}>
-            <Link to="/contact" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] hover:shadow-[0_10px_28px_rgba(255,255,255,0.18)] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Start a Project</Link>
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.975 }}>
+            <Link to="/contact" className="flex h-[62px] w-full min-w-[240px] items-center justify-center border border-white/80 bg-transparent px-8 font-poppins text-[16px] font-medium text-white transition-colors hover:bg-white/10 sm:h-[66px] sm:w-[270px] sm:text-[17px]">
+              Start a Project
+            </Link>
           </motion.div>
         </motion.div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[42px] overflow-hidden border-t border-white/15 bg-[#050b1f]/10 backdrop-blur-[3px] sm:h-[46px]" aria-label="Creative services motion strip">
-        <div className="absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-[#00c7c3]/55 to-transparent sm:w-24" aria-hidden="true" />
-        <div className="absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-[#00c7c3]/55 to-transparent sm:w-24" aria-hidden="true" />
-        <motion.div className="flex h-full w-max items-center" animate={{ x: ["0%", "-50%"] }} transition={{ duration: 34, repeat: Infinity, ease: "linear" }}>
-          {[...rotatingWords, ...rotatingWords].map((word, index) => (
-            <motion.div key={`${word}-${index}`} className="flex h-full shrink-0 items-center px-5 sm:px-7" animate={{ y: [0, -1.5, 0], opacity: [0.72, 1, 0.72] }} transition={{ duration: 3.8 + (index % 3) * 0.6, repeat: Infinity, ease: "easeInOut", delay: (index % rotatingWords.length) * 0.35 }}>
-              <span className="font-poppins text-[8px] font-semibold uppercase tracking-[0.3em] text-white/90 sm:text-[9px] sm:tracking-[0.34em]">{word}</span>
-              <span className="ml-5 h-[3px] w-[3px] rotate-45 rounded-[1px] bg-white/70 sm:ml-7" />
-            </motion.div>
+      <div className="absolute inset-x-0 bottom-0 z-20 h-[42px] overflow-hidden border-t border-white/20 bg-white/10 backdrop-blur-md sm:h-[46px]">
+        <motion.div className="flex h-full min-w-max items-center gap-8 px-5 font-poppins text-[10px] font-semibold uppercase tracking-[0.28em] text-white/75 sm:gap-12 sm:px-8 sm:text-[11px]">
+          {[
+            "PRINTING",
+            "BRANDING",
+            "EMBROIDERY",
+            "DESIGNS",
+            "MARKETING",
+            "VIDEO",
+          ].map((item, index) => (
+            <span key={item} className="flex items-center gap-8 sm:gap-12">
+              {item}
+              {index < 5 && <span className="text-white/55">•</span>}
+            </span>
           ))}
         </motion.div>
       </div>
