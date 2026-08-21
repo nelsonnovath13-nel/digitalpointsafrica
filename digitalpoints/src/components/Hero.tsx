@@ -55,6 +55,9 @@ export default function Hero() {
   const liquidX = useTransform(smoothX, [0, 100], [-56, 56]);
   const liquidY = useTransform(smoothY, [0, 100], [28, -28]);
   const liquidRotate = useTransform(smoothX, [0, 100], [2.5, -2.5]);
+  const secondarySmogX = useTransform(smoothX, [0, 100], [50, -50]);
+  const secondarySmogY = useTransform(smoothY, [0, 100], [-20, 20]);
+  const secondarySmogRotate = useTransform(smoothX, [0, 100], [2, -2]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
@@ -231,9 +234,9 @@ export default function Hero() {
         <motion.div
           className="absolute -right-[14%] top-[39%] h-[30%] w-[64%] rounded-[48%_52%_58%_42%/42%_58%_42%_58%] blur-[46px]"
           style={{
-            x: useTransform(smoothX, [0, 100], [50, -50]),
-            y: useTransform(smoothY, [0, 100], [-20, 20]),
-            rotate: useTransform(smoothX, [0, 100], [2, -2]),
+            x: secondarySmogX,
+            y: secondarySmogY,
+            rotate: secondarySmogRotate,
             mixBlendMode: "screen",
             background:
               "radial-gradient(ellipse at 48% 50%, rgba(235,255,254,0.32) 0%, rgba(183,250,247,0.22) 34%, rgba(108,235,232,0.1) 58%, rgba(108,235,232,0) 82%)",
