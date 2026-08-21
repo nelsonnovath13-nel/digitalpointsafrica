@@ -1,0 +1,40 @@
+name: Restore mobile card cover effect
+
+on:
+  push:
+    branches:
+      - fix/digital-points-way-preview-restore-2026-08-21
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    if: ${{ !contains(github.event.head_commit.message, 'fix: restore mobile cover effect') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore mobile stacking cover behavior
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('digitalpoints/src/components/Services.tsx')
+          s = p.read_text()
+          old_parent = '''      <div className="flex flex-col min-[900px]:hidden">'''
+          new_parent = '''      <div className="relative min-[900px]:hidden" style={{ height: `${highlights.length * 100}svh` }}>'''
+          old_card = '''    <article className="relative flex min-h-[100svh] w-full snap-start flex-col justify-center overflow-hidden bg-[#141414] px-6 py-20 text-[#F4EFE6] sm:px-8">'''
+          new_card = '''    <article className="sticky top-0 z-10 flex h-[100svh] w-full flex-col justify-center overflow-hidden bg-[#141414] px-6 py-20 text-[#F4EFE6] sm:px-8" style={{ zIndex: index + 1 }}>'''
+          if old_parent not in s:
+              raise SystemExit('Mobile parent marker not found')
+          if old_card not in s:
+              raise SystemExit('Mobile card marker not found')
+          s = s.replace(old_parent, new_parent, 1)
+          s = s.replace(old_card, new_card, 1)
+          p.write_text(s)
+          PY
+          rm .github/workflows/mobile-cover-effect.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add digitalpoints/src/components/Services.tsx .github/workflows/mobile-cover-effect.yml
+          git commit -m "fix: restore mobile cover effect"
+          git push
