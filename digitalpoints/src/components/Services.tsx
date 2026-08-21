@@ -19,64 +19,121 @@ const highlights: Highlight[] = [
 ];
 
 function HighlightIcon({ src }: { src: string }) {
-  return <img src={src} alt="" aria-hidden="true" className="h-[76px] w-[76px] object-contain" />;
+  return <img src={src} alt="" aria-hidden="true" className="h-[68px] w-[68px] object-contain sm:h-[72px] sm:w-[72px]" />;
 }
 
-function MobileHighlightCard({ highlight, index, progress }: { highlight: Highlight; index: number; progress: ReturnType<typeof useSpring> }) {
-  const start = index / highlights.length;
-  const center = (index + 0.5) / highlights.length;
-  const end = (index + 1) / highlights.length;
+function MobileHighlightCard({ highlight, index }: { highlight: Highlight; index: number }) {
   const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
-  const y = useTransform(progress, [start, center, end], ["8%", "0%", "-8%"]);
-  const opacity = useTransform(progress, [start, start + 0.04, end - 0.04, end], [index === 0 ? 1 : 0, 1, 1, index === highlights.length - 1 ? 1 : 0]);
-  const scale = useTransform(progress, [start, center, end], [0.96, 1, 0.96]);
 
   return (
-    <motion.article style={{ y, opacity, scale }} className="sticky top-0 flex h-[100dvh] min-h-[100dvh] w-full flex-col justify-center overflow-hidden bg-[#141414] px-7 py-20 text-[#F4EFE6]">
+    <article
+      className="dp-mobile-snap sticky top-0 flex h-[100dvh] min-h-[100dvh] w-full flex-col justify-center overflow-hidden bg-[#141414] px-6 py-16 text-[#F4EFE6] sm:px-8"
+      style={{ scrollSnapStop: "always" }}
+    >
       <div className="pointer-events-none absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }} />
-      <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-col">
-        <motion.h3 initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.6 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(48px,15vw,72px)] font-bold leading-[0.92] tracking-[-0.035em]">{highlight.title}</motion.h3>
-        <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ amount: 0.55 }} transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-12 flex h-[132px] w-[132px] items-center justify-center">
-          <div className="absolute inset-0 rounded-full border border-white/20"><span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} /></div>
+      <div className="relative z-10 mx-auto flex w-full max-w-[430px] flex-col">
+        <motion.h3
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.65, once: false }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+          className="text-[clamp(46px,14vw,68px)] font-bold leading-[0.92] tracking-[-0.035em]"
+        >
+          {highlight.title}
+        </motion.h3>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.88 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ amount: 0.55, once: false }}
+          transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mx-auto my-10 flex h-[126px] w-[126px] items-center justify-center sm:my-12 sm:h-[136px] sm:w-[136px]"
+        >
+          <div className="absolute inset-0 rounded-full border border-white/20">
+            <span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} />
+          </div>
           <HighlightIcon src={highlight.icon} />
         </motion.div>
-        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5 }} transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }} className="text-center">
-          <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[340px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
-          <div className="mx-auto mt-[18px] h-[3px] w-full max-w-[340px] overflow-hidden rounded-full bg-white/[0.12]"><span className="block h-full w-full" style={{ backgroundColor: color }} /></div>
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.5, once: false }}
+          transition={{ duration: 0.55, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center"
+        >
+          <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[350px] text-[15px] leading-[1.55] text-white/80">
+            {highlight.description}
+          </p>
+          <div className="mx-auto mt-5 h-[3px] w-full max-w-[350px] overflow-hidden rounded-full bg-white/[0.12]">
+            <span className="block h-full w-full" style={{ backgroundColor: color }} />
+          </div>
         </motion.div>
       </div>
-      <span className="absolute bottom-[34px] right-7 h-[10px] w-[10px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 18px 6px ${color}99` }} />
-    </motion.article>
+      <span className="absolute bottom-7 right-7 h-[9px] w-[9px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 18px 6px ${color}99` }} />
+    </article>
   );
 }
 
 function HighlightCards() {
-  const mobileTrackRef = useRef<HTMLDivElement>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const { scrollYProgress: mobileProgress } = useScroll({ target: mobileTrackRef, offset: ["start start", "end end"] });
-  const mobileSmoothProgress = useSpring(mobileProgress, { stiffness: 100, damping: 30, mass: 0.35 });
 
   return (
     <div className="relative mx-auto w-full">
-      <div ref={mobileTrackRef} className="relative hidden h-[300dvh] min-[900px]:hidden">
-        <div className="absolute inset-x-0 top-0 h-full">
-          {highlights.map((highlight, index) => <MobileHighlightCard key={highlight.title} highlight={highlight} index={index} progress={mobileSmoothProgress} />)}
-        </div>
+      {/* Mobile: one normal document-flow track. Each card is sticky, so the page itself keeps scrolling — no nested scroller and no blank spacer. */}
+      <div className="block h-[300dvh] min-[900px]:hidden">
+        {highlights.map((highlight, index) => (
+          <MobileHighlightCard key={highlight.title} highlight={highlight} index={index} />
+        ))}
       </div>
 
-      <motion.div initial={{ y: 72, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto hidden h-[560px] w-full max-w-[1320px] items-center justify-center min-[900px]:flex" onMouseLeave={() => setHoveredIndex(null)}>
+      {/* Desktop/tablet: compact centered fan. Width and offsets are viewport-based so smaller laptops do not crop the outer cards. */}
+      <motion.div
+        initial={{ y: 38, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true, amount: 0.18 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative mx-auto hidden h-[470px] w-full max-w-[1180px] items-center justify-center min-[900px]:flex"
+        onMouseLeave={() => setHoveredIndex(null)}
+      >
         {highlights.map((highlight, index) => {
           const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
           const hovered = hoveredIndex === index;
-          const restingX = index === 0 ? -300 : index === 1 ? 0 : 300;
-          const restingY = index === 1 ? 0 : 18;
-          const restingRotate = index === 0 ? -5 : index === 1 ? 0 : 5;
-          const fanX = index === 0 ? -320 : index === 1 ? 0 : 320;
+          const restingX = index === 0 ? "-13vw" : index === 1 ? "0vw" : "13vw";
+          const restingY = index === 1 ? 0 : 12;
+          const restingRotate = index === 0 ? -4 : index === 1 ? 0 : 4;
+          const fanX = index === 0 ? "-14vw" : index === 1 ? "0vw" : "14vw";
+
           return (
-            <motion.article key={highlight.title} initial={{ y: 34, opacity: 0, scale: 0.97 }} animate={{ x: hovered ? fanX : restingX, y: hovered ? -12 : restingY, rotate: hovered ? 0 : restingRotate, opacity: 1, scale: hovered ? 1.015 : 1 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} onMouseEnter={() => setHoveredIndex(index)} className="absolute left-1/2 top-1/2 flex h-[440px] w-[min(29vw,360px)] min-w-[280px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] bg-[#141414] p-[34px_30px] text-[#F4EFE6] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]" style={{ zIndex: hovered ? 20 : 3 - index }}>
-              <h3 style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[38px] font-bold leading-none tracking-[-0.01em]">{highlight.title}</h3>
-              <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20"><span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon src={highlight.icon} /></div>
-              <div><p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[14.5px] leading-[1.55] text-white/80">{highlight.description}</p><div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]"><span className="block h-full w-full" style={{ backgroundColor: color }} /></div></div>
+            <motion.article
+              key={highlight.title}
+              initial={{ y: 24, opacity: 0, scale: 0.98 }}
+              animate={{
+                x: hovered ? fanX : restingX,
+                y: hovered ? -8 : restingY,
+                rotate: hovered ? 0 : restingRotate,
+                opacity: 1,
+                scale: hovered ? 1.01 : 1,
+              }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              className="absolute left-1/2 top-1/2 flex h-[380px] w-[clamp(250px,25vw,330px)] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[18px] bg-[#141414] p-[28px_25px] text-[#F4EFE6] shadow-[0_28px_65px_-25px_rgba(0,0,0,0.55)] lg:h-[400px] lg:rounded-[20px] lg:p-[30px]"
+              style={{ zIndex: hovered ? 20 : 3 - index }}
+            >
+              <h3 style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[34px] font-bold leading-none tracking-[-0.01em] lg:text-[36px]">
+                {highlight.title}
+              </h3>
+              <div className="relative mx-auto flex h-[118px] w-[118px] items-center justify-center rounded-full border border-white/20 lg:h-[126px] lg:w-[126px]">
+                <span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} />
+                <HighlightIcon src={highlight.icon} />
+              </div>
+              <div>
+                <p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[13.5px] leading-[1.5] text-white/80 lg:text-[14px]">
+                  {highlight.description}
+                </p>
+                <div className="mt-3 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]">
+                  <span className="block h-full w-full" style={{ backgroundColor: color }} />
+                </div>
+              </div>
             </motion.article>
           );
         })}
@@ -123,17 +180,18 @@ export default function Services() {
 
   return (
     <>
-      <section id="services-intro" aria-label="Services introduction" className="relative isolate min-h-[690px] overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:min-h-[700px] sm:px-8 sm:pt-20 lg:min-h-[700px] lg:px-12 lg:pt-24">
+      <style>{`@media (max-width: 899px) { html { scroll-snap-type: y mandatory; } .dp-mobile-snap { scroll-snap-align: start; } #services-showcase { scroll-snap-align: start; } }`}</style>
+      <section id="services-intro" aria-label="Services introduction" className="relative isolate min-h-0 overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:px-8 sm:pt-20 lg:min-h-0 lg:px-12 lg:pt-24">
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[38%] opacity-75" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.15) 1.15px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent)", WebkitMaskImage: "linear-gradient(90deg, black, transparent)" }} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[30%] opacity-50" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.11) 1px, transparent 1.2px)", backgroundSize: "20px 20px", maskImage: "linear-gradient(90deg, transparent, black)", WebkitMaskImage: "linear-gradient(90deg, transparent, black)" }} />
         <div className="relative z-10 mx-auto max-w-[1500px]">
           <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-70px" }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="flex w-full flex-col items-center text-center">
             <h2 className="max-w-[820px] font-display text-[clamp(2rem,3.8vw,3.8rem)] font-semibold leading-[1.03] tracking-[-0.055em] text-[#22D3C7]">The Digital Points Way</h2>
-            <p className="mt-8 max-w-[980px] font-display text-[clamp(0.9rem,1.25vw,1.18rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-10">
+            <p className="mt-7 max-w-[980px] font-display text-[clamp(0.9rem,1.25vw,1.18rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-8">
               <span className="hidden sm:inline">At Digital Points, we believe that every great business starts with an idea, but an idea needs<br className="hidden lg:block" /> the right creativity, identity, and strategy to become a successful brand. That is why our work<br className="hidden lg:block" /> is built around three simple but powerful principles:</span>
               <span className="sm:hidden">At Digital Points, we believe that every great business starts with an idea, but an idea needs the right creativity, identity, and strategy to become a successful brand. That is why our work is built around three simple but powerful principles:</span>
             </p>
-            <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#22D3C7] text-black shadow-[0_18px_40px_rgba(34,211,199,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
+            <div className="mt-8 [perspective:900px] sm:mt-10"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[60px] w-[225px] cursor-pointer rounded-[2px] font-display text-[0.92rem] font-semibold [transform-style:preserve-3d] sm:h-[64px] sm:w-[240px] sm:text-[0.95rem]"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_16px_34px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#22D3C7] text-black shadow-[0_16px_34px_rgba(34,211,199,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
           </motion.div>
           <HighlightCards />
         </div>
