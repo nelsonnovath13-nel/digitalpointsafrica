@@ -36,7 +36,7 @@ function HighlightIcon({ title }: { title: Highlight["title"] }) {
   );
   return (
     <svg viewBox="0 0 120 120" aria-hidden="true" className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-      <path d="M18 87h12V73h12v14h12V63h12v24h12V51h12v36h12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M18 87h12V73h12v14h12V63h12v24h12V51h12v36h12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M22 49c20 1 35-7 48-20 9-9 18-10 31-15" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
       <path d="m91 14 10 0 0 10" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -82,7 +82,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
 
       <div ref={cardsRef} className="relative hidden h-[310px] md:block lg:h-[315px]">
         {highlights.map((highlight, index) => {
-          const collapsedX = index === 0 ? "-32%" : index === 1 ? "0%" : "32%";
+          const collapsedX = index === 0 ? "-24%" : index === 1 ? "0%" : "24%";
           const expandedX = index === 0 ? "-115%" : index === 1 ? "0%" : "115%";
           const collapsedRotate = index === 0 ? -8 : index === 1 ? 2 : 8;
           return (
