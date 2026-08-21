@@ -50,19 +50,38 @@ function HighlightCards() {
       <div className="flex flex-col min-[900px]:hidden">
         {highlights.map((highlight, index) => <MobileHighlightCard key={highlight.title} highlight={highlight} index={index} />)}
       </div>
-      <div className="relative hidden h-[360px] min-[900px]:block" onMouseLeave={() => setHoveredIndex(null)}>
-        <div className="absolute right-[2%] top-1/2 h-[280px] w-[min(48vw,560px)] -translate-y-1/2">
+
+      {/* Desktop: larger premium card cluster that fills the right column without touching the text column. */}
+      <div className="relative hidden h-[390px] min-[900px]:block" onMouseLeave={() => setHoveredIndex(null)}>
+        <div className="absolute right-0 top-1/2 h-[330px] w-[min(52vw,650px)] -translate-y-1/2">
           {highlights.map((highlight, index) => {
             const color = index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
             const hovered = hoveredIndex === index;
-            const x = index === 0 ? "0%" : index === 1 ? "27%" : "54%";
-            const y = index === 0 ? "20%" : index === 1 ? "0%" : "20%";
+            const x = index === 0 ? "0%" : index === 1 ? "24%" : "48%";
+            const y = index === 0 ? "19%" : index === 1 ? "7%" : "19%";
             const rotate = index === 0 ? -5 : index === 1 ? 0 : 5;
             return (
-              <motion.button key={highlight.title} type="button" onMouseEnter={() => setHoveredIndex(index)} animate={{ x, y: hovered ? "-9%" : y, rotate: hovered ? 0 : rotate, scale: hovered ? 1.07 : 1 }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 flex h-[92px] w-[min(16vw,180px)] min-w-[150px] items-center gap-4 rounded-[16px] border border-black/10 bg-[#141414] px-5 text-left text-[#F4EFE6] shadow-[0_18px_42px_rgba(0,0,0,0.18)]" style={{ zIndex: hovered ? 30 : 10 + index }}>
-                <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15"><span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 12px 3px ${color}` }} /><HighlightIcon src={highlight.icon} /></span>
-                <span className="min-w-0"><span style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="block text-[18px] font-bold leading-none">{highlight.title}</span><span className="mt-1 block font-poppins text-[8px] uppercase tracking-[0.2em] text-white/45">0{index + 1} / POINT</span></span>
-                <span className="ml-auto text-white/45">↗</span>
+              <motion.button
+                key={highlight.title}
+                type="button"
+                onMouseEnter={() => setHoveredIndex(index)}
+                animate={{ x, y: hovered ? "-2%" : y, rotate: hovered ? 0 : rotate, scale: hovered ? 1.045 : 1 }}
+                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute left-0 top-0 flex h-[150px] w-[clamp(205px,17vw,245px)] items-center gap-4 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#141414] px-5 text-left text-[#F4EFE6] shadow-[0_24px_55px_-18px_rgba(0,0,0,0.5)]"
+                style={{ zIndex: hovered ? 30 : 10 + index }}
+              >
+                <span className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(circle at 78% 18%, ${color}28, transparent 58%)` }} />
+                <span className="pointer-events-none absolute bottom-0 left-5 right-5 h-[3px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px ${color}66` }} />
+                <span className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full border border-white/15">
+                  <span className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} />
+                  <HighlightIcon src={highlight.icon} />
+                </span>
+                <span className="relative min-w-0 flex-1">
+                  <span style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="block text-[21px] font-bold leading-none tracking-[-0.025em]">{highlight.title}</span>
+                  <span className="mt-2 block font-poppins text-[9px] uppercase tracking-[0.22em] text-white/45">0{index + 1} / POINT</span>
+                  <span className="mt-3 block font-poppins text-[11px] text-white/45">Explore</span>
+                </span>
+                <span className="relative self-start pt-1 text-lg text-white/45 transition-transform duration-300" style={{ transform: hovered ? "translate(2px,-2px)" : "none" }}>↗</span>
               </motion.button>
             );
           })}
@@ -106,6 +125,7 @@ export default function Services() {
   const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
+
   return (
     <>
       <section id="services-intro" aria-label="Services introduction" className="relative isolate overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
@@ -122,6 +142,7 @@ export default function Services() {
           </div>
         </div>
       </section>
+
       <section ref={showcaseRef} id="services-showcase" aria-label="Our Services" className="relative bg-[#f7f3ea]" style={{ height: `${services.length * 100}vh` }}>
         <div className="sticky top-0 h-screen overflow-hidden px-4 py-3 sm:px-7 sm:py-5 lg:px-10 lg:py-4">
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-70" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.13) 1.1px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent 45%, black)", WebkitMaskImage: "linear-gradient(90deg, black, transparent 45%, black)" }} />
