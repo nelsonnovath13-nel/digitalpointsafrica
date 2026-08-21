@@ -40,8 +40,8 @@ export default function Hero() {
   // uses animation only for scale/opacity, so pointer transforms never conflict.
   const pointerX = useMotionValue(50);
   const pointerY = useMotionValue(50);
-  const smoothX = useSpring(pointerX, { stiffness: 85, damping: 24, mass: 0.65 });
-  const smoothY = useSpring(pointerY, { stiffness: 85, damping: 24, mass: 0.65 });
+  const smoothX = useSpring(pointerX, { stiffness: 95, damping: 20, mass: 0.55 });
+  const smoothY = useSpring(pointerY, { stiffness: 95, damping: 20, mass: 0.55 });
 
   const smogOneX = useTransform(smoothX, [0, 100], [-130, 130]);
   const smogOneY = useTransform(smoothY, [0, 100], [-72, 72]);
@@ -54,9 +54,9 @@ export default function Hero() {
   const liquidX = useTransform(smoothX, [0, 100], [-95, 95]);
   const liquidY = useTransform(smoothY, [0, 100], [38, -38]);
   const liquidRotate = useTransform(smoothX, [0, 100], [3, -3]);
-  const geometryX = useTransform(smoothX, [0, 100], [-52, 52]);
-  const geometryY = useTransform(smoothY, [0, 100], [-34, 34]);
-  const geometryRotate = useTransform(smoothX, [0, 100], [-2.8, 2.8]);
+  const geometryX = useTransform(smoothX, [0, 100], [-90, 90]);
+  const geometryY = useTransform(smoothY, [0, 100], [-45, 45]);
+  const geometryRotate = useTransform(smoothX, [0, 100], [-4, 4]);
   const glowX = useTransform(smoothX, [0, 100], [-120, 120]);
   const glowY = useTransform(smoothY, [0, 100], [-90, 90]);
 
@@ -146,13 +146,24 @@ export default function Hero() {
           transition={{ duration: 20, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
         />
 
-        <motion.svg className="absolute inset-[-12%] h-[124%] w-[124%]" viewBox="0 0 1200 700" fill="none" style={{ x: geometryX, y: geometryY, rotate: geometryRotate }}>
-          <motion.path d="M-60 230 C 130 60, 285 390, 480 225 S 850 70, 1260 250" stroke="rgba(255,255,255,0.3)" strokeWidth="1.15" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.24 } : { opacity: [0.18, 0.3, 0.2, 0.28, 0.18] }} transition={{ duration: 15, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
-          <motion.path d="M-80 330 C 140 160, 300 500, 535 305 S 880 135, 1290 350" stroke="rgba(255,255,255,0.24)" strokeWidth="0.95" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.18 } : { opacity: [0.12, 0.24, 0.14, 0.22, 0.12] }} transition={{ duration: 19, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
-          <motion.path d="M-70 455 C 170 275, 335 570, 575 390 S 915 245, 1270 465" stroke="rgba(220,255,253,0.22)" strokeWidth="0.85" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.14 } : { opacity: [0.09, 0.2, 0.12, 0.18, 0.09] }} transition={{ duration: 23, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
-          <motion.path d="M100 90 C 300 230, 410 50, 620 175 S 930 330, 1190 130" stroke="rgba(255,255,255,0.17)" strokeWidth="0.8" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.1 } : { opacity: [0.06, 0.16, 0.08, 0.14, 0.06] }} transition={{ duration: 27, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
-          <motion.circle cx="180" cy="175" r="115" stroke="rgba(255,255,255,0.13)" strokeWidth="0.8" animate={shouldReduceMotion ? { opacity: 0.08 } : { opacity: [0.05, 0.13, 0.07, 0.12, 0.05], scale: [0.98, 1.03, 0.99, 1.02, 0.98] }} transition={{ duration: 21, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
-          <motion.circle cx="1020" cy="505" r="150" stroke="rgba(220,255,253,0.11)" strokeWidth="0.8" animate={shouldReduceMotion ? { opacity: 0.07 } : { opacity: [0.04, 0.12, 0.06, 0.1, 0.04], scale: [1, 0.97, 1.02, 0.98, 1] }} transition={{ duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
+        <motion.svg
+          className="absolute inset-[-12%] h-[124%] w-[124%]"
+          viewBox="0 0 1200 700"
+          fill="none"
+          style={{
+            x: geometryX,
+            y: geometryY,
+            rotate: geometryRotate,
+            maskImage: "linear-gradient(90deg, black 0%, black 24%, rgba(0,0,0,0.92) 31%, rgba(0,0,0,0.18) 44%, rgba(0,0,0,0.12) 56%, rgba(0,0,0,0.92) 69%, black 76%, black 100%)",
+            WebkitMaskImage: "linear-gradient(90deg, black 0%, black 24%, rgba(0,0,0,0.92) 31%, rgba(0,0,0,0.18) 44%, rgba(0,0,0,0.12) 56%, rgba(0,0,0,0.92) 69%, black 76%, black 100%)",
+          }}
+        >
+          <motion.path d="M-60 230 C 130 60, 285 390, 480 225 S 850 70, 1260 250" stroke="rgba(255,255,255,0.42)" strokeWidth="1.65" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.36 } : { opacity: [0.28, 0.48, 0.34, 0.46, 0.28] }} transition={{ duration: 15, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
+          <motion.path d="M-80 330 C 140 160, 300 500, 535 305 S 880 135, 1290 350" stroke="rgba(255,255,255,0.34)" strokeWidth="1.35" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.28 } : { opacity: [0.2, 0.38, 0.24, 0.36, 0.2] }} transition={{ duration: 19, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
+          <motion.path d="M-70 455 C 170 275, 335 570, 575 390 S 915 245, 1270 465" stroke="rgba(220,255,253,0.32)" strokeWidth="1.15" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.22 } : { opacity: [0.16, 0.32, 0.2, 0.3, 0.16] }} transition={{ duration: 23, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
+          <motion.path d="M100 90 C 300 230, 410 50, 620 175 S 930 330, 1190 130" stroke="rgba(255,255,255,0.26)" strokeWidth="1.05" strokeLinecap="round" animate={shouldReduceMotion ? { opacity: 0.18 } : { opacity: [0.12, 0.25, 0.14, 0.23, 0.12] }} transition={{ duration: 27, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
+          <motion.circle cx="180" cy="175" r="115" stroke="rgba(255,255,255,0.2)" strokeWidth="1" animate={shouldReduceMotion ? { opacity: 0.13 } : { opacity: [0.09, 0.2, 0.11, 0.18, 0.09], scale: [0.98, 1.04, 0.99, 1.03, 0.98] }} transition={{ duration: 21, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
+          <motion.circle cx="1020" cy="505" r="150" stroke="rgba(220,255,253,0.18)" strokeWidth="1" animate={shouldReduceMotion ? { opacity: 0.12 } : { opacity: [0.08, 0.18, 0.1, 0.16, 0.08], scale: [1, 0.96, 1.03, 0.98, 1] }} transition={{ duration: 25, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }} />
         </motion.svg>
 
         <motion.div
