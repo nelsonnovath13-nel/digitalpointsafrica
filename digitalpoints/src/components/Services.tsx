@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const services = [
   { title: "Digital Marketing", description: "We help businesses reach the right audience through social media, content, paid campaigns, and practical digital strategies designed to increase visibility, engagement, and enquiries.", tags: ["Social Media", "Content Marketing", "Paid Campaigns", "Digital Strategy"], visual: "MARKETING", image: "https://images.squarespace-cdn.com/content/v1/561646c6e4b0f890085faa02/1771484737308-OEDQ33ZIDCUD3NOF49P1/Social%2BMedia%2BManager%2Bwerden.png?format=1000w", imageAlt: "Creative marketing team planning a digital campaign" },
@@ -13,9 +13,9 @@ const services = [
 type Service = (typeof services)[number];
 type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string };
 const highlights: Highlight[] = [
-  { title: "CREATE", description: "We turn ideas into clear, creative content that gives your brand something worth noticing." },
-  { title: "BRAND", description: "We shape memorable identities that make your business easier to recognise, trust, and remember." },
-  { title: "GROW", description: "We turn attention into momentum through smarter marketing, stronger reach, and measurable results." },
+  { title: "CREATE", description: "We turn ideas into creative digital solutions, compelling visuals, engaging videos, and designs that capture attention." },
+  { title: "BRAND", description: "We transform ideas into strong, professional, and memorable brands through branding, graphic design, marketing, and printing." },
+  { title: "GROW", description: "We help brands connect with their audience, increase their visibility, and create opportunities for sustainable business growth." },
 ];
 
 function HighlightIcon({ title }: { title: Highlight["title"] }) {
@@ -43,73 +43,79 @@ function HighlightIcon({ title }: { title: Highlight["title"] }) {
   );
 }
 
-function CursorSnow({ active, x, y }: { active: boolean; x: number; y: number }) {
-  return (
-    <motion.div aria-hidden="true" initial={false} animate={{ opacity: active ? 1 : 0, x, y, scale: active ? 1 : 0.55 }} transition={{ type: "spring", stiffness: 280, damping: 24, mass: 0.35 }} className="pointer-events-none fixed left-0 top-0 z-[100] block h-8 w-8 -translate-x-1/2 -translate-y-1/2 sm:h-10 sm:w-10 md:h-12 md:w-12">
-      <span className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00B7FF] shadow-[0_0_28px_10px_rgba(0,183,255,0.38)] sm:h-7 sm:w-7 md:h-8 md:w-8" />
-    </motion.div>
-  );
-}
-
-function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | null> }) {
-  const [expanded, setExpanded] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0, active: false });
-  const cardsRef = useRef<HTMLDivElement>(null);
+function HighlightCards({ introRef: _introRef }: { introRef: React.RefObject<HTMLElement | null> }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [desktopExpanded, setDesktopExpanded] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const mobileScrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handlePointerMove = (event: globalThis.PointerEvent) => {
-      const bounds = introRef.current?.getBoundingClientRect();
-      if (!bounds) return;
-      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
-      if (inside) setCursor({ x: event.clientX, y: event.clientY, active: true });
-      else setCursor((current) => ({ ...current, active: false }));
-    };
-    const handlePointerLeave = () => setCursor((current) => ({ ...current, active: false }));
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerleave", handlePointerLeave);
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerleave", handlePointerLeave);
-    };
-  }, [introRef]);
+    const root = mobileScrollerRef.current;
+    if (!root) return;
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-dpw-mobile-card]"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const index = cards.indexOf(visible.target as HTMLElement);
+        if (index >= 0) setActiveIndex(index);
+      },
+      { root, threshold: [0.45, 0.65, 0.85] },
+    );
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, []);
 
-  const handlePointerEnter = () => setExpanded(true);
-  const handlePointerLeave = () => setExpanded(false);
+  const accent = (index: number) => index === 0 ? "#3DA9FC" : index === 1 ? "#F45CA0" : "#F5B942";
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-[1120px] touch-pan-x sm:mt-12 lg:mt-14" onPointerEnter={handlePointerEnter} onPointerLeave={handlePointerLeave}>
-      <CursorSnow active={cursor.active} x={cursor.x} y={cursor.y} />
-
-      <div ref={cardsRef} className="relative hidden h-[310px] md:block lg:h-[315px]">
+    <div className="relative mx-auto mt-10 w-full sm:mt-12 lg:mt-14">
+      <div ref={mobileScrollerRef} className="relative flex h-[100dvh] snap-y snap-mandatory flex-col overflow-y-auto overscroll-y-contain bg-[#141414] [scrollbar-width:none] max-[899px]:-mx-5 max-[899px]:w-[calc(100%+40px)] [&::-webkit-scrollbar]:hidden min-[900px]:hidden">
+        <div className="pointer-events-none absolute right-4 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-4">
+          {highlights.map((highlight, index) => <span key={highlight.title} className={`block w-[6px] rounded-full transition-all duration-500 ${activeIndex === index ? "h-[22px] bg-[#F4EFE6]" : "h-[6px] bg-white/30"}`} />)}
+        </div>
         {highlights.map((highlight, index) => {
-          const collapsedX = index === 0 ? "-16%" : index === 1 ? "0%" : "16%";
-          const expandedX = index === 0 ? "-115%" : index === 1 ? "0%" : "115%";
-          const collapsedRotate = index === 0 ? -8 : index === 1 ? 2 : 8;
+          const color = accent(index);
+          const isActive = activeIndex === index;
           return (
-            <motion.article key={highlight.title} animate={{ x: expanded ? expandedX : collapsedX, rotate: expanded ? 0 : collapsedRotate, scale: expanded ? 1 : 0.98 }} transition={{ type: "spring", stiffness: 170, damping: 22, mass: 0.8 }} style={{ zIndex: index + 1 }} className="absolute left-1/2 top-1/2 flex h-[290px] w-[30%] min-w-[280px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[3px] bg-[#211f1f] p-7 text-white shadow-[0_28px_70px_rgba(0,0,0,0.18)] lg:h-[300px] lg:p-8">
-              <div className="flex items-start justify-between">
-                <h3 className="font-display text-[clamp(1.55rem,2.6vw,2.15rem)] font-semibold tracking-[-0.055em]">{highlight.title}</h3>
-                <span className="font-poppins text-[9px] uppercase tracking-[0.3em] text-white/35">0{index + 1}</span>
+            <article key={highlight.title} data-dpw-mobile-card className="relative flex min-h-[100dvh] h-[100dvh] snap-center snap-always flex-col justify-center overflow-hidden bg-[#141414] px-7 py-[84px] text-[#F4EFE6]" style={{ backgroundImage: `radial-gradient(circle at 78% 18%, ${color}2e, transparent 48%)` }}>
+              <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-col">
+                <div className="w-fit overflow-hidden">
+                  <motion.h3 initial={{ y: "105%" }} animate={{ y: isActive ? "0%" : "105%" }} transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(48px,15vw,72px)] font-bold leading-[0.92] tracking-[-0.035em] text-[#F4EFE6]">{highlight.title}</motion.h3>
+                </div>
+                <motion.div initial={{ opacity: 0, scale: 0.7, rotate: -25 }} animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.7, rotate: isActive ? 0 : -25 }} transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-[34px] flex h-[132px] w-[132px] items-center justify-center">
+                  <motion.div animate={{ rotate: isActive ? 360 : 0 }} transition={{ duration: 16, repeat: Infinity, ease: "linear" }} className="absolute inset-0 rounded-full border border-white/20" style={{ borderColor: "rgba(244,239,230,.22)" }}>
+                    <span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} />
+                  </motion.div>
+                  <div className="relative z-10 flex h-[74px] w-[74px] items-center justify-center text-[#F4EFE6]"><HighlightIcon title={highlight.title} /></div>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }} transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }} className="text-center">
+                  <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[340px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
+                  <div className="mx-auto mt-[18px] h-[3px] w-full max-w-[340px] overflow-hidden rounded-full bg-white/[0.12]"><motion.div initial={{ scaleX: 0 }} animate={{ scaleX: isActive ? 1 : 0 }} transition={{ duration: 1.1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }} style={{ originX: 0, backgroundColor: color }} className="h-full w-full rounded-full" /></div>
+                </motion.div>
               </div>
-              <div className="flex flex-1 items-center justify-center text-white"><HighlightIcon title={highlight.title} /></div>
-              <p className="max-w-[320px] font-display text-[0.92rem] leading-[1.38] tracking-[-0.012em] text-white/90 lg:text-base">{highlight.description}</p>
-              <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-[#00B7FF]" />
-            </motion.article>
+              <motion.span initial={{ opacity: 0, scale: 1 }} animate={{ opacity: isActive ? 1 : 0, scale: isActive ? [1, 1.35, 1] : 1 }} transition={{ duration: 2.4, delay: 0.8, repeat: isActive ? Infinity : 0, ease: "easeInOut" }} className="absolute bottom-[34px] right-7 h-[18px] w-[18px] rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 24px 8px ${color}99` }} />
+            </article>
           );
         })}
       </div>
 
-      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
-        {highlights.map((highlight, index) => (
-          <article key={highlight.title} className="relative flex h-[410px] min-w-[calc(100vw-40px)] snap-center flex-col overflow-hidden rounded-[6px] bg-[#211f1f] p-8 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)]">
-            <div className="flex items-start justify-between"><h3 className="font-display text-[2rem] font-semibold tracking-[-0.055em]">{highlight.title}</h3><span className="font-poppins text-[9px] uppercase tracking-[0.3em] text-white/35">0{index + 1}</span></div>
-            <div className="flex flex-1 items-center justify-center text-white"><HighlightIcon title={highlight.title} /></div>
-            <p className="font-display text-[1rem] leading-[1.4] tracking-[-0.012em] text-white/90">{highlight.description}</p>
-            <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-[#00B7FF]" />
-          </article>
-        ))}
+      <div className="relative mx-auto hidden h-[520px] max-w-[1180px] items-center justify-center min-[900px]:flex" onMouseEnter={() => setDesktopExpanded(true)} onMouseLeave={() => { setDesktopExpanded(false); setHoveredIndex(null); }}>
+        {highlights.map((highlight, index) => {
+          const color = accent(index);
+          const hovered = hoveredIndex === index;
+          const resting = { x: index === 0 ? -14 : index === 1 ? 0 : 14, y: index === 1 ? -4 : 6, rotate: index === 0 ? -5 : index === 1 ? 1 : 6 };
+          const spread = { x: index === 0 ? -330 : index === 1 ? 0 : 330, y: index === 1 ? -26 : 0, rotate: index === 0 ? -6 : index === 1 ? 0 : 6 };
+          const position = desktopExpanded ? spread : resting;
+          return (
+            <motion.article key={highlight.title} animate={{ x: position.x, y: hovered && desktopExpanded ? position.y - 14 : position.y, rotate: hovered && desktopExpanded ? 0 : position.rotate, scale: hovered && desktopExpanded ? 1.02 : 1 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }} onMouseEnter={() => setHoveredIndex(index)} className="absolute left-1/2 top-1/2 flex h-[440px] w-[320px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] bg-[#141414] p-[34px_30px] text-[#F4EFE6] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]" style={{ zIndex: hovered ? 20 : 3 - index }}>
+              <h3 style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[38px] font-bold leading-none tracking-[-0.01em]">{highlight.title}</h3>
+              <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20"><span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon title={highlight.title} /></div>
+              <div><p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[14.5px] leading-[1.55] text-white/80">{highlight.description}</p><div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]"><motion.div initial={{ scaleX: 0 }} animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} style={{ originX: 0, backgroundColor: color }} className="h-full w-full rounded-full" /></div></div>
+            </motion.article>
+          );
+        })}
       </div>
-      <p className="mt-2 text-center font-poppins text-[9px] uppercase tracking-[0.28em] text-black/35 md:hidden">Swipe to explore</p>
     </div>
   );
 }
@@ -158,12 +164,12 @@ export default function Services() {
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[30%] opacity-50" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.11) 1px, transparent 1.2px)", backgroundSize: "20px 20px", maskImage: "linear-gradient(90deg, transparent, black)", WebkitMaskImage: "linear-gradient(90deg, transparent, black)" }} />
         <div className="relative z-10 mx-auto max-w-[1500px]">
           <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-70px" }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="flex w-full flex-col items-center text-center">
-            <h2 className="max-w-[820px] font-display text-[clamp(2rem,3.8vw,3.8rem)] font-semibold leading-[1.03] tracking-[-0.055em] text-[#08bdb8]">The Digital Points Way</h2>
+            <h2 className="max-w-[820px] font-display text-[clamp(2rem,3.8vw,3.8rem)] font-semibold leading-[1.03] tracking-[-0.055em] text-[#22D3C7]">The Digital Points Way</h2>
             <p className="mt-8 max-w-[980px] font-display text-[clamp(0.9rem,1.25vw,1.18rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-10">
               <span className="hidden sm:inline">At Digital Points, we believe that every great business starts with an idea, but an idea needs<br className="hidden lg:block" /> the right creativity, identity, and strategy to become a successful brand. That is why our work<br className="hidden lg:block" /> is built around three simple but powerful principles:</span>
               <span className="sm:hidden">At Digital Points, we believe that every great business starts with an idea, but an idea needs the right creativity, identity, and strategy to become a successful brand. That is why our work is built around three simple but powerful principles:</span>
             </p>
-            <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#08bdb8] text-black shadow-[0_18px_40px_rgba(8,189,184,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
+            <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#22D3C7] text-black shadow-[0_18px_40px_rgba(34,211,199,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
           </motion.div>
           <HighlightCards introRef={introRef} />
         </div>
