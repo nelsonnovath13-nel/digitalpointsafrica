@@ -1,0 +1,1 @@
+Backup branch created before the Hero interaction repair: backup/hero-effects-broken-state-2026-08-21
