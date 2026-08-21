@@ -55,8 +55,26 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
   const [order, setOrder] = useState([0, 1, 2]);
   const [isCycling, setIsCycling] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [cursor, setCursor] = useState({ x: 0, y: 0, active: false });
   const stackRef = useRef<HTMLDivElement>(null);
   const cycleTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handlePointerMove = (event: globalThis.PointerEvent) => {
+      const bounds = introRef.current?.getBoundingClientRect();
+      if (!bounds) return;
+      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+      if (inside) setCursor({ x: event.clientX, y: event.clientY, active: true });
+      else setCursor((current) => ({ ...current, active: false }));
+    };
+    const handlePointerLeave = () => setCursor((current) => ({ ...current, active: false }));
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerleave", handlePointerLeave);
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, [introRef]);
 
   useEffect(() => {
     return () => {
@@ -105,7 +123,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
 
   return (
     <div className="relative mx-auto mt-10 w-full max-w-[1120px] sm:mt-12 lg:mt-0 lg:max-w-none lg:self-stretch">
-      <CursorSnow active={false} x={0} y={0} />
+      <CursorSnow active={cursor.active} x={cursor.x} y={cursor.y} />
 
       <style>{`
         @keyframes dp-card-stack-float {
@@ -124,7 +142,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
       `}</style>
 
       <div className="relative hidden h-[360px] w-full items-center justify-center md:flex lg:h-[390px]">
-        <div className="dp-card-stack-float relative flex h-full w-full items-center justify-center">
+        <div className="dp-card-stack-float relative flex h-full w-full items-center justify-center" style={{ animation: "dp-card-stack-float 5.8s ease-in-out infinite" }}>
           <div
             ref={stackRef}
             onPointerMove={handleStackPointerMove}
