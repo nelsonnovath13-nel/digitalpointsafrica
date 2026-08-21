@@ -48,6 +48,13 @@ export default function Hero() {
   const smogTwoRotate = useTransform(smoothX, [0, 100], [3.5, -3.5]);
   const smogThreeX = useTransform(smoothX, [0, 100], [-48, 48]);
   const smogThreeY = useTransform(smoothY, [0, 100], [36, -36]);
+  const geometryX = useTransform(smoothX, [0, 100], [-34, 34]);
+  const geometryY = useTransform(smoothY, [0, 100], [-22, 22]);
+  const geometryRotate = useTransform(smoothX, [0, 100], [-2.2, 2.2]);
+  const geometryScale = useTransform(smoothY, [0, 100], [0.96, 1.04]);
+  const liquidX = useTransform(smoothX, [0, 100], [-56, 56]);
+  const liquidY = useTransform(smoothY, [0, 100], [28, -28]);
+  const liquidRotate = useTransform(smoothX, [0, 100], [2.5, -2.5]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
@@ -89,7 +96,7 @@ export default function Hero() {
   }, [shouldReduceMotion]);
 
   const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
-    if (event.pointerType !== "mouse") return;
+    if (event.pointerType !== "mouse" && event.pointerType !== "touch") return;
     const rect = event.currentTarget.getBoundingClientRect();
     pointerX.set(((event.clientX - rect.left) / rect.width) * 100);
     pointerY.set(((event.clientY - rect.top) / rect.height) * 100);
@@ -197,6 +204,103 @@ export default function Hero() {
           transition={{ duration: 38, repeat: Infinity, repeatType: "mirror", ease: [0.42, 0, 0.58, 1] }}
         />
 
+        <motion.div
+          className="absolute -left-[12%] top-[30%] h-[36%] w-[72%] rounded-[52%_48%_46%_54%/58%_42%_58%_42%] blur-[42px]"
+          style={{
+            x: liquidX,
+            y: liquidY,
+            rotate: liquidRotate,
+            mixBlendMode: "screen",
+            background:
+              "linear-gradient(112deg, rgba(255,255,255,0) 8%, rgba(238,255,254,0.22) 30%, rgba(255,255,255,0.42) 48%, rgba(161,251,247,0.2) 66%, rgba(161,251,247,0) 92%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.32 }
+              : {
+                  x: [0, 75, -30, 95, 0],
+                  y: [0, -12, 16, -8, 0],
+                  scaleX: [0.9, 1.08, 0.96, 1.12, 0.9],
+                  scaleY: [1, 0.92, 1.06, 0.96, 1],
+                  opacity: [0.2, 0.42, 0.28, 0.38, 0.2],
+                }
+          }
+          transition={{ duration: 36, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+        />
+
+        <motion.div
+          className="absolute -right-[14%] top-[39%] h-[30%] w-[64%] rounded-[48%_52%_58%_42%/42%_58%_42%_58%] blur-[46px]"
+          style={{
+            x: useTransform(smoothX, [0, 100], [50, -50]),
+            y: useTransform(smoothY, [0, 100], [-20, 20]),
+            rotate: useTransform(smoothX, [0, 100], [2, -2]),
+            mixBlendMode: "screen",
+            background:
+              "radial-gradient(ellipse at 48% 50%, rgba(235,255,254,0.32) 0%, rgba(183,250,247,0.22) 34%, rgba(108,235,232,0.1) 58%, rgba(108,235,232,0) 82%)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.28 }
+              : { scale: [1, 0.92, 1.08, 0.96, 1], opacity: [0.18, 0.32, 0.22, 0.3, 0.18] }
+          }
+          transition={{ duration: 32, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+        />
+
+        <motion.svg
+          className="absolute inset-[-10%] h-[120%] w-[120%]"
+          viewBox="0 0 1200 700"
+          fill="none"
+          style={{ x: geometryX, y: geometryY, rotate: geometryRotate, scale: geometryScale }}
+        >
+          <motion.path
+            d="M-40 250 C 160 90, 280 380, 470 230 S 820 90, 1240 270"
+            stroke="rgba(255,255,255,0.2)"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            animate={
+              shouldReduceMotion
+                ? { pathLength: 1, opacity: 0.14 }
+                : { pathLength: [0.92, 1, 0.94, 1], opacity: [0.1, 0.2, 0.12, 0.18] }
+            }
+            transition={{ duration: 18, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          />
+          <motion.path
+            d="M-80 330 C 130 190, 300 510, 520 310 S 860 160, 1280 350"
+            stroke="rgba(255,255,255,0.14)"
+            strokeWidth="0.9"
+            strokeLinecap="round"
+            animate={
+              shouldReduceMotion
+                ? { pathLength: 1, opacity: 0.1 }
+                : { x: [0, 18, -10, 0], y: [0, -8, 10, 0], opacity: [0.08, 0.16, 0.1, 0.14] }
+            }
+            transition={{ duration: 23, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          />
+          <motion.path
+            d="M-60 440 C 180 270, 330 570, 570 390 S 900 250, 1260 450"
+            stroke="rgba(218,255,253,0.12)"
+            strokeWidth="0.8"
+            strokeLinecap="round"
+            animate={
+              shouldReduceMotion
+                ? { opacity: 0.08 }
+                : { x: [0, -14, 12, 0], y: [0, 12, -8, 0], opacity: [0.06, 0.13, 0.08, 0.11] }
+            }
+            transition={{ duration: 27, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          />
+        </motion.svg>
+
+        <motion.div
+          className="absolute left-[6%] top-[18%] h-[1px] w-[30%] origin-left bg-gradient-to-r from-white/0 via-white/20 to-white/0"
+          style={{ x: geometryX, y: geometryY, rotate: geometryRotate }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 0.08 }
+              : { opacity: [0.04, 0.14, 0.06, 0.12, 0.04], scaleX: [0.9, 1.05, 0.94, 1.02, 0.9] }
+          }
+          transition={{ duration: 21, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+        />
+
         <div className="absolute inset-x-0 bottom-[42px] h-[30%] overflow-hidden sm:bottom-[46px]" aria-hidden="true">
           {atmosphericParticles.map((particle, index) => (
             <motion.span
@@ -259,7 +363,8 @@ export default function Hero() {
           transition={{ duration: 0.55, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
           className="mt-4 max-w-[920px] px-2 font-poppins text-[12px] font-normal leading-[1.45] tracking-[-0.01em] text-black/90 sm:mt-5 sm:text-[14px] md:text-[15px] lg:text-[16px] lg:leading-[1.5]"
         >
-          We bring together creativity, technology, and strategy to build brands that connect, engage and grow.
+          <span className="block">We bring together creativity, technology and strategy to build brands</span>
+          <span className="block">that connect, engage and grow.</span>
         </motion.p>
 
         <motion.div
