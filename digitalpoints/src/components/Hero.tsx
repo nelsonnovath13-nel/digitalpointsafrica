@@ -251,8 +251,7 @@ export default function Hero() {
               {typedWord}
               <span
                 aria-hidden="true"
-                className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-black/90 align-baseline"
-                style={{ animation: "hero-type-caret 0.9s steps(1, end) infinite" }}
+                className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-black/90 animate-pulse align-baseline"
               />
             </span>
           </span>
