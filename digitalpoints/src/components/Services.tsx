@@ -52,51 +52,136 @@ function CursorSnow({ active, x, y }: { active: boolean; x: number; y: number })
 }
 
 function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | null> }) {
-  const [expanded, setExpanded] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0, active: false });
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const [order, setOrder] = useState([0, 1, 2]);
+  const [isCycling, setIsCycling] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const stackRef = useRef<HTMLDivElement>(null);
+  const cycleTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const handlePointerMove = (event: globalThis.PointerEvent) => {
-      const bounds = introRef.current?.getBoundingClientRect();
-      if (!bounds) return;
-      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
-      if (inside) setCursor({ x: event.clientX, y: event.clientY, active: true });
-      else setCursor((current) => ({ ...current, active: false }));
-    };
-    const handlePointerLeave = () => setCursor((current) => ({ ...current, active: false }));
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerleave", handlePointerLeave);
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerleave", handlePointerLeave);
+      if (cycleTimerRef.current !== null) window.clearTimeout(cycleTimerRef.current);
     };
-  }, [introRef]);
+  }, []);
 
-  const handlePointerEnter = () => setExpanded(true);
-  const handlePointerLeave = () => setExpanded(false);
+  const handleStackPointerMove = (event: globalThis.PointerEvent) => {
+    const stack = stackRef.current;
+    if (!stack) return;
+    const bounds = stack.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    setTilt({ x: Math.max(-0.5, Math.min(0.5, y)) * -7, y: Math.max(-0.5, Math.min(0.5, x)) * 9 });
+  };
+
+  const handleStackPointerLeave = () => setTilt({ x: 0, y: 0 });
+
+  const cycleCards = () => {
+    if (isCycling) return;
+    setIsCycling(true);
+    cycleTimerRef.current = window.setTimeout(() => {
+      setOrder((current) => [current[1], current[2], current[0]]);
+      setIsCycling(false);
+    }, 430);
+  };
+
+  const getCardPosition = (cardIndex: number) => order.indexOf(cardIndex);
+
+  const cardStyle = (cardIndex: number) => {
+    const position = getCardPosition(cardIndex);
+    const isFront = position === 0;
+    const isBack = position === 2;
+    const leaving = isFront && isCycling;
+    const transforms = [
+      "translate3d(0, 0, 0) rotate(-5deg) scale(1)",
+      "translate3d(30px, -16px, 0) rotate(4deg) scale(0.975)",
+      "translate3d(62px, -34px, 0) rotate(11deg) scale(0.95)",
+    ];
+    return {
+      zIndex: leaving ? 40 : 30 - position * 10,
+      transform: leaving ? "translate3d(48px, -112px, 0) rotate(18deg) scale(0.92)" : transforms[position],
+      opacity: leaving ? 0 : isBack ? 0.98 : 1,
+    };
+  };
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-[1120px] touch-pan-x sm:mt-12 lg:mt-14" onPointerEnter={handlePointerEnter} onPointerLeave={handlePointerLeave}>
-      <CursorSnow active={cursor.active} x={cursor.x} y={cursor.y} />
+    <div className="relative mx-auto mt-10 w-full max-w-[1120px] sm:mt-12 lg:mt-0 lg:max-w-none lg:self-stretch">
+      <CursorSnow active={false} x={0} y={0} />
 
-      <div ref={cardsRef} className="relative hidden h-[310px] md:block lg:h-[315px]">
-        {highlights.map((highlight, index) => {
-          const collapsedX = index === 0 ? "-24%" : index === 1 ? "0%" : "24%";
-          const expandedX = index === 0 ? "-115%" : index === 1 ? "0%" : "115%";
-          const collapsedRotate = index === 0 ? -8 : index === 1 ? 2 : 8;
-          return (
-            <motion.article key={highlight.title} animate={{ x: expanded ? expandedX : collapsedX, rotate: expanded ? 0 : collapsedRotate, scale: expanded ? 1 : 0.98 }} transition={{ type: "spring", stiffness: 170, damping: 22, mass: 0.8 }} style={{ zIndex: index + 1 }} className="absolute left-1/2 top-1/2 flex h-[290px] w-[30%] min-w-[280px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[3px] bg-[#211f1f] p-7 text-white shadow-[0_28px_70px_rgba(0,0,0,0.18)] lg:h-[300px] lg:p-8">
-              <div className="flex items-start justify-between">
-                <h3 className="font-display text-[clamp(1.55rem,2.6vw,2.15rem)] font-semibold tracking-[-0.055em]">{highlight.title}</h3>
-                <span className="font-poppins text-[9px] uppercase tracking-[0.3em] text-white/35">0{index + 1}</span>
-              </div>
-              <div className="flex flex-1 items-center justify-center text-white"><HighlightIcon title={highlight.title} /></div>
-              <p className="max-w-[320px] font-display text-[0.92rem] leading-[1.38] tracking-[-0.012em] text-white/90 lg:text-base">{highlight.description}</p>
-              <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-[#00B7FF]" />
-            </motion.article>
-          );
-        })}
+      <style>{`
+        @keyframes dp-card-stack-float {
+          0%, 100% { transform: translate3d(0, 0, 0); }
+          50% { transform: translate3d(0, -8px, 0); }
+        }
+        @keyframes dp-card-progress {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .dp-card-stack-float { animation: none !important; }
+          .dp-card-stack-card,
+          .dp-card-stack-progress { transition: none !important; animation: none !important; }
+        }
+      `}</style>
+
+      <div className="relative hidden h-[360px] w-full items-center justify-center md:flex lg:h-[390px]">
+        <div className="dp-card-stack-float relative flex h-full w-full items-center justify-center">
+          <div
+            ref={stackRef}
+            onPointerMove={handleStackPointerMove}
+            onPointerLeave={handleStackPointerLeave}
+            className="relative h-[260px] w-[390px] [perspective:1000px]"
+            style={{
+              transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transformStyle: "preserve-3d",
+              transition: "transform 180ms ease-out",
+            }}
+          >
+            {highlights.map((highlight, cardIndex) => {
+              const position = getCardPosition(cardIndex);
+              const isFront = position === 0;
+              const colors = ["#2D8CFF", "#F05AA6", "#C89B3C"];
+              return (
+                <article
+                  key={highlight.title}
+                  aria-label={highlight.title}
+                  onClick={isFront ? cycleCards : undefined}
+                  onKeyDown={isFront ? (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); cycleCards(); } } : undefined}
+                  role={isFront ? "button" : undefined}
+                  tabIndex={isFront ? 0 : -1}
+                  className={`dp-card-stack-card absolute left-1/2 top-1/2 flex h-[220px] w-[350px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#211f1f_0%,#080808_100%)] p-7 text-white shadow-[0_30px_70px_rgba(0,0,0,0.26)] select-none ${isFront ? "cursor-pointer pointer-events-auto" : "pointer-events-none"}`}
+                  style={{
+                    ...cardStyle(cardIndex),
+                    transformOrigin: "center center",
+                    transition: "transform 430ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease, box-shadow 300ms ease",
+                  }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="dp-card-icon flex h-9 w-9 items-center justify-center rounded-[10px] bg-white/[0.09] text-white/90 ring-1 ring-white/[0.08] backdrop-blur-sm [&>svg]:h-[21px] [&>svg]:w-[21px]">
+                        <HighlightIcon title={highlight.title} />
+                      </span>
+                      <h3 className="font-display text-[1.8rem] font-semibold leading-none tracking-[-0.055em]">{highlight.title}</h3>
+                    </div>
+                    <span className="font-poppins pt-1 text-[9px] uppercase tracking-[0.28em] text-white/35">0{cardIndex + 1} / POINT</span>
+                  </div>
+
+                  <div className="flex flex-1 items-end">
+                    <p className="max-w-[280px] font-display text-[0.94rem] leading-[1.4] tracking-[-0.012em] text-white/78">{highlight.description}</p>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between text-white/45">
+                    <span className="font-poppins text-[10px] uppercase tracking-[0.25em]">Explore</span>
+                    <span aria-hidden="true" className="text-sm">↗</span>
+                  </div>
+
+                  <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[4px]" style={{ backgroundColor: colors[cardIndex] }}>
+                    <span className="dp-card-stack-progress block h-full w-0" style={{ backgroundColor: colors[cardIndex], animation: `dp-card-progress 900ms cubic-bezier(0.22,1,0.36,1) ${cardIndex * 120}ms forwards` }} />
+                  </span>
+                </article>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
@@ -157,15 +242,17 @@ export default function Services() {
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[38%] opacity-75" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.15) 1.15px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent)", WebkitMaskImage: "linear-gradient(90deg, black, transparent)" }} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[30%] opacity-50" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.11) 1px, transparent 1.2px)", backgroundSize: "20px 20px", maskImage: "linear-gradient(90deg, transparent, black)", WebkitMaskImage: "linear-gradient(90deg, transparent, black)" }} />
         <div className="relative z-10 mx-auto max-w-[1500px]">
-          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-70px" }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="flex w-full flex-col items-center text-center">
-            <h2 className="max-w-[820px] font-display text-[clamp(2rem,3.8vw,3.8rem)] font-semibold leading-[1.03] tracking-[-0.055em] text-[#08bdb8]">The Digital Points Way</h2>
-            <p className="mt-8 max-w-[980px] font-display text-[clamp(0.9rem,1.25vw,1.18rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-10">
-              <span className="hidden sm:inline">At Digital Points, we believe that every great business starts with an idea, but an idea needs<br className="hidden lg:block" /> the right creativity, identity, and strategy to become a successful brand. That is why our work<br className="hidden lg:block" /> is built around three simple but powerful principles:</span>
-              <span className="sm:hidden">At Digital Points, we believe that every great business starts with an idea, but an idea needs the right creativity, identity, and strategy to become a successful brand. That is why our work is built around three simple but powerful principles:</span>
-            </p>
-            <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#08bdb8] text-black shadow-[0_18px_40px_rgba(8,189,184,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
-          </motion.div>
-          <HighlightCards introRef={introRef} />
+          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.82fr)] lg:items-center lg:gap-16">
+            <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-70px" }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} className="flex w-full flex-col items-center text-center lg:items-start lg:text-left">
+              <h2 className="max-w-[820px] font-display text-[clamp(2rem,3.8vw,3.8rem)] font-semibold leading-[1.03] tracking-[-0.055em] text-[#08bdb8]">The Digital Points Way</h2>
+              <p className="mt-8 max-w-[980px] font-display text-[clamp(0.9rem,1.25vw,1.18rem)] font-normal leading-[1.55] tracking-[-0.012em] text-[#171919] sm:mt-10 lg:max-w-[720px]">
+                <span className="hidden sm:inline">At Digital Points, we believe that every great business starts with an idea, but an idea needs<br className="hidden lg:block" /> the right creativity, identity, and strategy to become a successful brand. That is why our work<br className="hidden lg:block" /> is built around three simple but powerful principles:</span>
+                <span className="sm:hidden">At Digital Points, we believe that every great business starts with an idea, but an idea needs the right creativity, identity, and strategy to become a successful brand. That is why our work is built around three simple but powerful principles:</span>
+              </p>
+              <div className="mt-12 [perspective:900px] sm:mt-14"><motion.a href="/portfolio" aria-label="View all our works" whileHover={{ rotateX: 180 }} whileTap={{ rotateX: 180, scale: 0.98 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} style={{ transformStyle: "preserve-3d" }} className="group relative block h-[64px] w-[235px] cursor-pointer rounded-[2px] font-display text-[0.95rem] font-semibold [transform-style:preserve-3d] sm:h-[70px] sm:w-[255px] sm:text-base"><span className="absolute inset-0 flex items-center justify-center bg-[#211f1f] text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden]">View all our works <span aria-hidden="true" className="ml-2 text-base">↗</span></span><span className="absolute inset-0 flex items-center justify-center bg-[#08bdb8] text-black shadow-[0_18px_40px_rgba(8,189,184,0.22)] [backface-visibility:hidden] [transform:rotateX(180deg)]">Explore our work <span aria-hidden="true" className="ml-2 text-base">↗</span></span></motion.a></div>
+            </motion.div>
+            <HighlightCards introRef={introRef} />
+          </div>
         </div>
       </section>
 
