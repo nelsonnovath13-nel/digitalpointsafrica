@@ -11,19 +11,15 @@ const services = [
 ] as const;
 
 type Service = (typeof services)[number];
-type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string };
+type Highlight = { title: "CREATE" | "BRAND" | "GROW"; description: string; icon: string };
 const highlights: Highlight[] = [
-  { title: "CREATE", description: "We turn ideas into creative digital solutions, compelling visuals, engaging videos, and designs that capture attention." },
-  { title: "BRAND", description: "We transform ideas into strong, professional, and memorable brands through branding, graphic design, marketing, and printing." },
-  { title: "GROW", description: "We help brands connect with their audience, increase their visibility, and create opportunities for sustainable business growth." },
+  { title: "CREATE", description: "We turn ideas into creative digital solutions, compelling visuals, engaging videos, and designs that capture attention.", icon: "/icons/create.svg" },
+  { title: "BRAND", description: "We transform ideas into strong, professional, and memorable brands through branding, graphic design, marketing, and printing.", icon: "/icons/brand.svg" },
+  { title: "GROW", description: "We help brands connect with their audience, increase their visibility, and create opportunities for sustainable business growth.", icon: "/icons/grow.svg" },
 ];
 
-function HighlightPlaceholder() {
-  return (
-    <div aria-hidden="true" className="flex h-[92px] w-[92px] items-center justify-center rounded-full border border-white/20">
-      <span className="h-9 w-9 rounded-[6px] border border-white/45" />
-    </div>
-  );
+function HighlightIcon({ src }: { src: string }) {
+  return <img src={src} alt="" aria-hidden="true" className="h-[76px] w-[76px] object-contain" />;
 }
 
 function MobileHighlightCard({ highlight, index, progress }: { highlight: Highlight; index: number; progress: ReturnType<typeof useSpring> }) {
@@ -42,7 +38,7 @@ function MobileHighlightCard({ highlight, index, progress }: { highlight: Highli
         <motion.h3 initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.6 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[clamp(48px,15vw,72px)] font-bold leading-[0.92] tracking-[-0.035em]">{highlight.title}</motion.h3>
         <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ amount: 0.55 }} transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto my-12 flex h-[132px] w-[132px] items-center justify-center">
           <div className="absolute inset-0 rounded-full border border-white/20"><span className="absolute left-1/2 top-[-3.5px] h-[7px] w-[7px] -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 16px 4px ${color}` }} /></div>
-          <HighlightPlaceholder />
+          <HighlightIcon src={highlight.icon} />
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.5 }} transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }} className="text-center">
           <p style={{ fontFamily: '"Inter", sans-serif' }} className="mx-auto max-w-[340px] text-[15px] leading-[1.55] text-white/80">{highlight.description}</p>
@@ -79,7 +75,7 @@ function HighlightCards() {
           return (
             <motion.article key={highlight.title} initial={{ y: 34, opacity: 0, scale: 0.97 }} animate={{ x: hovered ? fanX : restingX, y: hovered ? -12 : restingY, rotate: hovered ? 0 : restingRotate, opacity: 1, scale: hovered ? 1.015 : 1 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} onMouseEnter={() => setHoveredIndex(index)} className="absolute left-1/2 top-1/2 flex h-[440px] w-[min(29vw,360px)] min-w-[280px] -translate-x-1/2 -translate-y-1/2 cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] bg-[#141414] p-[34px_30px] text-[#F4EFE6] shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]" style={{ zIndex: hovered ? 20 : 3 - index }}>
               <h3 style={{ fontFamily: '"Space Grotesk", sans-serif' }} className="text-[38px] font-bold leading-none tracking-[-0.01em]">{highlight.title}</h3>
-              <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20"><span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightPlaceholder /></div>
+              <div className="relative mx-auto flex h-[132px] w-[132px] items-center justify-center rounded-full border border-white/20"><span className="absolute left-1/2 top-[-4px] h-2 w-2 -translate-x-1/2 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 14px 4px ${color}` }} /><HighlightIcon src={highlight.icon} /></div>
               <div><p style={{ fontFamily: '"Inter", sans-serif' }} className="text-[14.5px] leading-[1.55] text-white/80">{highlight.description}</p><div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.14]"><span className="block h-full w-full" style={{ backgroundColor: color }} /></div></div>
             </motion.article>
           );
