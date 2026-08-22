@@ -1,4 +1,4 @@
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 const services = [
@@ -102,6 +102,12 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
     }, 430);
   };
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia("(max-width: 767px)").matches || isCycling) return;
+    const timer = window.setTimeout(cycleCards, 3800);
+    return () => window.clearTimeout(timer);
+  }, [order, isCycling]);
+
   const getCardPosition = (cardIndex: number) => order.indexOf(cardIndex);
 
   const cardStyle = (cardIndex: number) => {
@@ -120,6 +126,8 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
       opacity: leaving ? 0 : isBack ? 0.98 : 1,
     };
   };
+
+  const mobileHighlight = highlights[order[0]];
 
   return (
     <div className="relative mx-auto mt-10 w-full max-w-[1120px] sm:mt-12 lg:mt-0 lg:max-w-none lg:self-stretch">
@@ -202,17 +210,35 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
         </div>
       </div>
 
-      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
-        {highlights.map((highlight, index) => (
-          <article key={highlight.title} className="relative flex h-[410px] min-w-[calc(100vw-40px)] snap-center flex-col overflow-hidden rounded-[6px] bg-[#211f1f] p-8 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)]">
-            <div className="flex items-start justify-between"><h3 className="font-display text-[2rem] font-semibold tracking-[-0.055em]">{highlight.title}</h3><span className="font-poppins text-[9px] uppercase tracking-[0.3em] text-white/35">0{index + 1}</span></div>
-            <div className="flex flex-1 items-center justify-center text-white"><HighlightIcon title={highlight.title} /></div>
-            <p className="font-display text-[1rem] leading-[1.4] tracking-[-0.012em] text-white/90">{highlight.description}</p>
-            <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-[#00B7FF]" />
-          </article>
-        ))}
+      <div className="md:hidden">
+        <div className="relative mx-auto h-[300px] w-[min(84vw,300px)]">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.article
+              key={mobileHighlight.title}
+              initial={{ x: 72, opacity: 0, rotate: 7, scale: 0.94 }}
+              animate={{ x: 0, opacity: 1, rotate: -4, scale: 1 }}
+              exit={{ x: -72, opacity: 0, rotate: -8, scale: 0.94 }}
+              transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-0 flex flex-col overflow-hidden bg-[#211f1f] px-7 py-6 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)]"
+            >
+              <div className="flex items-start justify-between">
+                <h3 className="font-display text-[1.95rem] font-semibold leading-none tracking-[-0.055em]">{mobileHighlight.title}</h3>
+                <span className="font-poppins pt-1 text-[9px] uppercase tracking-[0.28em] text-white/35">0{highlights.indexOf(mobileHighlight) + 1} / POINT</span>
+              </div>
+              <div className="flex flex-1 items-center justify-center text-white">
+                <HighlightIcon title={mobileHighlight.title} />
+              </div>
+              <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[4px]" style={{ backgroundColor: mobileHighlight.title === "CREATE" ? "#2D8CFF" : mobileHighlight.title === "BRAND" ? "#F05AA6" : "#C89B3C" }} />
+            </motion.article>
+          </AnimatePresence>
+        </div>
+
+        <div className="mt-9 flex justify-center">
+          <a href="/about" aria-label="Learn About Us" className="inline-flex h-[54px] min-w-[210px] items-center justify-center bg-[#211f1f] px-7 font-display text-[0.95rem] font-semibold text-white shadow-[0_16px_34px_rgba(0,0,0,0.14)] transition-transform duration-200 active:scale-[0.98]">
+            Learn About Us <span aria-hidden="true" className="ml-2 text-base">↗</span>
+          </a>
+        </div>
       </div>
-      <p className="mt-2 text-center font-poppins text-[9px] uppercase tracking-[0.28em] text-black/35 md:hidden">Swipe to explore</p>
     </div>
   );
 }
@@ -222,7 +248,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%");
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
