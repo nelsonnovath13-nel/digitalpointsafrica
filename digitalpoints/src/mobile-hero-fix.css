@@ -1,0 +1,51 @@
+/* Mobile hero visibility + performance guard.
+   Keep the hero fully readable while Services transitions begin below it. */
+@media (max-width: 767px) {
+  /* The Services transition veil was fixed to the viewport and could sit above the hero. */
+  #services-intro > .fixed {
+    display: none !important;
+  }
+
+  /* The hero must own the first viewport stacking layer. */
+  section[class*="h-[520px]"][class*="bg-ink-950"] {
+    position: relative !important;
+    z-index: 20 !important;
+    isolation: isolate !important;
+  }
+
+  /* Keep hero content above the atmospheric pseudo-layers. */
+  section[class*="h-[520px]"][class*="bg-ink-950"] > div {
+    position: relative;
+    z-index: 3;
+  }
+
+  /* The atmospheric animation is decorative on mobile; the static hero background
+     remains visible. Removing the heavy animated layer reduces blur/GPU work. */
+  section[class*="h-[520px]"][class*="bg-ink-950"] > div.pointer-events-none.absolute.inset-0.overflow-hidden {
+    display: none !important;
+  }
+
+  /* Replace the removed animated atmosphere with a lightweight static glow. */
+  section[class*="h-[520px]"][class*="bg-ink-950"]::before {
+    z-index: 1 !important;
+    inset: 0 !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(255,255,255,0.30), transparent 34%),
+      radial-gradient(circle at 82% 30%, rgba(121,245,239,0.24), transparent 38%),
+      radial-gradient(circle at 50% 86%, rgba(255,255,255,0.16), transparent 42%);
+  }
+
+  section[class*="h-[520px]"][class*="bg-ink-950"]::after {
+    z-index: 2 !important;
+    inset: 0 !important;
+    filter: none !important;
+    opacity: 0.32 !important;
+    transform: none !important;
+    animation: none !important;
+    mix-blend-mode: screen;
+  }
+}
