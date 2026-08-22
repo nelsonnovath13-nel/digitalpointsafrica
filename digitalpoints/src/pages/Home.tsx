@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 import ImageMosaic from "../components/ImageMosaic";
 import VideoShowcase from "../components/VideoShowcase";
@@ -60,6 +61,43 @@ function DigitalPointsWayCards() {
   );
 }
 
+function MobileDigitalPointsWayCards() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const cards = [
+    { title: "CREATE", icon: <CreateIcon />, rotation: "rotate-0" },
+    { title: "BRAND", icon: <BrandIcon />, rotation: "rotate-[9deg]" },
+    { title: "GROW", icon: <GrowIcon />, rotation: "rotate-[9deg]" },
+  ];
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % cards.length);
+    }, 3200);
+
+    return () => window.clearInterval(interval);
+  }, [cards.length]);
+
+  return (
+    <div className="mt-10 flex w-full justify-center overflow-hidden lg:hidden" aria-label="Digital Points Way cards">
+      <div className="relative h-[205px] w-[180px] overflow-hidden">
+        <div
+          className="flex h-full w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+        >
+          {cards.map((card) => (
+            <div key={card.title} className="relative flex h-full min-w-full items-start justify-center">
+              <div className={`relative h-[195px] w-[169px] ${card.rotation}`}>
+                <WayCard title={card.title} icon={card.icon} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <>
@@ -90,6 +128,7 @@ export default function Home() {
           </div>
 
           <DigitalPointsWayCards />
+          <MobileDigitalPointsWayCards />
         </div>
       </section>
 
