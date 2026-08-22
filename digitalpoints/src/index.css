@@ -64,4 +64,41 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
   }
 }
 
+/* MOBILE BOTTOM GLASS — colorless, subtle, and scoped only to the intro + sticky highlight cards. */
+@media (max-width: 899px) {
+  #services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] {
+    position: sticky !important;
+    top: 70svh !important;
+    bottom: auto !important;
+    height: 30svh !important;
+    max-height: none !important;
+    margin-top: 0 !important;
+    margin-bottom: -30svh !important;
+    transform: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    z-index: 60 !important;
+    pointer-events: none !important;
+    background: transparent !important;
+  }
+  #services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] > div {
+    display: none !important;
+  }
+  #services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(247,243,234,0) 0%, rgba(247,243,234,0.025) 45%, rgba(247,243,234,0.08) 100%);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.18) 30%, rgba(0,0,0,0.68) 72%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.18) 30%, rgba(0,0,0,0.68) 72%, #000 100%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
