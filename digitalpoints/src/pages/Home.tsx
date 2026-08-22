@@ -70,7 +70,7 @@ export default function Home() {
       >
         <div className="mx-auto grid min-h-[620px] w-full max-w-[1600px] grid-cols-1 items-start px-[clamp(24px,3.4vw,56px)] py-[clamp(72px,8vw,120px)] lg:grid-cols-[minmax(0,0.92fr)_minmax(560px,1.08fr)] lg:gap-[clamp(40px,5vw,96px)] lg:px-[clamp(36px,4vw,64px)]">
           <div className="max-w-[760px] text-left">
-            <h2 className="font-display text-[clamp(2.8rem,5vw,5.5rem)] font-semibold leading-[0.92] tracking-[-0.065em] text-black">
+            <h2 className="whitespace-nowrap font-display text-[clamp(2.4rem,3.8vw,4rem)] font-semibold leading-[0.92] tracking-[-0.065em] text-black">
               The Digital Points Way
             </h2>
 
