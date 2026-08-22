@@ -104,7 +104,7 @@ export default function PrintingServices() {
       <div className="relative">
         <a
           href="/printing"
-          className="absolute left-1/2 top-5 z-20 inline-flex -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-point-600 px-6 py-3 text-sm font-medium text-white shadow-lg transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-point-500 focus:ring-offset-2"
+          className="absolute left-1/2 top-1/2 z-20 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center whitespace-nowrap rounded-full bg-point-600 px-6 py-3 text-sm font-medium text-white shadow-lg transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-point-500 focus:ring-offset-2"
         >
           Explore Printing
         </a>
