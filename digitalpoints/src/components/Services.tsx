@@ -82,7 +82,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
     };
   }, []);
 
-  const handleStackPointerMove = (event: globalThis.PointerEvent) => {
+  const handleStackPointerMove = (event: PointerEvent<HTMLDivElement>) => {
     const stack = stackRef.current;
     if (!stack) return;
     const bounds = stack.getBoundingClientRect();
