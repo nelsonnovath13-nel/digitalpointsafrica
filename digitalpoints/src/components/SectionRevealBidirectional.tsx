@@ -35,40 +35,64 @@ export default function SectionRevealBidirectional({ children }: SectionRevealBi
       element.textContent?.replace(/\s+/g, " ").trim().toLowerCase().includes("the digital points way"),
     );
 
-    if (!heading) return;
+    if (heading) {
+      const originalTransform = heading.style.transform;
+      const originalColor = heading.style.color;
+      const originalOpacity = heading.style.opacity;
+      const originalWillChange = heading.style.willChange;
+      const originalTransformOrigin = heading.style.transformOrigin;
 
-    const originalTransform = heading.style.transform;
-    const originalColor = heading.style.color;
-    const originalOpacity = heading.style.opacity;
-    const originalWillChange = heading.style.willChange;
-    const originalTransformOrigin = heading.style.transformOrigin;
+      heading.style.willChange = "transform, color, opacity";
+      heading.style.transformOrigin = "left center";
 
-    heading.style.willChange = "transform, color, opacity";
-    heading.style.transformOrigin = "left center";
+      const unsubscribe = scrollYProgress.on("change", (progress) => {
+        const clamped = Math.max(0, Math.min(1, progress));
+        const rise = 34 * (1 - clamped);
+        const scale = 0.965 + clamped * 0.035;
+        const opacity = 0.72 + clamped * 0.28;
+        const r = Math.round(8 * (1 - clamped) + 20 * clamped);
+        const g = Math.round(189 * (1 - clamped) + 20 * clamped);
+        const b = Math.round(184 * (1 - clamped) + 20 * clamped);
 
-    const unsubscribe = scrollYProgress.on("change", (progress) => {
-      const clamped = Math.max(0, Math.min(1, progress));
-      const rise = 34 * (1 - clamped);
-      const scale = 0.965 + clamped * 0.035;
-      const opacity = 0.72 + clamped * 0.28;
-      const r = Math.round(8 * (1 - clamped) + 20 * clamped);
-      const g = Math.round(189 * (1 - clamped) + 20 * clamped);
-      const b = Math.round(184 * (1 - clamped) + 20 * clamped);
+        heading.style.transform = `translate3d(0, ${rise}px, 0) scale(${scale})`;
+        heading.style.opacity = String(opacity);
+        heading.style.color = `rgb(${r}, ${g}, ${b})`;
+      });
 
-      heading.style.transform = `translate3d(0, ${rise}px, 0) scale(${scale})`;
-      heading.style.opacity = String(opacity);
-      heading.style.color = `rgb(${r}, ${g}, ${b})`;
-    });
-
-    return () => {
-      unsubscribe();
-      heading.style.transform = originalTransform;
-      heading.style.color = originalColor;
-      heading.style.opacity = originalOpacity;
-      heading.style.willChange = originalWillChange;
-      heading.style.transformOrigin = originalTransformOrigin;
-    };
+      return () => {
+        unsubscribe();
+        heading.style.transform = originalTransform;
+        heading.style.color = originalColor;
+        heading.style.opacity = originalOpacity;
+        heading.style.willChange = originalWillChange;
+        heading.style.transformOrigin = originalTransformOrigin;
+      };
+    }
   }, [scrollYProgress, shouldReduceMotion]);
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    const root = sectionRef.current;
+    if (!root) return;
+
+    const intro = Array.from(root.querySelectorAll<HTMLElement>("p")).find((element) =>
+      element.textContent?.replace(/\s+/g, " ").trim().toLowerCase().includes("three simple but powerful principles"),
+    );
+
+    if (!intro || root.querySelector("#digital-points-learn-about-us")) return;
+
+    const button = document.createElement("button");
+    button.id = "digital-points-learn-about-us";
+    button.type = "button";
+    button.textContent = "Learn About Us ↗";
+    button.setAttribute("aria-label", "Learn About Us");
+    button.className = "mt-7 block w-fit bg-[#201e1f] px-8 py-4 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(0,0,0,0.14)] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#08bdb8] focus:ring-offset-2 sm:px-9 sm:py-4 sm:text-[15px] max-sm:mx-auto";
+
+    intro.insertAdjacentElement("afterend", button);
+
+    return () => button.remove();
+  }, [shouldReduceMotion]);
 
   return (
     <div ref={sectionRef} className="relative isolate overflow-hidden">
