@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const services = [
   {
@@ -42,9 +42,14 @@ const services = [
 
 const SERVICE_COUNT = services.length;
 const DESKTOP_MEDIA = "(min-width: 768px)";
+const DESKTOP_LERP = 0.08;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+
+function easeOutExpo(value: number) {
+  return value >= 1 ? 1 : 1 - Math.pow(2, -10 * value);
 }
 
 function useReducedMotion() {
@@ -68,6 +73,8 @@ export default function StickyServices() {
   const frameRef = useRef<number | null>(null);
   const entranceTimerRef = useRef<number | null>(null);
   const lastProgressRef = useRef(-1);
+  const desktopTargetRef = useRef(0);
+  const desktopCurrentRef = useRef(0);
   const [desktop, setDesktop] = useState(false);
   const [entranceSeen, setEntranceSeen] = useState(false);
   const [entranceVisible, setEntranceVisible] = useState(false);
@@ -138,46 +145,77 @@ export default function StickyServices() {
   }, [desktop]);
 
   useEffect(() => {
-    if (!desktop || reducedMotion) return;
+    if (!desktop) return;
 
     const section = sectionRef.current;
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const update = () => {
-      frameRef.current = null;
-
+    const setTargetFromScroll = () => {
       const rect = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const progress = clamp(-rect.top / travel, 0, 1);
+      desktopTargetRef.current = clamp(-rect.top / travel, 0, 1);
+    };
 
-      if (Math.abs(progress - lastProgressRef.current) < 0.0005) return;
-      lastProgressRef.current = progress;
+    const render = () => {
+      const target = desktopTargetRef.current;
+      const current = desktopCurrentRef.current;
+      const next = reducedMotion
+        ? target
+        : current + (target - current) * DESKTOP_LERP;
+      const settled = Math.abs(target - next) < 0.0001;
+      desktopCurrentRef.current = settled ? target : next;
 
-      track.style.transform = `translate3d(${-progress * (SERVICE_COUNT - 1) * 100}vw, 0, 0)`;
-
+      const progress = desktopCurrentRef.current;
       const travelProgress = progress * (SERVICE_COUNT - 1);
+      const basePosition = travelProgress * 100;
+      track.style.transform = `translate3d(${-basePosition}vw, 0, 0)`;
+
+      track.querySelectorAll<HTMLElement>("[data-service-image]").forEach((image) => {
+        const index = Number(image.dataset.serviceImage);
+        const distance = Math.abs(travelProgress - index);
+        const settle = 1 - clamp(distance, 0, 1);
+        const scale = 1.045 - settle * 0.045;
+        image.style.transform = `scale(${scale})`;
+      });
+
       track.querySelectorAll<HTMLElement>(".service-curtain").forEach((curtain) => {
         const index = Number(curtain.dataset.serviceIndex);
-        const reveal = clamp((travelProgress - index - 0.7) / 0.3, 0, 1);
+        const localProgress = travelProgress - index;
+        const reveal = easeOutExpo(clamp((localProgress + 0.04) / 0.96, 0, 1));
         curtain.style.setProperty("--curtain-cover", `${(1 - reveal) * 100}%`);
       });
+
+      if (Math.abs(progress - lastProgressRef.current) >= 0.0005) {
+        lastProgressRef.current = progress;
+      }
+
+      frameRef.current = window.requestAnimationFrame(render);
     };
+
+    setTargetFromScroll();
+    desktopCurrentRef.current = reducedMotion
+      ? desktopTargetRef.current
+      : desktopCurrentRef.current;
 
     const onScroll = () => {
-      if (frameRef.current === null) {
-        frameRef.current = window.requestAnimationFrame(update);
-      }
+      setTargetFromScroll();
     };
 
-    update();
+    const onResize = () => {
+      setTargetFromScroll();
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    frameRef.current = window.requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
       if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      lastProgressRef.current = -1;
     };
   }, [desktop, reducedMotion]);
 
@@ -200,14 +238,19 @@ export default function StickyServices() {
           } transition-opacity duration-200`}
         >
           <div
-            className={`overflow-hidden text-xs font-semibold uppercase tracking-[0.28em] text-[#20cbab] transition-transform duration-[850ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`overflow-hidden text-xs font-semibold uppercase tracking-[0.28em] text-[#20cbab] transition-transform duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
               entranceSeen ? "translate-y-0" : "translate-y-full"
             }`}
           >
-            Our Services
+            <span className="inline-block transition-[font-weight,letter-spacing] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+              Our
+            </span>{" "}
+            <span className="inline-block transition-[font-weight,letter-spacing] delay-100 duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+              Services
+            </span>
           </div>
           <div
-            className={`mt-3 h-px w-28 bg-[#20cbab] transition-transform duration-[850ms] delay-100 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`mt-4 h-px w-32 bg-[#20cbab] transition-transform duration-[900ms] delay-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               entranceSeen ? "origin-left scale-x-100" : "origin-left scale-x-0"
             }`}
           />
@@ -232,7 +275,8 @@ export default function StickyServices() {
                   aria-hidden="true"
                   loading={index === 0 ? "eager" : "lazy"}
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  data-service-image={index}
+                  className="absolute inset-0 h-full w-full object-cover will-change-transform"
                 />
 
                 <div className="absolute inset-0 bg-[#07090a]/55" />
@@ -326,7 +370,7 @@ export default function StickyServices() {
                   </p>
                   <Link
                     to={service.href}
-                    className="mt-7 inline-flex items-center gap-3 bg-[#201e1f] px-6 py-3.5 text-sm font-semibold text-white transition duration-300 hover:bg-[#20cbab] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#20cbab] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
+                    className="mt-7 inline-flex items-center gap-3 bg-[#201e1f] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#20cbab] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#20cbab] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
                   >
                     Explore {service.name}
                     <span aria-hidden="true">↗</span>
