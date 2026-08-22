@@ -73,6 +73,7 @@ export default function StickyServices() {
   const trackRef = useRef<HTMLDivElement>(null);
   const entranceRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
+  const mobileFrameRef = useRef<number | null>(null);
   const entranceTimerRef = useRef<number | null>(null);
   const lastProgressRef = useRef(-1);
   const desktopTargetRef = useRef(0);
@@ -124,27 +125,103 @@ export default function StickyServices() {
     const section = sectionRef.current;
     if (!section) return;
 
-    const cards = Array.from(
-      section.querySelectorAll<HTMLElement>("[data-mobile-service-index]"),
+    const wrappers = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-mobile-service-wrapper]"),
     );
-    if (!cards.length) return;
+    if (!wrappers.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const index = Number(
-            entry.target.getAttribute("data-mobile-service-index"),
+    let lastActiveIndex = -1;
+    let resizeFrame: number | null = null;
+
+    const updateMobileArrival = () => {
+      const scrollY = window.scrollY;
+      let activeIndex = 0;
+
+      wrappers.forEach((wrapper, index) => {
+        const card = wrapper.querySelector<HTMLElement>(
+          "[data-mobile-service-index]",
+        );
+        const curtain = wrapper.querySelector<HTMLElement>(
+          ".mobile-service-curtain",
+        );
+        const content = wrapper.querySelector<HTMLElement>(
+          ".mobile-service-content",
+        );
+        if (!card) return;
+
+        const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
+        const stickyDistance = Math.max(
+          wrapper.offsetHeight - card.offsetHeight,
+          1,
+        );
+        const localProgress = clamp(
+          (scrollY - wrapperTop) / stickyDistance,
+          0,
+          1,
+        );
+
+        if (scrollY >= wrapperTop - 1) {
+          activeIndex = index;
+        }
+
+        if (curtain && index > 0 && !reducedMotion) {
+          const revealProgress = easeOutExpo(
+            clamp((localProgress - 0.72) / 0.28, 0, 1),
           );
-          if (Number.isFinite(index)) setMobileActiveIndex(index);
-        });
-      },
-      { rootMargin: "-42% 0px -42% 0px", threshold: 0 },
-    );
+          curtain.style.setProperty(
+            "--mobile-curtain-cover",
+            `${(1 - revealProgress) * 100}%`,
+          );
+        }
 
-    cards.forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, [desktop]);
+        if (content && !reducedMotion) {
+          const settleProgress = easeOutExpo(
+            clamp((localProgress - 0.72) / 0.28, 0, 1),
+          );
+          const translateY = (1 - settleProgress) * 8;
+          const scale = 0.985 + settleProgress * 0.015;
+          content.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+          content.style.opacity = `${0.92 + settleProgress * 0.08}`;
+        }
+      });
+
+      if (activeIndex !== lastActiveIndex) {
+        lastActiveIndex = activeIndex;
+        setMobileActiveIndex(activeIndex);
+      }
+    };
+
+    const requestUpdate = () => {
+      if (mobileFrameRef.current !== null) return;
+      mobileFrameRef.current = window.requestAnimationFrame(() => {
+        mobileFrameRef.current = null;
+        updateMobileArrival();
+      });
+    };
+
+    const onScroll = () => requestUpdate();
+    const onResize = () => {
+      if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = null;
+        requestUpdate();
+      });
+    };
+
+    updateMobileArrival();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      if (mobileFrameRef.current !== null) {
+        window.cancelAnimationFrame(mobileFrameRef.current);
+      }
+      if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
+      mobileFrameRef.current = null;
+    };
+  }, [desktop, reducedMotion]);
 
   useEffect(() => {
     if (!desktop) return;
@@ -235,11 +312,7 @@ export default function StickyServices() {
       ref={sectionRef}
       id="homepage-services"
       className="relative w-full bg-[#07090a]"
-      style={
-        desktop
-          ? { height: `${DESKTOP_SCROLL_HEIGHT_VH}vh` }
-          : undefined
-      }
+      style={desktop ? { height: `${DESKTOP_SCROLL_HEIGHT_VH}vh` } : undefined}
       aria-label="Digital Points services"
     >
       <div
@@ -352,6 +425,7 @@ export default function StickyServices() {
               key={service.number}
               className="relative w-full"
               style={{ height: `${MOBILE_CARD_SCROLL_HEIGHT_VH}vh` }}
+              data-mobile-service-wrapper
             >
               <article
                 className="sticky top-0 flex h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#07090a]"
@@ -369,11 +443,18 @@ export default function StickyServices() {
                 <div className="absolute inset-0 bg-[#07090a]/58" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#07090a]/90 via-[#07090a]/45 to-transparent" />
 
-                {index > 0 && !reducedMotion && index > mobileActiveIndex && (
-                  <div aria-hidden="true" className="absolute inset-0 z-20 bg-[#0eab8f]" />
+                {index > 0 && !reducedMotion && (
+                  <div
+                    aria-hidden="true"
+                    className="mobile-service-curtain absolute inset-0 z-20 bg-[#0eab8f]"
+                    style={{ clipPath: "inset(0 0 0 var(--mobile-curtain-cover, 0%))" }}
+                  />
                 )}
 
-                <div className="relative z-10 flex h-full w-full items-end px-6 pb-16 sm:px-10 sm:pb-20">
+                <div
+                  className="mobile-service-content relative z-10 flex h-full w-full items-end px-6 pb-16 sm:px-10 sm:pb-20"
+                  style={{ transformOrigin: "center bottom", willChange: "transform, opacity" }}
+                >
                   <div className="w-full max-w-2xl">
                     <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[#20cbab]">
                       {service.number} — {service.name}
@@ -397,8 +478,13 @@ export default function StickyServices() {
                   </div>
                 </div>
 
-                <div className="absolute bottom-6 right-5 z-30 text-sm font-semibold tabular-nums text-white sm:right-8">
-                  {service.number} <span className="text-white/30">/ 04</span>
+                <div className="absolute bottom-6 right-5 z-30 flex items-center gap-3 text-sm font-semibold tabular-nums text-white sm:right-8">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
+                    {mobileActiveIndex + 1}/04
+                  </span>
+                  <span>
+                    {service.number} <span className="text-white/30">/ 04</span>
+                  </span>
                 </div>
               </article>
             </div>
