@@ -248,7 +248,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%");
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
@@ -276,7 +276,7 @@ export default function Services() {
   const showcaseRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 65, damping: 28, mass: 0.65 });
-  const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%");
+  const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
 
