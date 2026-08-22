@@ -41,27 +41,38 @@ const services = [
   },
 ] as const;
 
-function ServiceCard({ service, index }: { service: (typeof services)[number]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: (typeof services)[number];
+  index: number;
+}) {
+  const cardRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: cardRef,
-    offset: ["start end", "end start"],
+    offset: ["start end", "start start"],
   });
 
-  const entranceY = useTransform(scrollYProgress, [0, 0.42, 0.7], [120, 28, 0]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.36, 0.62], [0, 0.72, 1]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.72, 1], [1.08, 1, 0.98]);
-  const veilY = useTransform(scrollYProgress, [0.08, 0.58], ["-115%", "115%"]);
-  const veilOpacity = useTransform(scrollYProgress, [0.08, 0.25, 0.58, 0.72], [0, 0.92, 0.72, 0]);
+  const entranceY = useTransform(scrollYProgress, [0, 0.7, 1], [96, 20, 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.55, 0.9], [0, 0.7, 1]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.08, 1]);
+  const veilY = useTransform(scrollYProgress, [0.08, 0.82], ["-115%", "115%"]);
+  const veilOpacity = useTransform(
+    scrollYProgress,
+    [0.08, 0.2, 0.65, 0.86],
+    [0, 0.92, 0.72, 0],
+  );
 
   return (
-    <section
+    <article
       ref={cardRef}
-      className="relative h-screen w-full max-md:h-auto"
+      className="relative h-screen w-full max-md:h-[100svh] max-md:min-h-[100svh]"
+      style={{ zIndex: index + 1 }}
       aria-labelledby={`digital-points-service-${service.number}`}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#07090a] max-md:relative max-md:top-auto max-md:min-h-[100svh]">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#07090a] max-md:relative max-md:h-[100svh]">
         <motion.img
           src={service.image}
           alt=""
@@ -123,13 +134,17 @@ function ServiceCard({ service, index }: { service: (typeof services)[number]; i
           </span>
         </div>
       </div>
-    </section>
+    </article>
   );
 }
 
 export default function StickyServices() {
   return (
-    <section id="homepage-services" className="relative w-full bg-[#050b1f]">
+    <section
+      id="homepage-services"
+      className="relative w-full bg-[#050b1f]"
+      aria-label="Digital Points services"
+    >
       {services.map((service, index) => (
         <ServiceCard key={service.number} service={service} index={index} />
       ))}
