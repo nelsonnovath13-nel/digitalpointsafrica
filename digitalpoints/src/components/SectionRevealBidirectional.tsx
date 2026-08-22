@@ -25,6 +25,81 @@ export default function SectionRevealBidirectional({ children }: SectionRevealBi
   const glowOpacity = useTransform(scrollYProgress, [0, 0.55, 1], [0.42, 0.18, 0]);
 
   useEffect(() => {
+    const root = sectionRef.current;
+    const hero = root?.previousElementSibling as HTMLElement | null;
+    if (!root || !hero) return;
+
+    const originalHeroPosition = hero.style.position;
+    const originalHeroTop = hero.style.top;
+    const originalHeroZIndex = hero.style.zIndex;
+    const originalHeroTransform = hero.style.transform;
+    const originalHeroFilter = hero.style.filter;
+    const originalHeroWillChange = hero.style.willChange;
+    const originalRootPosition = root.style.position;
+    const originalRootZIndex = root.style.zIndex;
+    const originalRootBackground = root.style.backgroundColor;
+    const originalRootRadius = root.style.borderRadius;
+    const originalRootShadow = root.style.boxShadow;
+
+    hero.style.position = "sticky";
+    hero.style.top = "0px";
+    hero.style.zIndex = "0";
+    hero.style.willChange = "transform, filter";
+
+    root.style.position = "relative";
+    root.style.zIndex = "10";
+    root.style.backgroundColor = "#f7f3ea";
+    root.style.borderRadius = "24px 24px 0 0";
+    root.style.boxShadow = "0 -18px 42px rgba(7, 9, 10, 0.14)";
+
+    let frame: number | null = null;
+
+    const update = () => {
+      frame = null;
+      const heroHeight = Math.max(hero.offsetHeight, 1);
+      const progress = Math.min(Math.max(window.scrollY / (heroHeight * 0.92), 0), 1);
+
+      if (shouldReduceMotion) {
+        hero.style.transform = "none";
+        hero.style.filter = "none";
+        return;
+      }
+
+      const scale = 1 - progress * 0.04;
+      const dim = progress * 0.14;
+      hero.style.transform = `scale3d(${scale}, ${scale}, 1)`;
+      hero.style.filter = `brightness(${1 - dim})`;
+    };
+
+    const requestUpdate = () => {
+      if (frame !== null) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frame !== null) window.cancelAnimationFrame(frame);
+
+      hero.style.position = originalHeroPosition;
+      hero.style.top = originalHeroTop;
+      hero.style.zIndex = originalHeroZIndex;
+      hero.style.transform = originalHeroTransform;
+      hero.style.filter = originalHeroFilter;
+      hero.style.willChange = originalHeroWillChange;
+      root.style.position = originalRootPosition;
+      root.style.zIndex = originalRootZIndex;
+      root.style.backgroundColor = originalRootBackground;
+      root.style.borderRadius = originalRootRadius;
+      root.style.boxShadow = originalRootShadow;
+    };
+  }, [shouldReduceMotion]);
+
+  useEffect(() => {
     if (shouldReduceMotion) return;
 
     const root = sectionRef.current;
