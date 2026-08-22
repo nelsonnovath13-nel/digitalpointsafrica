@@ -31,20 +31,31 @@ const videos = [
   },
 ] as const;
 
-function VideoStage({ video }: { video: (typeof videos)[number] }) {
+function VideoStage({
+  video,
+  index,
+}: {
+  video: (typeof videos)[number];
+  index: number;
+}) {
   const stageRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const nearViewport = useInView(stageRef, { margin: "50% 0px" });
   const reducedMotion = useReducedMotion();
+  const isFollowUpStage = index > 0;
   const { scrollYProgress } = useScroll({
     target: stageRef,
     offset: ["start start", "end end"],
   });
 
+  // Later productions enter as a scene rather than appearing as a hard cut.
+  // These values remain scroll-linked, so the transition reverses naturally.
   const scale = useTransform(
     scrollYProgress,
     [0, 0.24, 0.48, 0.72, 1],
-    [0.46, 0.78, 1, 0.82, 0.46],
+    isFollowUpStage
+      ? [0.68, 0.9, 1, 0.84, 0.46]
+      : [0.46, 0.78, 1, 0.82, 0.46],
   );
   const radius = useTransform(
     scrollYProgress,
@@ -53,8 +64,15 @@ function VideoStage({ video }: { video: (typeof videos)[number] }) {
   );
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.14, 0.76, 0.96, 1],
-    [0.82, 1, 1, 0.86, 0],
+    [0, 0.1, 0.24, 0.76, 0.96, 1],
+    isFollowUpStage
+      ? [0, 0.38, 1, 1, 0.72, 0]
+      : [0.82, 1, 1, 1, 0.86, 0],
+  );
+  const y = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.3, 0.72, 1],
+    isFollowUpStage ? [56, 20, 0, -8, -28] : [0, 0, 0, -6, -20],
   );
   const overlayOpacity = useTransform(
     scrollYProgress,
@@ -95,6 +113,7 @@ function VideoStage({ video }: { video: (typeof videos)[number] }) {
         <motion.div
           style={{
             scale: reducedMotion ? 1 : scale,
+            y: reducedMotion ? 0 : y,
             borderRadius: reducedMotion ? 0 : radius,
             opacity: reducedMotion ? 1 : opacity,
           }}
@@ -158,8 +177,8 @@ export default function ScrollVideoReveal() {
       aria-label="Digital Points visual stories"
     >
       <div className="pointer-events-none absolute left-0 top-0 z-20 h-px w-full bg-[#20cbab]/20" />
-      {videos.map((video) => (
-        <VideoStage key={video.number} video={video} />
+      {videos.map((video, index) => (
+        <VideoStage key={video.number} video={video} index={index} />
       ))}
     </section>
   );
