@@ -71,8 +71,6 @@ export default function SectionRevealBidirectional({ children }: SectionRevealBi
   }, [scrollYProgress, shouldReduceMotion]);
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
-
     const root = sectionRef.current;
     if (!root) return;
 
@@ -82,12 +80,16 @@ export default function SectionRevealBidirectional({ children }: SectionRevealBi
 
     if (!intro || root.querySelector("#digital-points-learn-about-us")) return;
 
-    const button = document.createElement("button");
+    const button = document.createElement("a");
     button.id = "digital-points-learn-about-us";
-    button.type = "button";
-    button.textContent = "Learn About Us ↗";
+    button.href = "/about";
     button.setAttribute("aria-label", "Learn About Us");
-    button.className = "mt-7 block w-fit bg-[#201e1f] px-8 py-4 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(0,0,0,0.14)] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#08bdb8] focus:ring-offset-2 sm:px-9 sm:py-4 sm:text-[15px] max-sm:mx-auto";
+    button.innerHTML = '<span>Learn About Us</span><span aria-hidden="true" class="digital-points-learn-arrow">↗</span>';
+    button.className = "digital-points-learn-button mt-7 block w-fit bg-[#201e1f] px-8 py-4 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(0,0,0,0.14)] sm:px-9 sm:py-4 sm:text-[15px] max-sm:mx-auto";
+
+    if (shouldReduceMotion) {
+      button.style.transition = "none";
+    }
 
     intro.insertAdjacentElement("afterend", button);
 
