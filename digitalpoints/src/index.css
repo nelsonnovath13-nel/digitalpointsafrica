@@ -21,7 +21,7 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
 @keyframes digital-points-particle-rise { 0% { transform: translate3d(0, 18px, 0) scale(0.88); opacity: 0.38; } 50% { transform: translate3d(12px, -34px, 0) scale(1.16); opacity: 1; } 100% { transform: translate3d(-14px, -72px, 0) scale(0.92); opacity: 0.46; } }
 @media (max-width: 639px) { section[class*="h-[520px]"][class*="bg-ink-950"]::after { inset: -44%; opacity: 1; animation-duration: 19s; } section[class*="h-[520px]"][class*="bg-ink-950"]::before { inset: -34% -50% -18%; opacity: 1; animation-duration: 24s; } section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*="h-[42px]"]::before { inset: -260% 0 -20%; opacity: 1; animation-duration: 6s; } }
 
-/* SERVICES INTRO — definitive isolated layout fix. */
+/* SERVICES INTRO — isolated layout rules. */
 #services-intro { min-height: 0 !important; height: auto !important; overflow: visible !important; position: relative; z-index: 2; }
 #services-showcase { position: relative; isolation: isolate; clear: both; margin-top: 0 !important; z-index: 1; }
 
@@ -30,14 +30,52 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
   #services-intro > div.relative.z-10 { width: 100% !important; max-width: 1500px !important; margin-left: auto !important; margin-right: auto !important; }
   #services-intro .touch-pan-x { width: min(100%, 1080px) !important; max-width: 1080px !important; margin-left: auto !important; margin-right: auto !important; margin-top: 44px !important; }
   #services-intro .touch-pan-x > div.hidden { width: 100% !important; max-width: 1080px !important; height: 340px !important; margin-left: auto !important; margin-right: auto !important; overflow: visible !important; }
-  #services-intro .touch-pan-x > div.hidden > article { width: 30% !important; min-width: 0 !important; max-width: 320px !important; height: 300px !important; top: 50% !important; left: 50% !important; translate: 0 0 !important; }
-  #services-intro .touch-pan-x > div.hidden > article:nth-child(1),
-  #services-intro .touch-pan-x > div.hidden > article:nth-child(3) { translate: 0 0 !important; }
   #services-showcase > .sticky { padding-top: 22px !important; }
   #services-showcase > .sticky > div.relative.z-10 { width: 100% !important; max-width: 1320px !important; margin-left: auto !important; margin-right: auto !important; }
   #services-showcase h2 { font-size: clamp(3.4rem, 7.2vw, 6.4rem) !important; line-height: 0.84 !important; letter-spacing: -0.07em !important; }
 }
 
 @media (max-width: 767px) { #services-intro { padding-bottom: 56px !important; } }
+
+/* DIGITAL POINTS WAY — restore the stack's own centering instead of overriding its transforms. */
+@media (min-width: 768px) {
+  #services-intro .dp-card-stack-card {
+    width: 350px !important;
+    min-width: 350px !important;
+    max-width: 350px !important;
+    height: 220px !important;
+    left: 50% !important;
+    top: 50% !important;
+    translate: -50% -50% !important;
+  }
+}
+
+/* Use the exact supplied CREATE / BRAND / GROW artwork converted to SVG assets. */
+#services-intro .dp-card-icon svg,
+#services-intro .dp-card-stack-card .flex-1 > svg { display: none !important; }
+#services-intro .dp-card-icon {
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 25px 25px !important;
+}
+#services-intro .dp-card-stack-card:nth-child(1) .dp-card-icon { background-image: url('/icons/digital-points-create.svg') !important; }
+#services-intro .dp-card-stack-card:nth-child(2) .dp-card-icon { background-image: url('/icons/digital-points-brand.svg') !important; }
+#services-intro .dp-card-stack-card:nth-child(3) .dp-card-icon { background-image: url('/icons/digital-points-grow.svg') !important; }
+
+@media (max-width: 767px) {
+  #services-intro .dp-card-stack-card .flex-1 { position: relative; }
+  #services-intro .dp-card-stack-card .flex-1::before {
+    content: "";
+    display: block;
+    width: 150px;
+    height: 150px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  #services-intro .dp-card-stack-card:nth-child(1) .flex-1::before { background-image: url('/icons/digital-points-create.svg'); }
+  #services-intro .dp-card-stack-card:nth-child(2) .flex-1::before { background-image: url('/icons/digital-points-brand.svg'); }
+  #services-intro .dp-card-stack-card:nth-child(3) .flex-1::before { background-image: url('/icons/digital-points-grow.svg'); }
+}
 
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
