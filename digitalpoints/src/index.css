@@ -40,4 +40,29 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
 
 @media (max-width: 767px) { #services-intro { padding-bottom: 56px !important; } }
 
+/* SERVICES TRANSITION VEIL — keep the mobile hero visible and make the handoff quick/subtle. */
+#services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] {
+  height: 14vh !important;
+  max-height: 120px !important;
+}
+#services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] > div:last-child {
+  height: 9vh !important;
+  max-height: 76px !important;
+  opacity: 0.55 !important;
+  filter: blur(1px) !important;
+}
+#services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] > div:first-child {
+  opacity: 0.48 !important;
+}
+@media (min-width: 768px) {
+  #services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] {
+    height: 17vh !important;
+    max-height: 150px !important;
+  }
+  #services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] > div:last-child {
+    height: 11vh !important;
+    max-height: 96px !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
