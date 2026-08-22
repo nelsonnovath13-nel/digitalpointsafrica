@@ -135,9 +135,14 @@ function VideoStage({ video }: { video: (typeof videos)[number] }) {
                 {video.title}
               </h2>
             </div>
-            <span className="hidden shrink-0 text-xs uppercase tracking-[0.2em] text-white/55 sm:block">
-              Scroll to reveal
-            </span>
+            <div className="hidden shrink-0 text-right sm:block">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-white">
+                Digital Points
+              </p>
+              <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/75">
+                Production {video.number}
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>
