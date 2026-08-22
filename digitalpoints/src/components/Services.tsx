@@ -133,15 +133,25 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
 
 export default function Services() {
   const showcaseRef = useRef<HTMLElement>(null);
+  const introRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ["start start", "end end"] });
+  const { scrollYProgress: introTransitionProgress } = useScroll({ target: introRef, offset: ["start end", "start start"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 65, damping: 28, mass: 0.65 });
+  const introTransitionY = useTransform(introTransitionProgress, [0, 0.72, 1], ["100%", "0%", "-5%"]);
+  const introTransitionOpacity = useTransform(introTransitionProgress, [0, 0.12, 0.78, 1], [1, 1, 0.94, 0]);
+  const introTransitionScale = useTransform(introTransitionProgress, [0, 0.72, 1], [0.985, 1, 1]);
   const ambientX = useTransform(smoothProgress, [0, 1], ["0%", "-9%"]);
   const ambientScale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.06, 1]);
   const ambientOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.72, 1, 1, 0.72]);
 
   return (
     <>
-      <section id="services-intro" aria-label="Services introduction" className="relative isolate overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
+      <section ref={introRef} id="services-intro" aria-label="Services introduction" className="relative isolate overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
+        <motion.div aria-hidden="true" style={{ y: introTransitionY, opacity: introTransitionOpacity, scale: introTransitionScale, willChange: "transform, opacity" }} className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-screen origin-bottom overflow-hidden rounded-t-[34px] shadow-[0_-24px_80px_rgba(0,80,255,0.18)] sm:rounded-t-[46px]">
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,#0A8CFF_0%,#287BFF_18%,#6DA7FF_38%,#D9E8FF_58%,#F7F3EA_78%,#F7F3EA_100%)]" />
+          <div className="absolute inset-x-0 top-0 h-[22vh] bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.32),transparent_62%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-[38vh] bg-gradient-to-b from-transparent via-[#F7F3EA]/55 to-[#F7F3EA]" />
+        </motion.div>
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[38%] opacity-75" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.15) 1.15px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent)", WebkitMaskImage: "linear-gradient(90deg, black, transparent)" }} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[30%] opacity-50" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.11) 1px, transparent 1.2px)", backgroundSize: "20px 20px", maskImage: "linear-gradient(90deg, transparent, black)", WebkitMaskImage: "linear-gradient(90deg, transparent, black)" }} />
         <div className="relative z-10 mx-auto max-w-[1400px]">
