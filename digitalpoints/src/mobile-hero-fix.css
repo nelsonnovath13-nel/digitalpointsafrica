@@ -1,162 +1,81 @@
-/* Mobile hero + scroll-reveal refinement.
-   Keep the first screen compact and readable; let the lower CREATE/BRAND/GROW
-   section reveal gently as the user scrolls. */
+/* Mobile transition refinement: keep Hero readable and let CREATE/BRAND/GROW
+   reveal naturally as the user scrolls into them. */
 @media (max-width: 767px) {
-  /* 1. Compact mobile hero: no more oversized 520px block. */
+  /* No fixed transition layer over the Hero. */
+  #services-intro > .fixed,
+  #services-intro > div.fixed.inset-x-0.bottom-0.z-\[60\] {
+    display: none !important;
+  }
+
+  /* Keep the Hero compact, clear, and visually separate from the next section. */
   section[class*="h-[520px]"][class*="bg-ink-950"] {
     height: 380px !important;
     min-height: 380px !important;
     max-height: 380px !important;
     position: relative !important;
-    z-index: 20 !important;
+    z-index: 1 !important;
     isolation: isolate !important;
     overflow: hidden !important;
   }
 
-  /* Keep the actual hero copy crisp and above every decorative layer. */
+  /* Hero copy must always remain crisp and visible. */
   section[class*="h-[520px]"][class*="bg-ink-950"] > div.relative.z-10 {
     position: relative !important;
-    z-index: 30 !important;
+    z-index: 5 !important;
     height: 100% !important;
-    padding-top: 3.5rem !important;
-    padding-bottom: 3.25rem !important;
   }
 
-  section[class*="h-[520px]"][class*="bg-ink-950"] > div.relative.z-10 h1 {
-    font-size: 1.38rem !important;
-    line-height: 1.04 !important;
+  /* Remove all Hero atmospheric pseudo layers on mobile. The base teal
+     background remains; nothing can turn the Hero into a blur wall. */
+  section[class*="h-[520px]"][class*="bg-ink-950"]::before,
+  section[class*="h-[520px"][class*="bg-ink-950"]::after {
+    display: none !important;
+    content: none !important;
   }
 
-  section[class*="h-[520px]"][class*="bg-ink-950"] > div.relative.z-10 p {
-    margin-top: 0.7rem !important;
-    max-width: 320px !important;
-    font-size: 11px !important;
-    line-height: 1.38 !important;
-  }
-
-  section[class*="h-[520px]"][class*="bg-ink-950"] > div.relative.z-10 > div.mt-6 {
-    margin-top: 0.9rem !important;
-    gap: 0.45rem !important;
-  }
-
-  section[class*="h-[520px]"][class*="bg-ink-950"] > div.relative.z-10 > div.mt-6 a {
-    height: 37px !important;
-    min-width: 174px !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    font-size: 11px !important;
-  }
-
-  /* 2. Remove the heavy animated fog completely on mobile. */
+  /* Disable the large animated atmospheric canvas on mobile. */
   section[class*="h-[520px]"][class*="bg-ink-950"] > div.pointer-events-none.absolute.inset-0.overflow-hidden {
     display: none !important;
   }
 
-  /* 3. Very light atmosphere only — deliberately NOT a blur wall. */
-  section[class*="h-[520px]"][class*="bg-ink-950"]::before {
-    z-index: 1 !important;
-    inset: 0 !important;
+  /* Keep only the Hero's original base background layers. */
+  section[class*="h-[520px]"][class*="bg-ink-950"] > div.absolute.inset-0 {
     filter: none !important;
     opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-    mix-blend-mode: normal !important;
-    background:
-      radial-gradient(circle at 16% 20%, rgba(255,255,255,0.18), transparent 31%),
-      radial-gradient(circle at 84% 28%, rgba(126,240,235,0.13), transparent 34%),
-      radial-gradient(circle at 50% 82%, rgba(255,255,255,0.08), transparent 38%) !important;
   }
 
-  section[class*="h-[520px]"][class*="bg-ink-950"]::after {
-    z-index: 2 !important;
-    inset: 0 !important;
-    filter: none !important;
-    opacity: 0.12 !important;
-    transform: none !important;
-    animation: none !important;
-    mix-blend-mode: screen !important;
-  }
-
-  /* The small bottom motion strip stays visible, but does not create haze. */
-  section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*="h-[42px]"] {
-    height: 30px !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: rgba(5,11,31,0.08) !important;
-  }
-
-  /* 4. The next mobile section starts immediately after the compact hero. */
+  /* The lower section starts immediately after the Hero. */
   #services-intro {
-    padding-bottom: 28px !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     min-height: 0 !important;
   }
 
-  /* 5. Lower CREATE / BRAND / GROW cards: reveal softly during scroll.
-     The effect is intentionally distant, not a heavy blur. */
+  /* Keep the existing sticky card takeover, but do not make the whole
+     card a blur layer. */
   #services-intro .sticky {
-    height: 88svh !important;
-    min-height: 88svh !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
-  #services-intro .sticky > .relative.z-10 {
-    transform: translateZ(0);
+  #services-intro .sticky > div:first-child {
+    opacity: 1 !important;
+    filter: none !important;
   }
 
+  /* The existing Framer Motion reveal controls the text/icon entrance.
+     Keep it crisp; no CSS scroll-timeline blur is applied. */
   #services-intro .sticky h3,
   #services-intro .sticky h3 + div,
   #services-intro .sticky h3 ~ div.text-center {
-    filter: blur(0px);
-    will-change: filter, opacity, transform;
-  }
-
-  /* Modern Chrome/Safari: tie the soft reveal to the element entering view. */
-  @supports (animation-timeline: view()) {
-    #services-intro .sticky h3 {
-      animation: mobile-soft-reveal 0.9s ease both;
-      animation-timeline: view(block 0% 70%);
-    }
-
-    #services-intro .sticky h3 + div {
-      animation: mobile-soft-reveal 1s ease both;
-      animation-delay: 80ms;
-      animation-timeline: view(block 0% 68%);
-    }
-
-    #services-intro .sticky h3 ~ div.text-center {
-      animation: mobile-soft-reveal 1s ease both;
-      animation-delay: 140ms;
-      animation-timeline: view(block 0% 65%);
-    }
-  }
-
-  /* Reduce the amount of blur used by the card itself. */
-  #services-intro .sticky > div:first-child {
-    opacity: 0.7 !important;
-  }
-
-  #services-intro .sticky > div.relative.z-10 {
-    max-width: 390px !important;
-  }
-
-  #services-intro .sticky h3 {
-    font-size: clamp(40px, 12vw, 58px) !important;
-  }
-}
-
-@keyframes mobile-soft-reveal {
-  0% {
-    opacity: 0.15;
-    filter: blur(9px);
-    transform: translate3d(0, 18px, 0) scale(0.985);
-  }
-  55% {
-    opacity: 0.72;
-    filter: blur(3px);
-    transform: translate3d(0, 6px, 0) scale(0.995);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0);
-    transform: translate3d(0, 0, 0) scale(1);
+    filter: none !important;
+    opacity: 1 !important;
+    animation: none !important;
+    animation-timeline: none !important;
+    will-change: auto;
   }
 }
