@@ -1,6 +1,5 @@
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 const services = [
   {
@@ -41,113 +40,307 @@ const services = [
   },
 ] as const;
 
-function ServiceCard({
-  service,
-  index,
-}: {
-  service: (typeof services)[number];
-  index: number;
-}) {
-  const cardRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "start start"],
-  });
+const SERVICE_COUNT = services.length;
+const DESKTOP_MEDIA = "(min-width: 768px)";
 
-  const entranceY = useTransform(scrollYProgress, [0, 0.7, 1], [96, 20, 0]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.55, 0.9], [0, 0.7, 1]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.08, 1]);
-  const veilY = useTransform(scrollYProgress, [0.08, 0.82], ["-115%", "115%"]);
-  const veilOpacity = useTransform(
-    scrollYProgress,
-    [0.08, 0.2, 0.65, 0.86],
-    [0, 0.92, 0.72, 0],
-  );
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
 
-  return (
-    <article
-      ref={cardRef}
-      className="relative h-screen w-full max-md:h-[100svh] max-md:min-h-[100svh]"
-      style={{ zIndex: index + 1 }}
-      aria-labelledby={`digital-points-service-${service.number}`}
-    >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#07090a] max-md:relative max-md:h-[100svh]">
-        <motion.img
-          src={service.image}
-          alt=""
-          aria-hidden="true"
-          loading={index === 0 ? "eager" : "lazy"}
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={reduceMotion ? undefined : { scale: imageScale }}
-        />
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
 
-        <div className="absolute inset-0 bg-[#050b1f]/62" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050b1f]/90 via-[#050b1f]/55 to-[#050b1f]/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050b1f]/75 via-transparent to-[#050b1f]/25" />
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 z-20 h-28 border-y border-white/15 bg-white/[0.08] backdrop-blur-md"
-          style={reduceMotion ? { opacity: 0 } : { y: veilY, opacity: veilOpacity }}
-        >
-          <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-[#08bdb8]/80 to-transparent" />
-          <div className="absolute inset-x-[18%] top-0 h-px bg-white/25" />
-        </motion.div>
-
-        <motion.div
-          className="relative z-10 flex h-full items-end px-6 pb-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-20"
-          style={reduceMotion ? undefined : { y: entranceY, opacity: contentOpacity }}
-        >
-          <div className="w-full max-w-6xl">
-            <div className="max-w-4xl">
-              <p className="mb-5 text-xs font-medium uppercase tracking-[0.22em] text-[#08bdb8] sm:text-sm">
-                {service.number} — {service.name}
-              </p>
-              <h2
-                id={`digital-points-service-${service.number}`}
-                className="font-display text-[clamp(3.2rem,8vw,8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-white"
-              >
-                {service.name}
-              </h2>
-              <p className="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
-                {service.description}
-              </p>
-              <Link
-                to={service.href}
-                className="mt-8 inline-flex items-center gap-3 bg-[#201e1f] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#08bdb8] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08bdb8] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
-              >
-                Explore {service.name}
-                <span aria-hidden="true">↗</span>
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="absolute bottom-7 right-6 z-30 flex items-center gap-3 sm:right-10">
-          <span className="hidden text-[10px] font-medium uppercase tracking-[0.18em] text-white/45 sm:inline">
-            Services
-          </span>
-          <span className="text-sm font-semibold tabular-nums text-white">
-            {service.number} <span className="text-white/30">/ 04</span>
-          </span>
-        </div>
-      </div>
-    </article>
-  );
+  return reduced;
 }
 
 export default function StickyServices() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const entranceRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<number | null>(null);
+  const entranceTimerRef = useRef<number | null>(null);
+  const lastProgressRef = useRef(-1);
+  const [desktop, setDesktop] = useState(false);
+  const [entranceSeen, setEntranceSeen] = useState(false);
+  const [entranceVisible, setEntranceVisible] = useState(false);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const media = window.matchMedia(DESKTOP_MEDIA);
+    const update = () => setDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const target = entranceRef.current;
+    if (!target || entranceSeen) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setEntranceSeen(true);
+        setEntranceVisible(true);
+        entranceTimerRef.current = window.setTimeout(
+          () => setEntranceVisible(false),
+          1350,
+        );
+        observer.disconnect();
+      },
+      { threshold: 0.18 },
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.disconnect();
+      if (entranceTimerRef.current !== null) {
+        window.clearTimeout(entranceTimerRef.current);
+      }
+    };
+  }, [entranceSeen]);
+
+  useEffect(() => {
+    if (desktop) return;
+
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const cards = Array.from(
+      section.querySelectorAll<HTMLElement>("[data-mobile-service-index]"),
+    );
+    if (!cards.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const index = Number(
+            entry.target.getAttribute("data-mobile-service-index"),
+          );
+          if (Number.isFinite(index)) setMobileActiveIndex(index);
+        });
+      },
+      { rootMargin: "-42% 0px -42% 0px", threshold: 0 },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [desktop]);
+
+  useEffect(() => {
+    if (!desktop || reducedMotion) return;
+
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    if (!section || !track) return;
+
+    const update = () => {
+      frameRef.current = null;
+
+      const rect = section.getBoundingClientRect();
+      const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
+      const progress = clamp(-rect.top / travel, 0, 1);
+
+      if (Math.abs(progress - lastProgressRef.current) < 0.0005) return;
+      lastProgressRef.current = progress;
+
+      track.style.transform = `translate3d(${-progress * (SERVICE_COUNT - 1) * 100}vw, 0, 0)`;
+
+      const travelProgress = progress * (SERVICE_COUNT - 1);
+      track.querySelectorAll<HTMLElement>(".service-curtain").forEach((curtain) => {
+        const index = Number(curtain.dataset.serviceIndex);
+        const reveal = clamp((travelProgress - index - 0.7) / 0.3, 0, 1);
+        curtain.style.setProperty("--curtain-cover", `${(1 - reveal) * 100}%`);
+      });
+    };
+
+    const onScroll = () => {
+      if (frameRef.current === null) {
+        frameRef.current = window.requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+    };
+  }, [desktop, reducedMotion]);
+
   return (
     <section
+      ref={sectionRef}
       id="homepage-services"
-      className="relative w-full bg-[#050b1f]"
+      className="relative w-full bg-[#07090a]"
+      style={desktop ? { height: `${SERVICE_COUNT * 100}vh` } : undefined}
       aria-label="Digital Points services"
     >
-      {services.map((service, index) => (
-        <ServiceCard key={service.number} service={service} index={index} />
-      ))}
+      <div
+        ref={entranceRef}
+        className="pointer-events-none absolute inset-x-0 top-0 z-40 h-screen"
+        aria-hidden="true"
+      >
+        <div
+          className={`absolute left-6 top-1/2 -translate-y-1/2 sm:left-10 lg:left-16 ${
+            entranceVisible ? "opacity-100" : "opacity-0"
+          } transition-opacity duration-200`}
+        >
+          <div
+            className={`overflow-hidden text-xs font-semibold uppercase tracking-[0.28em] text-[#20cbab] transition-transform duration-[850ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              entranceSeen ? "translate-y-0" : "translate-y-full"
+            }`}
+          >
+            Our Services
+          </div>
+          <div
+            className={`mt-3 h-px w-28 bg-[#20cbab] transition-transform duration-[850ms] delay-100 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              entranceSeen ? "origin-left scale-x-100" : "origin-left scale-x-0"
+            }`}
+          />
+        </div>
+      </div>
+
+      {desktop ? (
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#07090a]">
+          <div
+            ref={trackRef}
+            className="flex h-full w-[400vw] will-change-transform"
+          >
+            {services.map((service, index) => (
+              <article
+                key={service.number}
+                className="relative h-screen w-screen shrink-0 overflow-hidden"
+                aria-labelledby={`digital-points-service-${service.number}`}
+              >
+                <img
+                  src={service.image}
+                  alt=""
+                  aria-hidden="true"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+
+                <div className="absolute inset-0 bg-[#07090a]/55" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#07090a]/90 via-[#07090a]/55 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07090a]/80 via-transparent to-[#07090a]/20" />
+
+                {index > 0 && !reducedMotion && (
+                  <div
+                    aria-hidden="true"
+                    data-service-index={index}
+                    className="service-curtain absolute inset-0 z-20 bg-[#0eab8f]"
+                    style={{ clipPath: "inset(0 var(--curtain-cover, 0%) 0 0)" }}
+                  />
+                )}
+
+                <div className="relative z-10 flex h-full items-end px-7 pb-20 sm:px-12 sm:pb-24 lg:px-16 lg:pb-20">
+                  <div className="w-full max-w-6xl">
+                    <div className="max-w-4xl">
+                      <p className="mb-5 text-xs font-medium uppercase tracking-[0.22em] text-[#20cbab] sm:text-sm">
+                        {service.number} — {service.name}
+                      </p>
+                      <h2
+                        id={`digital-points-service-${service.number}`}
+                        className="font-display text-[clamp(3.2rem,8vw,8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-white"
+                      >
+                        {service.name}
+                      </h2>
+                      <p className="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+                        {service.description}
+                      </p>
+                      <Link
+                        to={service.href}
+                        className="mt-8 inline-flex items-center gap-3 bg-[#201e1f] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#20cbab] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#20cbab] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
+                      >
+                        Explore {service.name}
+                        <span aria-hidden="true">↗</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-7 right-6 z-30 flex items-center gap-3 sm:right-10">
+                  <span className="hidden text-[10px] font-medium uppercase tracking-[0.18em] text-white/45 sm:inline">
+                    Services
+                  </span>
+                  <span className="text-sm font-semibold tabular-nums text-white">
+                    {service.number} <span className="text-white/30">/ 04</span>
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="w-full">
+          {services.map((service, index) => (
+            <article
+              key={service.number}
+              className="sticky top-0 flex h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#07090a]"
+              data-mobile-service-index={index}
+              aria-labelledby={`mobile-digital-points-service-${service.number}`}
+            >
+              <img
+                src={service.image}
+                alt=""
+                aria-hidden="true"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-[#07090a]/58" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07090a]/90 via-[#07090a]/45 to-transparent" />
+
+              {index > 0 && !reducedMotion && index > mobileActiveIndex && (
+                <div aria-hidden="true" className="absolute inset-0 z-20 bg-[#0eab8f]" />
+              )}
+
+              <div className="relative z-10 flex h-full w-full items-end px-6 pb-16 sm:px-10 sm:pb-20">
+                <div className="w-full max-w-2xl">
+                  <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[#20cbab]">
+                    {service.number} — {service.name}
+                  </p>
+                  <h2
+                    id={`mobile-digital-points-service-${service.number}`}
+                    className="font-display text-[clamp(2.8rem,13vw,5rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-white"
+                  >
+                    {service.name}
+                  </h2>
+                  <p className="mt-6 max-w-xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
+                    {service.description}
+                  </p>
+                  <Link
+                    to={service.href}
+                    className="mt-7 inline-flex items-center gap-3 bg-[#201e1f] px-6 py-3.5 text-sm font-semibold text-white transition duration-300 hover:bg-[#20cbab] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#20cbab] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
+                  >
+                    Explore {service.name}
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="absolute bottom-6 right-5 z-30 text-sm font-semibold tabular-nums text-white sm:right-8">
+                {service.number} <span className="text-white/30">/ 04</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
