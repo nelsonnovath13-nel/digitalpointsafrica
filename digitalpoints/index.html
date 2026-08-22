@@ -20,12 +20,95 @@
       :where([class~="rounded-t-[34px]"], [class~="sm:rounded-t-[46px]"]) {
         border-radius: 0 !important;
       }
+
+      /* Digital Points Way: keep the transition visually atmospheric.
+         The veil hides the service cards while they move underneath,
+         then releases only at the end of the transition. */
+      #digital-points-way-veil {
+        position: fixed;
+        inset: 0;
+        z-index: 61;
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        background:
+          radial-gradient(72% 48% at 50% 42%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 68%),
+          linear-gradient(180deg, rgba(0,199,195,0.76) 0%, rgba(72,188,189,0.78) 52%, rgba(99,200,199,0.72) 100%);
+        backdrop-filter: blur(15px) saturate(112%);
+        -webkit-backdrop-filter: blur(15px) saturate(112%);
+        transition: opacity 120ms linear, visibility 120ms linear;
+      }
+
+      #digital-points-way-veil::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255,255,255,0.05) 0%,
+          rgba(255,255,255,0.02) 58%,
+          rgba(255,255,255,0.08) 82%,
+          rgba(255,255,255,0) 100%
+        );
+        filter: blur(18px);
+        transform: scale(1.04);
+      }
     </style>
     <title>Digital Points — Digital Solutions, Media & AI Automation</title>
     <meta name="description" content="Digital Points builds video, web, branding and AI automation systems for businesses across Tanzania and Africa." />
   </head>
   <body>
     <div id="root"></div>
+    <div id="digital-points-way-veil" aria-hidden="true"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (() => {
+        const veil = document.getElementById("digital-points-way-veil");
+        if (!veil) return;
+
+        let ticking = false;
+
+        const updateTransitionVeil = () => {
+          ticking = false;
+
+          const intro = document.getElementById("services-intro");
+          if (!intro) {
+            veil.style.opacity = "0";
+            veil.style.visibility = "hidden";
+            return;
+          }
+
+          const rect = intro.getBoundingClientRect();
+          const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+          const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / viewportHeight));
+
+          // Stay fully opaque while the service cards pass underneath.
+          // Only reveal the real section at the very end.
+          let opacity = 0;
+          if (progress > 0.08 && progress < 0.90) {
+            opacity = 1;
+          } else if (progress >= 0.90 && progress < 1) {
+            opacity = 1 - ((progress - 0.90) / 0.10);
+          }
+
+          veil.style.opacity = String(opacity);
+          veil.style.visibility = opacity > 0.01 ? "visible" : "hidden";
+        };
+
+        const requestUpdate = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(updateTransitionVeil);
+        };
+
+        window.addEventListener("scroll", requestUpdate, { passive: true });
+        window.addEventListener("resize", requestUpdate, { passive: true });
+
+        const observer = new MutationObserver(requestUpdate);
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        requestUpdate();
+      })();
+    </script>
   </body>
 </html>
