@@ -1,0 +1,85 @@
+/* Scroll transition only: no hero blur, no card veil. */
+
+/* Keep the existing Hero completely clear on mobile. */
+@media (max-width: 767px) {
+  section[class*="h-[520px]"][class*="bg-ink-950"]::before,
+  section[class*="h-[520px]"][class*="bg-ink-950"]::after,
+  #services-intro > div.fixed {
+    display: none !important;
+  }
+}
+
+/* The section itself provides the transition atmosphere; nothing covers the Hero. */
+#services-intro {
+  view-timeline-name: --digital-points-way;
+  view-timeline-axis: block;
+}
+
+#services-intro > div.relative.z-10 {
+  animation: digital-points-way-enter linear both;
+  animation-timeline: --digital-points-way;
+  animation-range: entry 0% entry 55%;
+}
+
+@keyframes digital-points-way-enter {
+  from {
+    transform: translateY(30px);
+    opacity: 0.86;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* The heading changes from the existing dark color to light only as the section enters. */
+#services-intro h2 {
+  animation: digital-points-way-heading linear both;
+  animation-timeline: --digital-points-way;
+  animation-range: entry 5% entry 70%;
+}
+
+@keyframes digital-points-way-heading {
+  0% { color: #171919; }
+  55% { color: #8fe9e2; }
+  100% { color: #f4efe6; }
+}
+
+/* Very subtle brand atmosphere, never a full-screen blur. */
+#services-intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(ellipse 70% 35% at 50% 0%, rgba(34,211,199,0.10), transparent 72%);
+  opacity: 0;
+  animation: digital-points-way-glow linear both;
+  animation-timeline: --digital-points-way;
+  animation-range: entry 0% entry 70%;
+}
+
+@keyframes digital-points-way-glow {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 767px) {
+  #services-intro > div.relative.z-10 {
+    animation-range: entry 0% entry 42%;
+  }
+  #services-intro h2 {
+    animation-range: entry 0% entry 52%;
+  }
+  #services-intro::before {
+    opacity: 0;
+    background: radial-gradient(ellipse 90% 22% at 50% 0%, rgba(34,211,199,0.07), transparent 72%);
+    animation-range: entry 0% entry 45%;
+  }
+}
+
+@supports not (animation-timeline: view()) {
+  #services-intro > div.relative.z-10,
+  #services-intro h2,
+  #services-intro::before { animation: none; }
+}
