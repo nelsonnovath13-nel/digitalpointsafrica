@@ -25,52 +25,6 @@ export default function SectionRevealBidirectional({ children }: SectionRevealBi
   const glowOpacity = useTransform(scrollYProgress, [0, 0.55, 1], [0.42, 0.18, 0]);
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
-
-    const root = sectionRef.current;
-    if (!root) return;
-
-    const headings = Array.from(root.querySelectorAll<HTMLElement>("h1, h2, h3, h4, h5, h6"));
-    const heading = headings.find((element) =>
-      element.textContent?.replace(/\s+/g, " ").trim().toLowerCase().includes("the digital points way"),
-    );
-
-    if (heading) {
-      const originalTransform = heading.style.transform;
-      const originalColor = heading.style.color;
-      const originalOpacity = heading.style.opacity;
-      const originalWillChange = heading.style.willChange;
-      const originalTransformOrigin = heading.style.transformOrigin;
-
-      heading.style.willChange = "transform, color, opacity";
-      heading.style.transformOrigin = "left center";
-
-      const unsubscribe = scrollYProgress.on("change", (progress) => {
-        const clamped = Math.max(0, Math.min(1, progress));
-        const rise = 34 * (1 - clamped);
-        const scale = 0.965 + clamped * 0.035;
-        const opacity = 0.72 + clamped * 0.28;
-        const r = Math.round(8 * (1 - clamped) + 20 * clamped);
-        const g = Math.round(189 * (1 - clamped) + 20 * clamped);
-        const b = Math.round(184 * (1 - clamped) + 20 * clamped);
-
-        heading.style.transform = `translate3d(0, ${rise}px, 0) scale(${scale})`;
-        heading.style.opacity = String(opacity);
-        heading.style.color = `rgb(${r}, ${g}, ${b})`;
-      });
-
-      return () => {
-        unsubscribe();
-        heading.style.transform = originalTransform;
-        heading.style.color = originalColor;
-        heading.style.opacity = originalOpacity;
-        heading.style.willChange = originalWillChange;
-        heading.style.transformOrigin = originalTransformOrigin;
-      };
-    }
-  }, [scrollYProgress, shouldReduceMotion]);
-
-  useEffect(() => {
     const root = sectionRef.current;
     if (!root) return;
 
