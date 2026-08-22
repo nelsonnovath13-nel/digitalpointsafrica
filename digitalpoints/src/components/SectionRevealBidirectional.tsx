@@ -67,6 +67,30 @@ export default function SectionRevealBidirectional({ children }: SectionRevealBi
     };
   }, [scrollYProgress, shouldReduceMotion]);
 
+  useEffect(() => {
+    const root = sectionRef.current;
+    if (!root) return;
+
+    const intro = Array.from(root.querySelectorAll<HTMLElement>("p")).find((element) =>
+      element.textContent?.replace(/\s+/g, " ").trim().toLowerCase().includes("three simple but powerful principles"),
+    );
+
+    if (!intro || root.querySelector("#digital-points-learn-about-us")) return;
+
+    const button = document.createElement("a");
+    button.id = "digital-points-learn-about-us";
+    button.href = "/about";
+    button.setAttribute("aria-label", "Learn About Us");
+    button.innerHTML = '<span>Learn About Us</span><span aria-hidden="true" class="digital-points-learn-arrow">↗</span>';
+    button.className = "digital-points-learn-button mt-7 block w-fit bg-[#201e1f] px-8 py-4 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(0,0,0,0.14)] sm:px-9 sm:py-4 sm:text-[15px] max-sm:mx-auto";
+
+    if (shouldReduceMotion) button.style.transition = "none";
+
+    intro.insertAdjacentElement("afterend", button);
+
+    return () => button.remove();
+  }, [shouldReduceMotion]);
+
   return (
     <div ref={sectionRef} className="relative isolate overflow-hidden">
       <motion.div
