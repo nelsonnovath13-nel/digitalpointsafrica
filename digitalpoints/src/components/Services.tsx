@@ -52,12 +52,9 @@ function CursorSnow({ active, x, y }: { active: boolean; x: number; y: number })
 }
 
 function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | null> }) {
-  const [order, setOrder] = useState([0, 1, 2]);
-  const [isCycling, setIsCycling] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [expanded, setExpanded] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0, active: false });
-  const stackRef = useRef<HTMLDivElement>(null);
-  const cycleTimerRef = useRef<number | null>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handlePointerMove = (event: globalThis.PointerEvent) => {
@@ -76,130 +73,30 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
     };
   }, [introRef]);
 
-  useEffect(() => {
-    return () => {
-      if (cycleTimerRef.current !== null) window.clearTimeout(cycleTimerRef.current);
-    };
-  }, []);
-
-  const handleStackPointerMove = (event: PointerEvent) => {
-    const stack = stackRef.current;
-    if (!stack) return;
-    const bounds = stack.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-    setTilt({ x: Math.max(-0.5, Math.min(0.5, y)) * -7, y: Math.max(-0.5, Math.min(0.5, x)) * 9 });
-  };
-
-  const handleStackPointerLeave = () => setTilt({ x: 0, y: 0 });
-
-  const cycleCards = () => {
-    if (isCycling) return;
-    setIsCycling(true);
-    cycleTimerRef.current = window.setTimeout(() => {
-      setOrder((current) => [current[1], current[2], current[0]]);
-      setIsCycling(false);
-    }, 430);
-  };
-
-  const getCardPosition = (cardIndex: number) => order.indexOf(cardIndex);
-
-  const cardStyle = (cardIndex: number) => {
-    const position = getCardPosition(cardIndex);
-    const isFront = position === 0;
-    const isBack = position === 2;
-    const leaving = isFront && isCycling;
-    const transforms = [
-      "translate3d(0, 0, 0) rotate(-5deg) scale(1)",
-      "translate3d(30px, -16px, 0) rotate(4deg) scale(0.975)",
-      "translate3d(62px, -34px, 0) rotate(11deg) scale(0.95)",
-    ];
-    return {
-      zIndex: leaving ? 40 : 30 - position * 10,
-      transform: leaving ? "translate3d(48px, -112px, 0) rotate(18deg) scale(0.92)" : transforms[position],
-      opacity: leaving ? 0 : isBack ? 0.98 : 1,
-    };
-  };
+  const handlePointerEnter = () => setExpanded(true);
+  const handlePointerLeave = () => setExpanded(false);
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-[1120px] sm:mt-12 lg:mt-0 lg:w-[520px] lg:max-w-none lg:justify-self-end lg:self-stretch">
+    <div className="relative mx-auto mt-10 w-full max-w-[1120px] touch-pan-x sm:mt-12 lg:mt-14" onPointerEnter={handlePointerEnter} onPointerLeave={handlePointerLeave}>
       <CursorSnow active={cursor.active} x={cursor.x} y={cursor.y} />
 
-      <style>{`
-        @keyframes dp-card-stack-float {
-          0%, 100% { transform: translate3d(0, 0, 0); }
-          50% { transform: translate3d(0, -8px, 0); }
-        }
-        @keyframes dp-card-progress {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .dp-card-stack-float { animation: none !important; }
-          .dp-card-stack-card,
-          .dp-card-stack-progress { transition: none !important; animation: none !important; }
-        }
-      `}</style>
-
-      <div className="relative hidden h-[360px] w-full items-center justify-center md:flex lg:h-[390px]">
-        <div className="dp-card-stack-float relative flex h-full w-full items-center justify-center" style={{ animation: "dp-card-stack-float 5.8s ease-in-out infinite" }}>
-          <div
-            ref={stackRef}
-            onPointerMove={handleStackPointerMove}
-            onPointerLeave={handleStackPointerLeave}
-            className="relative h-[260px] w-[390px] [perspective:1000px]"
-            style={{
-              transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-              transformStyle: "preserve-3d",
-              transition: "transform 180ms ease-out",
-            }}
-          >
-            {highlights.map((highlight, cardIndex) => {
-              const position = getCardPosition(cardIndex);
-              const isFront = position === 0;
-              const colors = ["#2D8CFF", "#F05AA6", "#C89B3C"];
-              return (
-                <article
-                  key={highlight.title}
-                  aria-label={highlight.title}
-                  onClick={isFront ? cycleCards : undefined}
-                  onKeyDown={isFront ? (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); cycleCards(); } } : undefined}
-                  role={isFront ? "button" : undefined}
-                  tabIndex={isFront ? 0 : -1}
-                  className={`dp-card-stack-card absolute left-1/2 top-1/2 flex h-[220px] w-[350px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#211f1f_0%,#080808_100%)] p-7 text-white shadow-[0_30px_70px_rgba(0,0,0,0.26)] select-none ${isFront ? "cursor-pointer pointer-events-auto" : "pointer-events-none"}`}
-                  style={{
-                    ...cardStyle(cardIndex),
-                    transformOrigin: "center center",
-                    transition: "transform 430ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease, box-shadow 300ms ease",
-                  }}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="dp-card-icon flex h-9 w-9 items-center justify-center rounded-[10px] bg-white/[0.09] text-white/90 ring-1 ring-white/[0.08] backdrop-blur-sm [&>svg]:h-[21px] [&>svg]:w-[21px]">
-                        <HighlightIcon title={highlight.title} />
-                      </span>
-                      <h3 className="font-display text-[1.8rem] font-semibold leading-none tracking-[-0.055em]">{highlight.title}</h3>
-                    </div>
-                    <span className="font-poppins pt-1 text-[9px] uppercase tracking-[0.28em] text-white/35">0{cardIndex + 1} / POINT</span>
-                  </div>
-
-                  <div className="flex flex-1 items-end">
-                    <p className="max-w-[280px] font-display text-[0.94rem] leading-[1.4] tracking-[-0.012em] text-white/78">{highlight.description}</p>
-                  </div>
-
-                  <div className="mt-4 flex items-center justify-between text-white/45">
-                    <span className="font-poppins text-[10px] uppercase tracking-[0.25em]">Explore</span>
-                    <span aria-hidden="true" className="text-sm">↗</span>
-                  </div>
-
-                  <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[4px]" style={{ backgroundColor: colors[cardIndex] }}>
-                    <span className="dp-card-stack-progress block h-full w-0" style={{ backgroundColor: colors[cardIndex], animation: `dp-card-progress 900ms cubic-bezier(0.22,1,0.36,1) ${cardIndex * 120}ms forwards` }} />
-                  </span>
-                </article>
-              );
-            })}
-          </div>
-        </div>
+      <div ref={cardsRef} className="relative hidden h-[310px] md:block lg:h-[315px]">
+        {highlights.map((highlight, index) => {
+          const collapsedX = index === 0 ? "-24%" : index === 1 ? "0%" : "24%";
+          const expandedX = index === 0 ? "-115%" : index === 1 ? "0%" : "115%";
+          const collapsedRotate = index === 0 ? -8 : index === 1 ? 2 : 8;
+          return (
+            <motion.article key={highlight.title} animate={{ x: expanded ? expandedX : collapsedX, rotate: expanded ? 0 : collapsedRotate, scale: expanded ? 1 : 0.98 }} transition={{ type: "spring", stiffness: 170, damping: 22, mass: 0.8 }} style={{ zIndex: index + 1 }} className="absolute left-1/2 top-1/2 flex h-[290px] w-[30%] min-w-[280px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[3px] bg-[#211f1f] p-7 text-white shadow-[0_28px_70px_rgba(0,0,0,0.18)] lg:h-[300px] lg:p-8">
+              <div className="flex items-start justify-between">
+                <h3 className="font-display text-[clamp(1.55rem,2.6vw,2.15rem)] font-semibold tracking-[-0.055em]">{highlight.title}</h3>
+                <span className="font-poppins text-[9px] uppercase tracking-[0.3em] text-white/35">0{index + 1}</span>
+              </div>
+              <div className="flex flex-1 items-center justify-center text-white"><HighlightIcon title={highlight.title} /></div>
+              <p className="max-w-[320px] font-display text-[0.92rem] leading-[1.38] tracking-[-0.012em] text-white/90 lg:text-base">{highlight.description}</p>
+              <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-[#00B7FF]" />
+            </motion.article>
+          );
+        })}
       </div>
 
       <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
@@ -222,7 +119,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]) ;
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
