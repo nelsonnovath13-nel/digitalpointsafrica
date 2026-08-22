@@ -122,7 +122,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
   };
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-[1120px] sm:mt-12 lg:mt-0 lg:max-w-none lg:self-stretch">
+    <div className="relative mx-auto mt-10 w-full max-w-[1120px] sm:mt-12 lg:mt-0 lg:w-[520px] lg:max-w-none lg:justify-self-end lg:self-stretch">
       <CursorSnow active={cursor.active} x={cursor.x} y={cursor.y} />
 
       <style>{`
