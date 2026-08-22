@@ -190,19 +190,9 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
                     </div>
                     <span className="font-poppins pt-1 text-[9px] uppercase tracking-[0.28em] text-white/35">0{cardIndex + 1} / POINT</span>
                   </div>
-
-                  <div className="flex flex-1 items-end">
-                    <p className="max-w-[280px] font-display text-[0.94rem] leading-[1.4] tracking-[-0.012em] text-white/78">{highlight.description}</p>
-                  </div>
-
-                  <div className="mt-4 flex items-center justify-between text-white/45">
-                    <span className="font-poppins text-[10px] uppercase tracking-[0.25em]">Explore</span>
-                    <span aria-hidden="true" className="text-sm">↗</span>
-                  </div>
-
-                  <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[4px]" style={{ backgroundColor: colors[cardIndex] }}>
-                    <span className="dp-card-stack-progress block h-full w-0" style={{ backgroundColor: colors[cardIndex], animation: `dp-card-progress 900ms cubic-bezier(0.22,1,0.36,1) ${cardIndex * 120}ms forwards` }} />
-                  </span>
+                  <div className="flex flex-1 items-end"><p className="max-w-[280px] font-display text-[0.94rem] leading-[1.4] tracking-[-0.012em] text-white/78">{highlight.description}</p></div>
+                  <div className="mt-4 flex items-center justify-between text-white/45"><span className="font-poppins text-[10px] uppercase tracking-[0.25em]">Explore</span><span aria-hidden="true" className="text-sm">↗</span></div>
+                  <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[4px]" style={{ backgroundColor: colors[cardIndex] }}><span className="dp-card-stack-progress block h-full w-0" style={{ backgroundColor: colors[cardIndex], animation: `dp-card-progress 900ms cubic-bezier(0.22,1,0.36,1) ${cardIndex * 120}ms forwards` }} /></span>
                 </article>
               );
             })}
@@ -213,31 +203,14 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
       <div className="md:hidden">
         <div className="relative mx-auto h-[300px] w-[min(84vw,300px)]">
           <AnimatePresence mode="wait" initial={false}>
-            <motion.article
-              key={mobileHighlight.title}
-              initial={{ x: 72, opacity: 0, rotate: 7, scale: 0.94 }}
-              animate={{ x: 0, opacity: 1, rotate: -4, scale: 1 }}
-              exit={{ x: -72, opacity: 0, rotate: -8, scale: 0.94 }}
-              transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 flex flex-col overflow-hidden bg-[#211f1f] px-7 py-6 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)]"
-            >
-              <div className="flex items-start justify-between">
-                <h3 className="font-display text-[1.95rem] font-semibold leading-none tracking-[-0.055em]">{mobileHighlight.title}</h3>
-                <span className="font-poppins pt-1 text-[9px] uppercase tracking-[0.28em] text-white/35">0{highlights.indexOf(mobileHighlight) + 1} / POINT</span>
-              </div>
-              <div className="flex flex-1 items-center justify-center text-white">
-                <HighlightIcon title={mobileHighlight.title} />
-              </div>
+            <motion.article key={mobileHighlight.title} initial={{ x: 72, opacity: 0, rotate: 7, scale: 0.94 }} animate={{ x: 0, opacity: 1, rotate: -4, scale: 1 }} exit={{ x: -72, opacity: 0, rotate: -8, scale: 0.94 }} transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }} className="absolute inset-0 flex flex-col overflow-hidden bg-[#211f1f] px-7 py-6 text-white shadow-[0_24px_60px_rgba(0,0,0,0.16)]">
+              <div className="flex items-start justify-between"><h3 className="font-display text-[1.95rem] font-semibold leading-none tracking-[-0.055em]">{mobileHighlight.title}</h3><span className="font-poppins pt-1 text-[9px] uppercase tracking-[0.28em] text-white/35">0{highlights.indexOf(mobileHighlight) + 1} / POINT</span></div>
+              <div className="flex flex-1 items-center justify-center text-white"><HighlightIcon title={mobileHighlight.title} /></div>
               <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[4px]" style={{ backgroundColor: mobileHighlight.title === "CREATE" ? "#2D8CFF" : mobileHighlight.title === "BRAND" ? "#F05AA6" : "#C89B3C" }} />
             </motion.article>
           </AnimatePresence>
         </div>
-
-        <div className="mt-9 flex justify-center">
-          <a href="/about" aria-label="Learn About Us" className="inline-flex h-[54px] min-w-[210px] items-center justify-center bg-[#211f1f] px-7 font-display text-[0.95rem] font-semibold text-white shadow-[0_16px_34px_rgba(0,0,0,0.14)] transition-transform duration-200 active:scale-[0.98]">
-            Learn About Us <span aria-hidden="true" className="ml-2 text-base">↗</span>
-          </a>
-        </div>
+        <div className="mt-9 flex justify-center"><a href="/about" aria-label="Learn About Us" className="inline-flex h-[54px] min-w-[210px] items-center justify-center bg-[#211f1f] px-7 font-display text-[0.95rem] font-semibold text-white shadow-[0_16px_34px_rgba(0,0,0,0.14)] transition-transform duration-200 active:scale-[0.98]">Learn About Us <span aria-hidden="true" className="ml-2 text-base">↗</span></a></div>
       </div>
     </div>
   );
@@ -248,7 +221,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%");
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
