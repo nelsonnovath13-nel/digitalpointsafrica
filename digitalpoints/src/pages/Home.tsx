@@ -1,7 +1,7 @@
 import Hero from "../components/Hero";
 import ImageMosaic from "../components/ImageMosaic";
 import Services from "../components/Services";
-import SectionReveal from "../components/SectionReveal";
+import SectionRevealBidirectional from "../components/SectionRevealBidirectional";
 import VideoShowcase from "../components/VideoShowcase";
 import Partners from "../components/Partners";
 import FinalCTA from "../components/FinalCTA";
@@ -10,9 +10,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <SectionReveal>
+      <SectionRevealBidirectional>
         <Services />
-      </SectionReveal>
+      </SectionRevealBidirectional>
       <ImageMosaic />
       <VideoShowcase />
       <Partners />
