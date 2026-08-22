@@ -37,7 +37,7 @@ const GrowIcon = () => (
 );
 
 const WayCard = ({ title, icon }: { title: string; icon: React.ReactNode }) => (
-  <article className="absolute origin-top-left scale-[0.72] flex h-[300px] w-[260px] flex-col items-center bg-[#211f20] px-7 pt-7 text-white shadow-none">
+  <article className="absolute origin-top-left scale-[0.65] flex h-[300px] w-[260px] flex-col items-center bg-[#211f20] px-7 pt-7 text-white shadow-none">
     <h3 className="font-display text-[30px] font-medium leading-none tracking-[-0.04em]">{title}</h3>
     <div className="mt-10 flex h-[170px] w-full items-center justify-center">{icon}</div>
   </article>
@@ -50,7 +50,7 @@ function DigitalPointsWayCards() {
       <div className="absolute left-[270px] top-0 rotate-[9deg]">
         <WayCard title="BRAND" icon={<BrandIcon />} />
       </div>
-      <div className="absolute left-[210px] top-[305px] rotate-[9deg]">
+      <div className="absolute left-[210px] top-[270px] rotate-[9deg]">
         <WayCard title="GROW" icon={<GrowIcon />} />
       </div>
     </div>
