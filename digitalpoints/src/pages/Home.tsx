@@ -49,7 +49,7 @@ function DigitalPointsWayCards() {
       <div className="absolute left-[20px] top-[10px]">
         <WayCard title="CREATE" icon={<CreateIcon />} />
       </div>
-      <div className="absolute left-[195px] top-[15px] rotate-[9deg]">
+      <div className="absolute left-[215px] top-[15px] rotate-[9deg]">
         <WayCard title="BRAND" icon={<BrandIcon />} />
       </div>
       <div className="absolute left-[145px] top-[220px] rotate-[9deg]">
