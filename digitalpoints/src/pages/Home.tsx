@@ -2,6 +2,7 @@ import Hero from "../components/Hero";
 import Services from "../components/Services";
 import SectionRevealBidirectional from "../components/SectionRevealBidirectional";
 import StickyServices from "../components/StickyServices";
+import ServicesVideoTransition from "../components/ServicesVideoTransition";
 import ScrollVideoReveal from "../components/ScrollVideoReveal";
 import VideoShowcase from "../components/VideoShowcase";
 import Partners from "../components/Partners";
@@ -15,6 +16,7 @@ export default function Home() {
         <Services />
       </SectionRevealBidirectional>
       <StickyServices />
+      <ServicesVideoTransition />
       <ScrollVideoReveal />
       <VideoShowcase />
       <Partners />
