@@ -112,7 +112,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
     const transforms = [
       "translate3d(0, 0, 0) rotate(-5deg) scale(1)",
       "translate3d(30px, -16px, 0) rotate(4deg) scale(0.975)",
-      "translate3d(62px, -34px, 0) rotate(11deg) scale(0.95)",
+      "translate3d(62px, -54px, 0) rotate(11deg) scale(0.95)",
     ];
     return {
       zIndex: leaving ? 40 : 30 - position * 10,
@@ -166,7 +166,7 @@ function HighlightCards({ introRef }: { introRef: React.RefObject<HTMLElement | 
                   onKeyDown={isFront ? (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); cycleCards(); } } : undefined}
                   role={isFront ? "button" : undefined}
                   tabIndex={isFront ? 0 : -1}
-                  className={`dp-card-stack-card absolute left-1/2 top-1/2 flex h-[220px] w-[350px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#211f1f_0%,#080808_100%)] p-7 text-white shadow-[0_30px_70px_rgba(0,0,0,0.26)] select-none ${isFront ? "cursor-pointer pointer-events-auto" : "pointer-events-none"}`}
+                  className={`dp-card-stack-card absolute left-1/2 top-1/2 flex h-[195px] w-[312px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#211f1f_0%,#080808_100%)] p-7 text-white shadow-[0_30px_70px_rgba(0,0,0,0.26)] select-none ${isFront ? "cursor-pointer pointer-events-auto" : "pointer-events-none"}`}
                   style={{
                     ...cardStyle(cardIndex),
                     transformOrigin: "center center",
@@ -222,7 +222,7 @@ function ServiceCard({ service, index, progress }: { service: Service; index: nu
   const start = index === 0 ? 0 : (index - 1) * segment + segment * 0.62;
   const center = index * segment;
   const end = index === services.length - 1 ? 1 : index * segment + segment * 0.62;
-  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]) ;
+  const cardX = useTransform(progress, [start, center, end], [index === 0 ? "0%" : "112%", "0%", index === services.length - 1 ? "0%" : "-112%"]);
   const opacity = useTransform(progress, [start, start + segment * 0.08, end - segment * 0.08, end], [index === 0 ? 1 : 0, 1, 1, index === services.length - 1 ? 1 : 0]);
   const scale = useTransform(progress, [start, center, end], [0.965, 1, 0.965]);
   const rotate = useTransform(progress, [start, center, end], [index === 0 ? 0 : 2, 0, index === services.length - 1 ? 0 : -2]);
