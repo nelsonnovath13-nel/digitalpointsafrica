@@ -350,7 +350,8 @@ export default function StickyServices() {
           {services.map((service, index) => (
             <div
               key={service.number}
-              className="relative h-[160vh] w-full"
+              className="relative w-full"
+              style={{ height: `${MOBILE_CARD_SCROLL_HEIGHT_VH}vh` }}
             >
               <article
                 className="sticky top-0 flex h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#07090a]"
