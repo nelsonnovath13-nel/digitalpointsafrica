@@ -9,7 +9,7 @@
   }
 }
 
-/* The section itself provides the transition atmosphere; nothing covers the Hero. */
+/* The section itself provides only the scroll movement; nothing covers the Hero. */
 #services-intro {
   view-timeline-name: --digital-points-way;
   view-timeline-axis: block;
@@ -32,7 +32,7 @@
   }
 }
 
-/* The heading changes from the existing dark color to light only as the section enters. */
+/* Keep the heading readable throughout: dark -> subtle brand teal -> dark. */
 #services-intro h2 {
   animation: digital-points-way-heading linear both;
   animation-timeline: --digital-points-way;
@@ -41,27 +41,13 @@
 
 @keyframes digital-points-way-heading {
   0% { color: #171919; }
-  55% { color: #8fe9e2; }
-  100% { color: #f4efe6; }
+  55% { color: #08bdb8; }
+  100% { color: #171919; }
 }
 
-/* Very subtle brand atmosphere, never a full-screen blur. */
+/* No transition blur/veil. The next section should remain clean and immediate. */
 #services-intro::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background: radial-gradient(ellipse 70% 35% at 50% 0%, rgba(34,211,199,0.10), transparent 72%);
-  opacity: 0;
-  animation: digital-points-way-glow linear both;
-  animation-timeline: --digital-points-way;
-  animation-range: entry 0% entry 70%;
-}
-
-@keyframes digital-points-way-glow {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  content: none;
 }
 
 @media (max-width: 767px) {
@@ -71,15 +57,9 @@
   #services-intro h2 {
     animation-range: entry 0% entry 52%;
   }
-  #services-intro::before {
-    opacity: 0;
-    background: radial-gradient(ellipse 90% 22% at 50% 0%, rgba(34,211,199,0.07), transparent 72%);
-    animation-range: entry 0% entry 45%;
-  }
 }
 
 @supports not (animation-timeline: view()) {
   #services-intro > div.relative.z-10,
-  #services-intro h2,
-  #services-intro::before { animation: none; }
+  #services-intro h2 { animation: none; }
 }
