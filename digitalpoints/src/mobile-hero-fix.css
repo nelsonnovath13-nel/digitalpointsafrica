@@ -28,7 +28,7 @@
   /* Remove all Hero atmospheric pseudo layers on mobile. The base teal
      background remains; nothing can turn the Hero into a blur wall. */
   section[class*="h-[520px]"][class*="bg-ink-950"]::before,
-  section[class*="h-[520px"][class*="bg-ink-950"]::after {
+  section[class*="h-[520px]"][class*="bg-ink-950"]::after {
     display: none !important;
     content: none !important;
   }
