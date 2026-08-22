@@ -84,3 +84,35 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
   .digital-points-learn-button { transform: none !important; }
   .digital-points-learn-button::before { display: none; }
 }
+
+/* HERO COLOR PALETTE ONLY — no layout, motion, timing, or structure changes. */
+section[class*="h-[520px]"][class*="bg-ink-950"] > div.absolute.inset-0[style] {
+  background-color: #063f42 !important;
+}
+section[class*="h-[520px]"][class*="bg-ink-950"] h1 {
+  color: #f3fffe !important;
+}
+section[class*="h-[520px]"][class*="bg-ink-950"] p {
+  color: rgba(243,255,254,0.88) !important;
+}
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"] {
+  background-color: #0eab8f !important;
+  color: #050b1f !important;
+}
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"]:hover,
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"]:active {
+  background-color: #050b1f !important;
+  color: #ffffff !important;
+}
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/services"],
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"] {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/services"]:hover,
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/services"]:active,
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"]:hover,
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"]:active {
+  background-color: #0eab8f !important;
+  color: #050b1f !important;
+}
