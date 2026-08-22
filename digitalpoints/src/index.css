@@ -53,18 +53,18 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
 /* Use the exact supplied CREATE / BRAND / GROW artwork converted to SVG assets. */
 #services-intro .dp-card-icon svg,
 #services-intro .dp-card-stack-card .flex-1 > svg { display: none !important; }
-#services-intro .dp-card-icon {
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: 25px 25px !important;
-}
+#services-intro .dp-card-icon { background-repeat: no-repeat !important; background-position: center !important; background-size: 25px 25px !important; }
 #services-intro .dp-card-stack-card:nth-child(1) .dp-card-icon { background-image: url('/icons/digital-points-create.svg') !important; }
 #services-intro .dp-card-stack-card:nth-child(2) .dp-card-icon { background-image: url('/icons/digital-points-brand.svg') !important; }
 #services-intro .dp-card-stack-card:nth-child(3) .dp-card-icon { background-image: url('/icons/digital-points-grow.svg') !important; }
 
 @media (max-width: 767px) {
-  #services-intro .dp-card-stack-card .flex-1 { position: relative; }
-  #services-intro .dp-card-stack-card .flex-1::before {
+  #services-intro .flex.snap-x > article:nth-child(1) .flex-1 > svg,
+  #services-intro .flex.snap-x > article:nth-child(2) .flex-1 > svg,
+  #services-intro .flex.snap-x > article:nth-child(3) .flex-1 > svg { display: none !important; }
+  #services-intro .flex.snap-x > article:nth-child(1) .flex-1::before,
+  #services-intro .flex.snap-x > article:nth-child(2) .flex-1::before,
+  #services-intro .flex.snap-x > article:nth-child(3) .flex-1::before {
     content: "";
     display: block;
     width: 150px;
@@ -73,9 +73,9 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
     background-position: center;
     background-size: contain;
   }
-  #services-intro .dp-card-stack-card:nth-child(1) .flex-1::before { background-image: url('/icons/digital-points-create.svg'); }
-  #services-intro .dp-card-stack-card:nth-child(2) .flex-1::before { background-image: url('/icons/digital-points-brand.svg'); }
-  #services-intro .dp-card-stack-card:nth-child(3) .flex-1::before { background-image: url('/icons/digital-points-grow.svg'); }
+  #services-intro .flex.snap-x > article:nth-child(1) .flex-1::before { background-image: url('/icons/digital-points-create.svg'); }
+  #services-intro .flex.snap-x > article:nth-child(2) .flex-1::before { background-image: url('/icons/digital-points-brand.svg'); }
+  #services-intro .flex.snap-x > article:nth-child(3) .flex-1::before { background-image: url('/icons/digital-points-grow.svg'); }
 }
 
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
