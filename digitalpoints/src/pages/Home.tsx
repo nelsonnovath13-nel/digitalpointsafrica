@@ -46,11 +46,13 @@ const WayCard = ({ title, icon }: { title: string; icon: React.ReactNode }) => (
 function DigitalPointsWayCards() {
   return (
     <div className="relative hidden h-[560px] w-[620px] lg:block" aria-label="Digital Points Way cards">
-      <WayCard title="CREATE" icon={<CreateIcon />} />
-      <div className="absolute left-[270px] top-0 rotate-[9deg]">
+      <div className="absolute left-[20px] top-[10px]">
+        <WayCard title="CREATE" icon={<CreateIcon />} />
+      </div>
+      <div className="absolute left-[195px] top-[15px] rotate-[9deg]">
         <WayCard title="BRAND" icon={<BrandIcon />} />
       </div>
-      <div className="absolute left-[210px] top-[270px] rotate-[9deg]">
+      <div className="absolute left-[145px] top-[220px] rotate-[9deg]">
         <WayCard title="GROW" icon={<GrowIcon />} />
       </div>
     </div>
@@ -68,7 +70,7 @@ export default function Home() {
       >
         <div className="mx-auto grid min-h-[620px] w-full max-w-[1600px] grid-cols-1 items-start px-[clamp(24px,3.4vw,56px)] py-[clamp(72px,8vw,120px)] lg:grid-cols-[minmax(0,0.92fr)_minmax(560px,1.08fr)] lg:gap-[clamp(40px,5vw,96px)] lg:px-[clamp(36px,4vw,64px)]">
           <div className="max-w-[760px] text-left">
-            <h2 className="font-display text-[clamp(3rem,5.7vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.065em] text-black">
+            <h2 className="font-display text-[clamp(2.8rem,5vw,5.5rem)] font-semibold leading-[0.92] tracking-[-0.065em] text-black">
               The Digital Points Way
             </h2>
 
