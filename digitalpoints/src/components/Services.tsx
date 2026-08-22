@@ -147,9 +147,9 @@ export default function Services() {
   return (
     <>
       <section ref={introRef} id="services-intro" aria-label="Services introduction" className="relative isolate overflow-visible bg-[#f7f3ea] px-5 pb-0 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
-        <motion.div aria-hidden="true" style={{ y: introTransitionY, opacity: introTransitionOpacity, scale: introTransitionScale, willChange: "transform, opacity" }} className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-screen origin-bottom overflow-hidden rounded-t-[34px] shadow-[0_-24px_80px_rgba(0,80,255,0.18)] sm:rounded-t-[46px]">
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,#0A8CFF_0%,#287BFF_18%,#6DA7FF_38%,#D9E8FF_58%,#F7F3EA_78%,#F7F3EA_100%)]" />
-          <div className="absolute inset-x-0 top-0 h-[22vh] bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.32),transparent_62%)]" />
+        <motion.div aria-hidden="true" style={{ y: introTransitionY, opacity: introTransitionOpacity, scale: introTransitionScale, willChange: "transform, opacity" }} className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-screen origin-bottom overflow-hidden rounded-t-[34px] shadow-[0_-24px_80px_rgba(30,180,180,0.18)] sm:rounded-t-[46px]">
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,#84DAD9_0%,#42BCBB_18%,#18A4A3_38%,#70C9C8_55%,#D9EFEE_70%,#F7F3EA_84%,#F7F3EA_100%)]" />
+          <div className="absolute inset-x-0 top-0 h-[22vh] bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.30),transparent_62%)]" />
           <div className="absolute inset-x-0 bottom-0 h-[38vh] bg-gradient-to-b from-transparent via-[#F7F3EA]/55 to-[#F7F3EA]" />
         </motion.div>
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[38%] opacity-75" style={{ backgroundImage: "radial-gradient(circle, rgba(50,55,55,0.15) 1.15px, transparent 1.3px)", backgroundSize: "18px 18px", maskImage: "linear-gradient(90deg, black, transparent)", WebkitMaskImage: "linear-gradient(90deg, black, transparent)" }} />
