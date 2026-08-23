@@ -149,7 +149,7 @@ export default function StickyServices() {
       }
 
       // The image is revealed during the sweep, but the service copy waits until
-      // the glass pane has completely exited. The final small interval lets the
+      // the wipe has completely exited. The final small interval lets the
       // new copy appear cleanly before the next scroll-driven transition starts.
       let completedIndex = transitionBase;
       if (transitionBase < SERVICE_COUNT - 1 && localProgress >= CONTENT_SETTLE_PORTION) {
@@ -219,7 +219,7 @@ export default function StickyServices() {
           <div
             ref={wipeRef}
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] border-x border-white/35 bg-white/15 shadow-[0_0_45px_rgba(255,255,255,0.14)] backdrop-blur-[20px] will-change-transform"
+            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] border-x border-white/35 will-change-transform"
             style={{ transform: "translate3d(120vw, 0, 0)", opacity: 0 }}
           >
             <div className="absolute inset-y-0 left-0 w-px bg-white/70" />
