@@ -2,6 +2,7 @@ import Hero from "../components/Hero";
 import Services from "../components/Services";
 import SectionRevealBidirectional from "../components/SectionRevealBidirectional";
 import StickyServices from "../components/StickyServices";
+import ServicesProgressBar from "../components/ServicesProgressBar";
 import ScrollVideoReveal from "../components/ScrollVideoReveal";
 import PrintingServices from "../components/PrintingServices";
 import CurtainRevealReviews from "../components/CurtainRevealReviews";
@@ -16,6 +17,7 @@ export default function Home() {
         <Services />
       </SectionRevealBidirectional>
       <StickyServices />
+      <ServicesProgressBar />
       <ScrollVideoReveal />
       <PrintingServices />
       <CurtainRevealReviews />
