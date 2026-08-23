@@ -41,41 +41,12 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
 @media (max-width: 767px) { #services-intro { padding-bottom: 56px !important; } }
 
 /* LEARN ABOUT US — isolated professional interaction for the existing CTA only. */
-.digital-points-learn-button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  overflow: hidden;
-  isolation: isolate;
-  transform: translateZ(0);
-  transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 460ms cubic-bezier(0.22, 1, 0.36, 1), background-color 300ms ease;
-}
-.digital-points-learn-button::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(110deg, transparent 20%, rgba(8, 189, 184, 0.22) 48%, transparent 76%);
-  transform: translateX(-125%);
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.digital-points-learn-button:hover {
-  transform: translate3d(0, -4px, 0);
-  background-color: #171516;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(8, 189, 184, 0.16);
-}
+.digital-points-learn-button { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.7rem; overflow: hidden; isolation: isolate; transform: translateZ(0); transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 460ms cubic-bezier(0.22, 1, 0.36, 1), background-color 300ms ease; }
+.digital-points-learn-button::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, transparent 20%, rgba(8, 189, 184, 0.22) 48%, transparent 76%); transform: translateX(-125%); transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1); }
+.digital-points-learn-button:hover { transform: translate3d(0, -4px, 0); background-color: #171516; box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(8, 189, 184, 0.16); }
 .digital-points-learn-button:hover::before { transform: translateX(125%); }
-.digital-points-learn-button:focus-visible {
-  outline: 2px solid #08bdb8;
-  outline-offset: 4px;
-}
-.digital-points-learn-arrow {
-  display: inline-block;
-  transform: translate3d(0, 0, 0);
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
-}
+.digital-points-learn-button:focus-visible { outline: 2px solid #08bdb8; outline-offset: 4px; }
+.digital-points-learn-arrow { display: inline-block; transform: translate3d(0, 0, 0); transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1); }
 .digital-points-learn-button:hover .digital-points-learn-arrow { transform: translate3d(4px, -4px, 0); }
 .digital-points-learn-button:active { transform: translate3d(0, -1px, 0) scale(0.985); }
 
@@ -86,33 +57,37 @@ section[class*="h-[520px]"][class*="bg-ink-950"] > div[class*="bottom-0"][class*
 }
 
 /* HERO COLOR PALETTE ONLY — no layout, motion, timing, or structure changes. */
-section[class*="h-[520px]"][class*="bg-ink-950"] > div.absolute.inset-0[style] {
-  background-color: #063f42 !important;
-}
-section[class*="h-[520px]"][class*="bg-ink-950"] h1 {
-  color: #f3fffe !important;
-}
-section[class*="h-[520px]"][class*="bg-ink-950"] p {
-  color: rgba(243,255,254,0.88) !important;
-}
-section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"] {
-  background-color: #0eab8f !important;
-  color: #050b1f !important;
-}
+section[class*="h-[520px]"][class*="bg-ink-950"] > div.absolute.inset-0[style] { background-color: #063f42 !important; }
+section[class*="h-[520px]"][class*="bg-ink-950"] h1 { color: #f3fffe !important; }
+section[class*="h-[520px]"][class*="bg-ink-950"] p { color: rgba(243,255,254,0.88) !important; }
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"] { background-color: #0eab8f !important; color: #050b1f !important; }
 section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"]:hover,
-section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"]:active {
-  background-color: #050b1f !important;
-  color: #ffffff !important;
-}
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/portfolio"]:active { background-color: #050b1f !important; color: #ffffff !important; }
 section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/services"],
-section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"] {
-  background-color: transparent !important;
-  color: #ffffff !important;
-}
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"] { background-color: transparent !important; color: #ffffff !important; }
 section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/services"]:hover,
 section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/services"]:active,
 section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"]:hover,
-section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"]:active {
-  background-color: #0eab8f !important;
-  color: #050b1f !important;
+section[class*="h-[520px]"][class*="bg-ink-950"] a[href="/contact"]:active { background-color: #0eab8f !important; color: #050b1f !important; }
+
+/* TRUSTEES MARQUEE — isolated to the Trusted By section. */
+.trustees-marquee {
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
 }
+.trustees-track {
+  display: flex;
+  width: max-content;
+  animation: trustees-marquee-scroll 38s linear infinite;
+  will-change: transform;
+}
+.trustees-marquee:hover .trustees-track { animation-play-state: paused; }
+.trustees-group { display: flex; flex: 0 0 auto; align-items: center; gap: clamp(2.5rem, 6vw, 6rem); padding-right: clamp(2.5rem, 6vw, 6rem); }
+.trustee-logo { display: flex; flex: 0 0 auto; align-items: center; justify-content: center; width: clamp(130px, 16vw, 210px); height: clamp(72px, 8vw, 104px); padding: 0.75rem; }
+.trustee-logo img { display: block; width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); opacity: 0.72; transform: translateZ(0) scale(1); transition: filter 280ms ease, opacity 280ms ease, transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
+.trustee-logo:hover img { filter: grayscale(0); opacity: 1; transform: translateZ(0) scale(1.06); }
+@keyframes trustees-marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 639px) { .trustees-track { animation-duration: 30s; } .trustees-group { gap: 2.25rem; padding-right: 2.25rem; } .trustee-logo { width: 128px; height: 72px; } }
+@media (prefers-reduced-motion: reduce) { .trustees-track { animation: none; } }
