@@ -7,107 +7,62 @@ import {
   useTransform,
 } from "framer-motion";
 
-const videos = [
-  {
-    number: "01",
-    title: "Make the story move.",
-    src: "https://videos.pexels.com/video-files/7989439/7989439-hd_1920_1080_25fps.mp4",
-    poster:
-      "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?q=80&w=1600&auto=format&fit=crop",
-  },
-  {
-    number: "02",
-    title: "Give your ideas a voice.",
-    src: "https://videos.pexels.com/video-files/1350205/1350205-hd_1920_1080_30fps.mp4",
-    poster:
-      "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1600&auto=format&fit=crop",
-  },
-  {
-    number: "03",
-    title: "Turn attention into momentum.",
-    src: "https://videos.pexels.com/video-files/853988/853988-hd_1920_1080_25fps.mp4",
-    poster:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1600&auto=format&fit=crop",
-  },
-] as const;
+const video = {
+  src: "https://videos.pexels.com/video-files/7989439/7989439-hd_1920_1080_25fps.mp4",
+  poster:
+    "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?q=80&w=1600&auto=format&fit=crop",
+};
 
-function VideoStage({
-  video,
-  index,
-}: {
-  video: (typeof videos)[number];
-  index: number;
-}) {
-  const stageRef = useRef<HTMLElement>(null);
+export default function ScrollVideoReveal() {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const nearViewport = useInView(stageRef, { margin: "50% 0px" });
   const reducedMotion = useReducedMotion();
-  const isFollowUpStage = index > 0;
+  const inView = useInView(sectionRef, { margin: "25% 0px" });
+
   const { scrollYProgress } = useScroll({
-    target: stageRef,
+    target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  // Later productions enter as a scene rather than appearing as a hard cut.
-  // These values remain scroll-linked, so the transition reverses naturally.
+  // One continuous, bidirectional scroll journey: compact → full viewport → exit.
   const scale = useTransform(
     scrollYProgress,
-    [0, 0.24, 0.48, 0.72, 1],
-    isFollowUpStage
-      ? [0.68, 0.9, 1, 0.84, 0.46]
-      : [0.46, 0.78, 1, 0.82, 0.46],
-  );
-  const radius = useTransform(
-    scrollYProgress,
-    [0, 0.32, 0.52, 0.72, 1],
-    [32, 22, 0, 18, 32],
-  );
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.24, 0.76, 0.96, 1],
-    isFollowUpStage
-      ? [0, 0.38, 1, 1, 0.72, 0]
-      : [0.82, 1, 1, 1, 0.86, 0],
+    [0, 0.22, 0.5, 0.78, 1],
+    [0.62, 1, 1, 0.76, 0.5],
   );
   const y = useTransform(
     scrollYProgress,
-    [0, 0.12, 0.3, 0.72, 1],
-    isFollowUpStage ? [56, 20, 0, -8, -28] : [0, 0, 0, -6, -20],
+    [0, 0.22, 0.62, 1],
+    [36, 0, 0, -72],
   );
-  const overlayOpacity = useTransform(
+  const radius = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.55, 0.82, 1],
-    [0.28, 0.08, 0, 0.16, 0.58],
+    [0, 0.24, 0.5, 0.82, 1],
+    [32, 0, 0, 20, 32],
+  );
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.08, 0.78, 1],
+    [0.9, 1, 1, 0],
   );
 
   useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement || !nearViewport) return;
+    const element = videoRef.current;
+    if (!element || !inView) return;
 
-    const unsubscribe = scrollYProgress.on("change", (progress) => {
-      if (reducedMotion) {
-        void videoElement.play().catch(() => undefined);
-        return;
-      }
-
-      if (progress > 0.08 && progress < 0.88) {
-        void videoElement.play().catch(() => undefined);
-      } else {
-        videoElement.pause();
-      }
-    });
+    void element.play().catch(() => undefined);
 
     return () => {
-      unsubscribe();
-      videoElement.pause();
+      element.pause();
     };
-  }, [nearViewport, reducedMotion, scrollYProgress]);
+  }, [inView]);
 
   return (
     <section
-      ref={stageRef}
-      className="relative h-[300vh] w-full bg-[#07090a]"
-      aria-label={`Video reveal ${video.number}`}
+      ref={sectionRef}
+      id="scroll-video-reveal"
+      className="relative h-[260vh] w-full bg-[#07090a]"
+      aria-label="Digital Points video reveal"
     >
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden px-4 sm:px-8">
         <motion.div
@@ -125,61 +80,22 @@ function VideoStage({
             aria-hidden="true"
           />
 
-          {nearViewport && (
+          {inView && (
             <video
               ref={videoRef}
               src={video.src}
               poster={video.poster}
+              autoPlay
               muted
               loop
               playsInline
               preload="metadata"
               className="absolute inset-0 h-full w-full object-cover"
-              aria-label={video.title}
+              aria-label="Digital Points visual story"
             />
           )}
-
-          <motion.div
-            style={{ opacity: reducedMotion ? 0.08 : overlayOpacity }}
-            className="pointer-events-none absolute inset-0 bg-[#07090a]"
-            aria-hidden="true"
-          />
-
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-8 bg-gradient-to-t from-[#07090a]/80 via-[#07090a]/10 to-transparent px-6 pb-8 pt-24 text-white sm:px-10 sm:pb-10 lg:px-14 lg:pb-14">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-[#20cbab]">
-                {video.number} — Digital Points
-              </p>
-              <h2 className="font-display text-3xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
-                {video.title}
-              </h2>
-            </div>
-            <div className="hidden shrink-0 text-right sm:block">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-white">
-                Digital Points
-              </p>
-              <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/75">
-                Production {video.number}
-              </p>
-            </div>
-          </div>
         </motion.div>
       </div>
-    </section>
-  );
-}
-
-export default function ScrollVideoReveal() {
-  return (
-    <section
-      id="scroll-video-reveal"
-      className="relative w-full bg-[#07090a]"
-      aria-label="Digital Points visual stories"
-    >
-      <div className="pointer-events-none absolute left-0 top-0 z-20 h-px w-full bg-[#20cbab]/20" />
-      {videos.map((video, index) => (
-        <VideoStage key={video.number} video={video} index={index} />
-      ))}
     </section>
   );
 }
