@@ -109,10 +109,10 @@ export default function Hero() {
       onPointerLeave={handlePointerLeave}
       className="relative h-[520px] min-h-[520px] w-full touch-pan-y overflow-hidden bg-ink-950 sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]"
     >
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0, 199, 195, 0.74)" }} />
+      <div className="absolute inset-0" style={{ backgroundColor: "#050B0B" }} />
       <div
         className="absolute inset-0"
-        style={{ background: "radial-gradient(65% 58% at 50% 46%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 45%, rgba(0,94,105,0.1) 100%)" }}
+        style={{ background: "radial-gradient(65% 58% at 50% 46%, rgba(20,184,166,0.10) 0%, rgba(20,184,166,0.035) 45%, rgba(0,0,0,0) 100%)" }}
       />
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
