@@ -56,10 +56,6 @@ export default function Hero() {
   return (
     <section className="relative h-[520px] min-h-[520px] w-full overflow-hidden bg-ink-950 sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]">
       <div className="absolute inset-0" style={{ backgroundColor: "#050B0B" }} />
-      <div
-        className="absolute inset-0"
-        style={{ background: "radial-gradient(65% 58% at 50% 46%, rgba(20,184,166,0.10) 0%, rgba(20,184,166,0.035) 45%, rgba(0,0,0,0) 100%)" }}
-      />
 
       <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8">
         <h1 className="font-display text-[1.55rem] font-semibold leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
