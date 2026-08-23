@@ -4,6 +4,7 @@ import SectionRevealBidirectional from "../components/SectionRevealBidirectional
 import StickyServices from "../components/StickyServices";
 import ScrollVideoReveal from "../components/ScrollVideoReveal";
 import PrintingServices from "../components/PrintingServices";
+import CurtainRevealReviews from "../components/CurtainRevealReviews";
 import Partners from "../components/Partners";
 import FinalCTA from "../components/FinalCTA";
 
@@ -17,6 +18,7 @@ export default function Home() {
       <StickyServices />
       <ScrollVideoReveal />
       <PrintingServices />
+      <CurtainRevealReviews />
       <Partners />
       <FinalCTA />
     </>
