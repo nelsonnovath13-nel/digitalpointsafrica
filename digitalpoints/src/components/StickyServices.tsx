@@ -219,12 +219,9 @@ export default function StickyServices() {
           <div
             ref={wipeRef}
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] border-x border-white/35 will-change-transform"
+            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] will-change-transform"
             style={{ transform: "translate3d(120vw, 0, 0)", opacity: 0 }}
-          >
-            <div className="absolute inset-y-0 left-0 w-px bg-white/70" />
-            <div className="absolute inset-y-0 right-0 w-px bg-white/50" />
-          </div>
+          />
 
           <div className="relative z-20 flex h-full items-end px-6 pb-16 sm:px-10 sm:pb-20 lg:px-16 lg:pb-20">
             <div className="w-full max-w-6xl">
