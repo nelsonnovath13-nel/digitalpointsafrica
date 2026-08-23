@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-
-const partners = ["UNICEF", "ELCTD", "Kilimanjaro Union", "Moshi Chamber", "Serengeti Boma", "Twiga Ventures", "Arusha NGO Forum", "Kibo Ventures"];
+import { trustees } from "../data/trustees";
 
 const stats = [
   { value: "25+", label: "Clients" },
@@ -11,7 +10,7 @@ const stats = [
 
 export default function Partners() {
   return (
-    <section className="bg-dot-grid relative bg-cream-50 py-24 sm:py-28">
+    <section className="bg-dot-grid relative overflow-hidden bg-cream-50 py-24 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-point-600">
           Trusted By
@@ -19,38 +18,37 @@ export default function Partners() {
         <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-4xl">
           Organizations that grew with us
         </h2>
+      </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {partners.map((p, i) => (
-            <motion.div
-              key={p}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="flex h-20 items-center justify-center rounded-xl border border-ink-950/5 bg-white px-4 text-center text-sm font-medium text-ink-950/40 shadow-sm grayscale transition hover:text-point-700 hover:grayscale-0"
-            >
-              {p}
-            </motion.div>
+      <div className="trustees-marquee mt-12" aria-label="Organizations that trust Digital Points Africa">
+        <div className="trustees-track">
+          {[0, 1].map((set) => (
+            <div className="trustees-group" key={set} aria-hidden={set === 1}>
+              {trustees.map((trustee) => (
+                <div className="trustee-logo" key={`${set}-${trustee.name}`}>
+                  <img src={trustee.src} alt={set === 0 ? trustee.name : ""} loading="lazy" decoding="async" />
+                </div>
+              ))}
+            </div>
           ))}
         </div>
+      </div>
 
-        <div className="mt-16 grid grid-cols-2 gap-8 border-t border-ink-950/10 pt-12 sm:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-            >
-              <p className="font-display text-4xl font-semibold text-point-600 sm:text-5xl">
-                {s.value}
-              </p>
-              <p className="mt-2 text-sm text-ink-950/50">{s.label}</p>
-            </motion.div>
-          ))}
-        </div>
+      <div className="mx-auto mt-16 grid max-w-6xl grid-cols-2 gap-8 border-t border-ink-950/10 px-6 pt-12 sm:grid-cols-4">
+        {stats.map((s, i) => (
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.08 }}
+          >
+            <p className="font-display text-4xl font-semibold text-point-600 sm:text-5xl">
+              {s.value}
+            </p>
+            <p className="mt-2 text-sm text-ink-950/50">{s.label}</p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
