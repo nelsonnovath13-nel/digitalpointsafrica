@@ -41,17 +41,17 @@ const services = [
 ] as const;
 
 const SERVICE_COUNT = services.length;
-const DESKTOP_MEDIA = "(min-width: 768px)";
-const DESKTOP_LERP = 0.08;
-const DESKTOP_SCROLL_HEIGHT_VH = 650;
-const MOBILE_CARD_SCROLL_HEIGHT_VH = 160;
+const SCROLL_HEIGHT_VH = 520;
+const ENTRANCE_PORTION = 0.18;
+const TRANSITION_PORTION = 1 - ENTRANCE_PORTION;
+const LERP = 0.085;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-function easeOutExpo(value: number) {
-  return value >= 1 ? 1 : 1 - Math.pow(2, -10 * value);
+function easeOutCubic(value: number) {
+  return 1 - Math.pow(1 - value, 3);
 }
 
 function useReducedMotion() {
@@ -70,427 +70,201 @@ function useReducedMotion() {
 
 export default function StickyServices() {
   const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const entranceRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const wipeRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
-  const mobileFrameRef = useRef<number | null>(null);
-  const entranceTimerRef = useRef<number | null>(null);
-  const lastProgressRef = useRef(-1);
-  const desktopTargetRef = useRef(0);
-  const desktopCurrentRef = useRef(0);
-  const [desktop, setDesktop] = useState(false);
-  const [entranceSeen, setEntranceSeen] = useState(false);
-  const [entranceVisible, setEntranceVisible] = useState(false);
-  const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
+  const targetProgressRef = useRef(0);
+  const currentProgressRef = useRef(0);
+  const activeIndexRef = useRef(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const media = window.matchMedia(DESKTOP_MEDIA);
-    const update = () => setDesktop(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  useEffect(() => {
-    const target = entranceRef.current;
-    if (!target || entranceSeen) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setEntranceSeen(true);
-        setEntranceVisible(true);
-        entranceTimerRef.current = window.setTimeout(
-          () => setEntranceVisible(false),
-          1350,
-        );
-        observer.disconnect();
-      },
-      { threshold: 0.18 },
-    );
-
-    observer.observe(target);
-    return () => {
-      observer.disconnect();
-      if (entranceTimerRef.current !== null) {
-        window.clearTimeout(entranceTimerRef.current);
-      }
-    };
-  }, [entranceSeen]);
-
-  useEffect(() => {
-    if (desktop) return;
-
     const section = sectionRef.current;
-    if (!section) return;
-
-    const wrappers = Array.from(
-      section.querySelectorAll<HTMLElement>("[data-mobile-service-wrapper]"),
-    );
-    if (!wrappers.length) return;
-
-    let lastActiveIndex = -1;
-    let resizeFrame: number | null = null;
-
-    const updateMobileArrival = () => {
-      const scrollY = window.scrollY;
-      let activeIndex = 0;
-
-      wrappers.forEach((wrapper, index) => {
-        const card = wrapper.querySelector<HTMLElement>(
-          "[data-mobile-service-index]",
-        );
-        const curtain = wrapper.querySelector<HTMLElement>(
-          ".mobile-service-curtain",
-        );
-        const content = wrapper.querySelector<HTMLElement>(
-          ".mobile-service-content",
-        );
-        if (!card) return;
-
-        const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
-        const stickyDistance = Math.max(
-          wrapper.offsetHeight - card.offsetHeight,
-          1,
-        );
-        const localProgress = clamp(
-          (scrollY - wrapperTop) / stickyDistance,
-          0,
-          1,
-        );
-
-        if (scrollY >= wrapperTop - 1) {
-          activeIndex = index;
-        }
-
-        if (curtain && index > 0 && !reducedMotion) {
-          const revealProgress = easeOutExpo(
-            clamp((localProgress - 0.72) / 0.28, 0, 1),
-          );
-          curtain.style.setProperty(
-            "--mobile-curtain-cover",
-            `${(1 - revealProgress) * 100}%`,
-          );
-        }
-
-        if (content && !reducedMotion) {
-          const settleProgress = easeOutExpo(
-            clamp((localProgress - 0.72) / 0.28, 0, 1),
-          );
-          const translateY = (1 - settleProgress) * 8;
-          const scale = 0.985 + settleProgress * 0.015;
-          content.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
-          content.style.opacity = `${0.92 + settleProgress * 0.08}`;
-        }
-      });
-
-      if (activeIndex !== lastActiveIndex) {
-        lastActiveIndex = activeIndex;
-        setMobileActiveIndex(activeIndex);
-      }
-    };
-
-    const requestUpdate = () => {
-      if (mobileFrameRef.current !== null) return;
-      mobileFrameRef.current = window.requestAnimationFrame(() => {
-        mobileFrameRef.current = null;
-        updateMobileArrival();
-      });
-    };
-
-    const onScroll = () => requestUpdate();
-    const onResize = () => {
-      if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
-      resizeFrame = window.requestAnimationFrame(() => {
-        resizeFrame = null;
-        requestUpdate();
-      });
-    };
-
-    updateMobileArrival();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (mobileFrameRef.current !== null) {
-        window.cancelAnimationFrame(mobileFrameRef.current);
-      }
-      if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
-      mobileFrameRef.current = null;
-    };
-  }, [desktop, reducedMotion]);
-
-  useEffect(() => {
-    if (!desktop) return;
-
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
+    const stage = stageRef.current;
+    const wipe = wipeRef.current;
+    if (!section || !stage || !wipe) return;
 
     const setTargetFromScroll = () => {
       const rect = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
-      desktopTargetRef.current = clamp(-rect.top / travel, 0, 1);
+      targetProgressRef.current = clamp(-rect.top / travel, 0, 1);
+    };
+
+    const setImageReveal = (transitionProgress: number) => {
+      section.querySelectorAll<HTMLElement>("[data-service-image]").forEach((image) => {
+        const index = Number(image.dataset.serviceImage);
+        if (index === 0) return;
+        const reveal = clamp(transitionProgress - (index - 1), 0, 1);
+        image.style.clipPath = `inset(0 ${100 - reveal * 100}% 0 0)`;
+      });
     };
 
     const render = () => {
-      const target = desktopTargetRef.current;
-      const current = desktopCurrentRef.current;
-      const next = reducedMotion
-        ? target
-        : current + (target - current) * DESKTOP_LERP;
-      const settled = Math.abs(target - next) < 0.0001;
-      desktopCurrentRef.current = settled ? target : next;
+      const target = targetProgressRef.current;
+      const current = currentProgressRef.current;
+      const next = reducedMotion ? target : current + (target - current) * LERP;
+      currentProgressRef.current = Math.abs(target - next) < 0.0001 ? target : next;
 
-      const progress = desktopCurrentRef.current;
-      const travelProgress = progress * (SERVICE_COUNT - 1);
-      const basePosition = travelProgress * 100;
-      track.style.transform = `translate3d(${-basePosition}vw, 0, 0)`;
+      const progress = currentProgressRef.current;
+      const entranceRaw = clamp(progress / ENTRANCE_PORTION, 0, 1);
+      const entrance = reducedMotion ? entranceRaw : easeOutCubic(entranceRaw);
+      const scale = 0.9 + entrance * 0.1;
+      const translateY = (1 - entrance) * 8;
+      const radius = Math.max(0, 28 * (1 - entrance));
 
-      track
-        .querySelectorAll<HTMLElement>("[data-service-image]")
-        .forEach((image) => {
-          const index = Number(image.dataset.serviceImage);
-          const distance = Math.abs(travelProgress - index);
-          const settle = 1 - clamp(distance, 0, 1);
-          const scale = 1.045 - settle * 0.045;
-          image.style.transform = `scale(${scale})`;
-        });
+      stage.style.transform = `translate3d(0, ${translateY}vh, 0) scale(${scale})`;
+      stage.style.borderRadius = `${radius}px`;
 
-      track
-        .querySelectorAll<HTMLElement>(".service-curtain")
-        .forEach((curtain) => {
-          const index = Number(curtain.dataset.serviceIndex);
-          const localProgress = travelProgress - index;
-          const reveal = easeOutExpo(
-            clamp((localProgress + 0.04) / 0.96, 0, 1),
+      const transitionProgress = clamp(
+        ((progress - ENTRANCE_PORTION) / TRANSITION_PORTION) * (SERVICE_COUNT - 1),
+        0,
+        SERVICE_COUNT - 1,
+      );
+
+      setImageReveal(transitionProgress);
+
+      const transitionBase = Math.floor(transitionProgress);
+      const localProgress = transitionProgress - transitionBase;
+      const hasActiveTransition = transitionBase < SERVICE_COUNT - 1 && progress > ENTRANCE_PORTION;
+
+      if (hasActiveTransition && !reducedMotion) {
+        const sweep = clamp(localProgress, 0, 1);
+        const paneProgress = easeOutCubic(sweep);
+        const viewportWidth = window.innerWidth;
+        const paneWidth = Math.max(viewportWidth * 0.42, 320);
+        const startX = -paneWidth * 1.25;
+        const endX = viewportWidth + paneWidth * 0.25;
+        const x = startX + (endX - startX) * paneProgress;
+        wipe.style.transform = `translate3d(${x}px, 0, 0)`;
+        wipe.style.opacity = "1";
+      } else {
+        wipe.style.opacity = "0";
+        wipe.style.transform = "translate3d(120vw, 0, 0)";
+      }
+
+      // Content stays on the current service while the glass pane is moving.
+      // It changes only when that sweep has completely exited the viewport.
+      const completedIndex = reducedMotion
+        ? Math.round(transitionProgress)
+        : Math.min(
+            SERVICE_COUNT - 1,
+            Math.floor(transitionProgress + 0.005),
           );
-          curtain.style.setProperty(
-            "--curtain-cover",
-            `${(1 - reveal) * 100}%`,
-          );
-        });
 
-      if (Math.abs(progress - lastProgressRef.current) >= 0.0005) {
-        lastProgressRef.current = progress;
+      if (completedIndex !== activeIndexRef.current) {
+        activeIndexRef.current = completedIndex;
+        setActiveIndex(completedIndex);
       }
 
       frameRef.current = window.requestAnimationFrame(render);
     };
 
     setTargetFromScroll();
-    desktopCurrentRef.current = reducedMotion
-      ? desktopTargetRef.current
-      : desktopCurrentRef.current;
-
-    const onScroll = () => {
-      setTargetFromScroll();
-    };
-
-    const onResize = () => {
-      setTargetFromScroll();
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("scroll", setTargetFromScroll, { passive: true });
+    window.addEventListener("resize", setTargetFromScroll);
     frameRef.current = window.requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", setTargetFromScroll);
+      window.removeEventListener("resize", setTargetFromScroll);
       if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
-      lastProgressRef.current = -1;
     };
-  }, [desktop, reducedMotion]);
+  }, [reducedMotion]);
+
+  const service = services[activeIndex];
 
   return (
     <section
       ref={sectionRef}
       id="homepage-services"
       className="relative w-full bg-[#07090a]"
-      style={desktop ? { height: `${DESKTOP_SCROLL_HEIGHT_VH}vh` } : undefined}
+      style={{ height: `${SCROLL_HEIGHT_VH}vh` }}
       aria-label="Digital Points services"
     >
-      <div
-        ref={entranceRef}
-        className="pointer-events-none absolute inset-x-0 top-0 z-40 h-screen"
-        aria-hidden="true"
-      >
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden bg-[#07090a]">
         <div
-          className={`absolute left-6 top-1/2 -translate-y-1/2 sm:left-10 lg:left-16 ${
-            entranceVisible ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-200`}
+          ref={stageRef}
+          className="relative h-[92svh] w-[94vw] overflow-hidden bg-[#07090a] shadow-[0_30px_80px_rgba(0,0,0,0.35)] will-change-transform"
+          style={{ transformOrigin: "center center" }}
         >
+          {services.map((item, index) => (
+            <img
+              key={item.number}
+              src={item.image}
+              alt=""
+              aria-hidden="true"
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              data-service-image={index}
+              className="absolute inset-0 h-full w-full object-cover will-change-[clip-path,transform]"
+              style={{
+                zIndex: index,
+                clipPath: index === 0 ? "inset(0)" : "inset(0 100% 0 0)",
+              }}
+            />
+          ))}
+
+          <div className="absolute inset-0 z-10 bg-[#07090a]/55" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#07090a]/90 via-[#07090a]/55 to-transparent" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#07090a]/80 via-transparent to-[#07090a]/20" />
+
           <div
-            className={`overflow-hidden text-xs font-semibold uppercase tracking-[0.28em] text-[#20cbab] transition-transform duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              entranceSeen ? "translate-y-0" : "translate-y-full"
-            }`}
+            ref={wipeRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] border-x border-white/35 bg-white/15 shadow-[0_0_45px_rgba(255,255,255,0.14)] backdrop-blur-[20px] will-change-transform"
+            style={{ transform: "translate3d(120vw, 0, 0)", opacity: 0 }}
           >
-            <span className="inline-block transition-[font-weight,letter-spacing] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
-              Our
-            </span>{" "}
-            <span className="inline-block transition-[font-weight,letter-spacing] delay-100 duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
-              Services
+            <div className="absolute inset-y-0 left-0 w-px bg-white/70" />
+            <div className="absolute inset-y-0 right-0 w-px bg-white/50" />
+          </div>
+
+          <div className="relative z-20 flex h-full items-end px-6 pb-16 sm:px-10 sm:pb-20 lg:px-16 lg:pb-20">
+            <div className="w-full max-w-6xl">
+              <div className="max-w-4xl">
+                <p className="mb-5 text-xs font-medium uppercase tracking-[0.22em] text-[#20cbab] sm:text-sm">
+                  {service.number} — {service.name}
+                </p>
+                <div key={`content-${service.number}`} className="animate-[service-content-in_280ms_ease-out]">
+                  <h2
+                    id={`digital-points-service-${service.number}`}
+                    className="font-display text-[clamp(3.1rem,8vw,8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-white"
+                  >
+                    {service.name}
+                  </h2>
+                  <p className="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+                    {service.description}
+                  </p>
+                  <Link
+                    to={service.href}
+                    className="mt-8 inline-flex items-center gap-3 rounded-lg border-[1.5px] border-white/40 bg-white/[0.08] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-[#14b8a6] hover:bg-[#14b8a6] hover:text-white hover:shadow-[0_6px_16px_rgba(20,184,166,0.35)] focus-visible:-translate-y-0.5 focus-visible:border-[#14b8a6] focus-visible:bg-[#14b8a6] focus-visible:text-white focus-visible:shadow-[0_6px_16px_rgba(20,184,166,0.35)] focus-visible:outline-none"
+                  >
+                    Explore {service.name}
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute bottom-7 right-6 z-40 flex items-center gap-3 sm:right-10">
+            <span className="text-sm font-semibold tabular-nums text-white">
+              {service.number} <span className="text-white/30">/ 04</span>
             </span>
           </div>
-          <div
-            className={`mt-4 h-px w-32 bg-[#20cbab] transition-transform duration-[900ms] delay-150 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              entranceSeen ? "origin-left scale-x-100" : "origin-left scale-x-0"
-            }`}
-          />
         </div>
       </div>
 
-      {desktop ? (
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#07090a]">
-          <div
-            ref={trackRef}
-            className="flex h-full w-[400vw] will-change-transform"
-          >
-            {services.map((service, index) => (
-              <article
-                key={service.number}
-                className="relative h-screen w-screen shrink-0 overflow-hidden"
-                aria-labelledby={`digital-points-service-${service.number}`}
-              >
-                <img
-                  src={service.image}
-                  alt=""
-                  aria-hidden="true"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                  data-service-image={index}
-                  className="absolute inset-0 h-full w-full object-cover will-change-transform"
-                />
-
-                <div className="absolute inset-0 bg-[#07090a]/55" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#07090a]/90 via-[#07090a]/55 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07090a]/80 via-transparent to-[#07090a]/20" />
-
-                {index > 0 && !reducedMotion && (
-                  <div
-                    aria-hidden="true"
-                    data-service-index={index}
-                    className="service-curtain absolute inset-0 z-20 bg-[#0eab8f]"
-                    style={{ clipPath: "inset(0 var(--curtain-cover, 0%) 0 0)" }}
-                  />
-                )}
-
-                <div className="relative z-10 flex h-full items-end px-7 pb-20 sm:px-12 sm:pb-24 lg:px-16 lg:pb-20">
-                  <div className="w-full max-w-6xl">
-                    <div className="max-w-4xl">
-                      <p className="mb-5 text-xs font-medium uppercase tracking-[0.22em] text-[#20cbab] sm:text-sm">
-                        {service.number} — {service.name}
-                      </p>
-                      <h2
-                        id={`digital-points-service-${service.number}`}
-                        className="font-display text-[clamp(3.2rem,8vw,8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-white"
-                      >
-                        {service.name}
-                      </h2>
-                      <p className="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
-                        {service.description}
-                      </p>
-                      <Link
-                        to={service.href}
-                        className="mt-8 inline-flex items-center gap-3 bg-[#201e1f] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#20cbab] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#20cbab] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
-                      >
-                        Explore {service.name}
-                        <span aria-hidden="true">↗</span>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-7 right-6 z-30 flex items-center gap-3 sm:right-10">
-                  <span className="hidden text-[10px] font-medium uppercase tracking-[0.18em] text-white/45 sm:inline">
-                    Services
-                  </span>
-                  <span className="text-sm font-semibold tabular-nums text-white">
-                    {service.number} <span className="text-white/30">/ 04</span>
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="w-full">
-          {services.map((service, index) => (
-            <div
-              key={service.number}
-              className="relative w-full"
-              style={{ height: `${MOBILE_CARD_SCROLL_HEIGHT_VH}vh` }}
-              data-mobile-service-wrapper
-            >
-              <article
-                className="sticky top-0 flex h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#07090a]"
-                data-mobile-service-index={index}
-                aria-labelledby={`mobile-digital-points-service-${service.number}`}
-              >
-                <img
-                  src={service.image}
-                  alt=""
-                  aria-hidden="true"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-[#07090a]/58" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#07090a]/90 via-[#07090a]/45 to-transparent" />
-
-                {index > 0 && !reducedMotion && (
-                  <div
-                    aria-hidden="true"
-                    className="mobile-service-curtain absolute inset-0 z-20 bg-[#0eab8f]"
-                    style={{ clipPath: "inset(0 0 0 var(--mobile-curtain-cover, 0%))" }}
-                  />
-                )}
-
-                <div
-                  className="mobile-service-content relative z-10 flex h-full w-full items-end px-6 pb-16 sm:px-10 sm:pb-20"
-                  style={{ transformOrigin: "center bottom", willChange: "transform, opacity" }}
-                >
-                  <div className="w-full max-w-2xl">
-                    <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[#20cbab]">
-                      {service.number} — {service.name}
-                    </p>
-                    <h2
-                      id={`mobile-digital-points-service-${service.number}`}
-                      className="font-display text-[clamp(2.8rem,13vw,5rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-white"
-                    >
-                      {service.name}
-                    </h2>
-                    <p className="mt-6 max-w-xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
-                      {service.description}
-                    </p>
-                    <Link
-                      to={service.href}
-                      className="mt-7 inline-flex items-center gap-3 bg-[#201e1f] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#20cbab] hover:text-[#07090a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#20cbab] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090a]"
-                    >
-                      Explore {service.name}
-                      <span aria-hidden="true">↗</span>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-6 right-5 z-30 flex items-center gap-3 text-sm font-semibold tabular-nums text-white sm:right-8">
-                  <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
-                    {mobileActiveIndex + 1}/04
-                  </span>
-                  <span>
-                    {service.number} <span className="text-white/30">/ 04</span>
-                  </span>
-                </div>
-              </article>
-            </div>
-          ))}
-        </div>
-      )}
+      <style>{`
+        @keyframes service-content-in {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          #homepage-services * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+      `}</style>
     </section>
   );
 }
