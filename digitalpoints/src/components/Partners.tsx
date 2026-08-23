@@ -1,6 +1,16 @@
 import { motion } from "framer-motion";
 
-const partners = ["UNICEF", "ELCTD", "Kilimanjaro Union", "Moshi Chamber", "Serengeti Boma", "Twiga Ventures", "Arusha NGO Forum", "Kibo Ventures"];
+const partners = [
+  { name: "Diakonia", x: "0%", y: "0%" },
+  { name: "ECSA Health Community", x: "50%", y: "0%" },
+  { name: "Double A Transfer & Gateway", x: "100%", y: "0%" },
+  { name: "UNICEF", x: "0%", y: "50%" },
+  { name: "ECOWAS", x: "50%", y: "50%" },
+  { name: "USAID", x: "100%", y: "50%" },
+  { name: "Hypermed Health Care", x: "0%", y: "100%" },
+  { name: "YWAM", x: "50%", y: "100%" },
+  { name: "World's Children", x: "100%", y: "100%" },
+];
 
 const stats = [
   { value: "25+", label: "Clients" },
@@ -20,17 +30,27 @@ export default function Partners() {
           Organizations that grew with us
         </h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {partners.map((p, i) => (
+        <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+          {partners.map((partner, i) => (
             <motion.div
-              key={p}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              key={partner.name}
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="flex h-20 items-center justify-center rounded-xl border border-ink-950/5 bg-white px-4 text-center text-sm font-medium text-ink-950/40 shadow-sm grayscale transition hover:text-point-700 hover:grayscale-0"
+              className="flex h-24 items-center justify-center rounded-xl border border-ink-950/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              title={partner.name}
             >
-              {p}
+              <span className="sr-only">{partner.name}</span>
+              <div
+                aria-hidden="true"
+                className="h-full w-full bg-no-repeat"
+                style={{
+                  backgroundImage: "url('/trustees-sprite.webp')",
+                  backgroundSize: "300% 300%",
+                  backgroundPosition: `${partner.x} ${partner.y}`,
+                }}
+              />
             </motion.div>
           ))}
         </div>
