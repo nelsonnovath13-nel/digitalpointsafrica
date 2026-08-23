@@ -31,11 +31,13 @@ export default function CurtainRevealReviews() {
     offset: ["start end", "end start"],
   });
 
-  const leftX = useTransform(scrollYProgress, [0.12, 0.44, 0.7], ["0%", "-38%", "-110%"]);
-  const rightX = useTransform(scrollYProgress, [0.12, 0.44, 0.7], ["0%", "38%", "110%"]);
-  const curtainOpacity = useTransform(scrollYProgress, [0.68, 0.78], [1, 0]);
-  const reviewsOpacity = useTransform(scrollYProgress, [0.48, 0.66, 0.78], [0, 0.9, 1]);
-  const reviewsY = useTransform(scrollYProgress, [0.48, 0.66], [24, 0]);
+  // Keep the existing scroll-linked curtain behaviour, but move the cards fully clear
+  // before the reviews become readable so the two layers never visually fight each other.
+  const leftX = useTransform(scrollYProgress, [0.12, 0.5, 0.72], ["0%", "-55%", "-115%"]);
+  const rightX = useTransform(scrollYProgress, [0.12, 0.5, 0.72], ["0%", "55%", "115%"]);
+  const curtainOpacity = useTransform(scrollYProgress, [0.72, 0.82], [1, 0]);
+  const reviewsOpacity = useTransform(scrollYProgress, [0.42, 0.62, 0.74], [0, 0.8, 1]);
+  const reviewsY = useTransform(scrollYProgress, [0.42, 0.62], [24, 0]);
 
   return (
     <section
@@ -43,7 +45,8 @@ export default function CurtainRevealReviews() {
       className="relative h-[210vh] overflow-clip bg-cream-50 sm:h-[190vh]"
       aria-label="Customer reviews"
     >
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+      {/* One sticky stage: reviews and both curtain cards share the exact same area. */}
+      <div className="sticky top-0 h-[100svh] min-h-[520px] overflow-hidden">
         <motion.div
           style={{ opacity: reviewsOpacity, y: reviewsY }}
           className="pointer-events-auto absolute inset-0 z-0 flex items-center justify-center px-4 sm:px-6"
@@ -90,30 +93,31 @@ export default function CurtainRevealReviews() {
           </div>
         </motion.div>
 
+        {/* Curtain layer sits over the reviews and occupies the full sticky stage. */}
         <motion.div
           style={reducedMotion ? undefined : { x: leftX, opacity: curtainOpacity }}
-          className="absolute left-0 top-1/2 z-10 h-[52vh] w-1/2 -translate-y-1/2 overflow-hidden rounded-r-3xl will-change-transform sm:h-[74vh]"
+          className="absolute inset-y-0 left-0 z-10 w-1/2 overflow-hidden rounded-r-3xl will-change-transform"
         >
           {/* Unsplash - free license, badilisha na picha halisi ya mteja ukipenda baadaye */}
           <img
             src="https://images.unsplash.com/photo-1529519195486-16945f0fb37f?fm=jpg&q=80&w=1200&auto=format&fit=crop"
             alt="Customer service experience"
             loading="lazy"
-            className="h-full w-full object-cover object-[center_42%] sm:object-center"
+            className="block h-full w-full object-cover object-[center_42%] sm:object-center"
           />
           <div className="absolute inset-0 bg-ink-950/10" />
         </motion.div>
 
         <motion.div
           style={reducedMotion ? undefined : { x: rightX, opacity: curtainOpacity }}
-          className="absolute right-0 top-1/2 z-10 h-[52vh] w-1/2 -translate-y-1/2 overflow-hidden rounded-l-3xl will-change-transform sm:h-[74vh]"
+          className="absolute inset-y-0 right-0 z-10 w-1/2 overflow-hidden rounded-l-3xl will-change-transform"
         >
           {/* Unsplash - free license, badilisha na picha halisi ya mteja ukipenda baadaye */}
           <img
             src="https://images.unsplash.com/photo-1606495186270-395860907235?fm=jpg&q=80&w=1200&auto=format&fit=crop"
             alt="Customer team experience"
             loading="lazy"
-            className="h-full w-full object-cover object-[center_38%] sm:object-center"
+            className="block h-full w-full object-cover object-[center_38%] sm:object-center"
           />
           <div className="absolute inset-0 bg-ink-950/10" />
         </motion.div>
