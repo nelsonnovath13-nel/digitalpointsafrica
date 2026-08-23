@@ -44,6 +44,8 @@ const SERVICE_COUNT = services.length;
 const SCROLL_HEIGHT_VH = 520;
 const ENTRANCE_PORTION = 0.18;
 const TRANSITION_PORTION = 1 - ENTRANCE_PORTION;
+const WIPE_PORTION = 0.88;
+const CONTENT_SETTLE_PORTION = 0.92;
 const LERP = 0.085;
 
 function clamp(value: number, min: number, max: number) {
@@ -95,7 +97,11 @@ export default function StickyServices() {
       section.querySelectorAll<HTMLElement>("[data-service-image]").forEach((image) => {
         const index = Number(image.dataset.serviceImage);
         if (index === 0) return;
-        const reveal = clamp(transitionProgress - (index - 1), 0, 1);
+        const reveal = clamp(
+          (transitionProgress - (index - 1)) / WIPE_PORTION,
+          0,
+          1,
+        );
         image.style.clipPath = `inset(0 ${100 - reveal * 100}% 0 0)`;
       });
     };
@@ -128,9 +134,8 @@ export default function StickyServices() {
       const localProgress = transitionProgress - transitionBase;
       const hasActiveTransition = transitionBase < SERVICE_COUNT - 1 && progress > ENTRANCE_PORTION;
 
-      if (hasActiveTransition && !reducedMotion) {
-        const sweep = clamp(localProgress, 0, 1);
-        const paneProgress = easeOutCubic(sweep);
+      if (hasActiveTransition && !reducedMotion && localProgress < WIPE_PORTION) {
+        const paneProgress = easeOutCubic(localProgress / WIPE_PORTION);
         const viewportWidth = window.innerWidth;
         const paneWidth = Math.max(viewportWidth * 0.42, 320);
         const startX = -paneWidth * 1.25;
@@ -143,14 +148,15 @@ export default function StickyServices() {
         wipe.style.transform = "translate3d(120vw, 0, 0)";
       }
 
-      // Content stays on the current service while the glass pane is moving.
-      // It changes only when that sweep has completely exited the viewport.
-      const completedIndex = reducedMotion
-        ? Math.round(transitionProgress)
-        : Math.min(
-            SERVICE_COUNT - 1,
-            Math.floor(transitionProgress + 0.005),
-          );
+      // The image is revealed during the sweep, but the service copy waits until
+      // the glass pane has completely exited. The final small interval lets the
+      // new copy appear cleanly before the next scroll-driven transition starts.
+      let completedIndex = transitionBase;
+      if (transitionBase < SERVICE_COUNT - 1 && localProgress >= CONTENT_SETTLE_PORTION) {
+        completedIndex = transitionBase + 1;
+      }
+      if (transitionProgress >= SERVICE_COUNT - 1) completedIndex = SERVICE_COUNT - 1;
+      if (reducedMotion) completedIndex = Math.round(transitionProgress);
 
       if (completedIndex !== activeIndexRef.current) {
         activeIndexRef.current = completedIndex;
