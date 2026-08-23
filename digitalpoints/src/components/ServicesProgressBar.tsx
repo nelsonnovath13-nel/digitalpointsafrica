@@ -1,17 +1,12 @@
 import { useEffect, useRef } from "react";
 
-const DESKTOP_MEDIA = "(min-width: 768px)";
-// 650vh → 400vh is a 38.5% reduction in desktop scroll distance.
-const OPTIMIZED_DESKTOP_SCROLL_HEIGHT = "400vh";
-
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
 /**
- * Keeps the existing service transition untouched while:
- * - shortening only the desktop scroll travel into/through the service journey
- * - showing an independent, scroll-linked progress indicator
+ * Independent, scroll-linked progress indicator for the existing services journey.
+ * It observes the section but never changes its height or transition logic.
  */
 export default function ServicesProgressBar() {
   const barRef = useRef<HTMLDivElement>(null);
@@ -23,16 +18,6 @@ export default function ServicesProgressBar() {
     const bar = barRef.current;
     const fill = fillRef.current;
     if (!section || !bar || !fill) return;
-
-    const media = window.matchMedia(DESKTOP_MEDIA);
-
-    const applyScrollHeight = () => {
-      if (media.matches) {
-        section.style.height = OPTIMIZED_DESKTOP_SCROLL_HEIGHT;
-      } else {
-        section.style.removeProperty("height");
-      }
-    };
 
     const update = () => {
       frameRef.current = null;
@@ -51,26 +36,14 @@ export default function ServicesProgressBar() {
       frameRef.current = window.requestAnimationFrame(update);
     };
 
-    const onChange = () => {
-      // Run after React's responsive update so the optimized height remains applied.
-      window.requestAnimationFrame(() => {
-        applyScrollHeight();
-        requestUpdate();
-      });
-    };
-
-    applyScrollHeight();
     update();
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate, { passive: true });
-    media.addEventListener("change", onChange);
 
     return () => {
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
-      media.removeEventListener("change", onChange);
       if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
-      section.style.removeProperty("height");
     };
   }, []);
 
