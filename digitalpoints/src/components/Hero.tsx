@@ -85,7 +85,8 @@ export default function Hero() {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-b from-transparent to-[#f7f3ea] sm:h-24"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 sm:h-40"
+        style={{ background: "linear-gradient(to bottom, rgba(247,243,234,0) 0%, rgba(247,243,234,0.16) 35%, rgba(247,243,234,0.58) 68%, #f7f3ea 100%)" }}
       />
     </section>
   );
