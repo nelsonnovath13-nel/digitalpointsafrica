@@ -73,14 +73,14 @@ export default function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
-      <div className={`flex h-[68px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
+      <div className={`flex h-[60px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
-        <nav className="hidden items-center rounded-[22px] px-5 py-2.5 lg:flex" aria-label="Main navigation">
+        <nav className="hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
           {links.map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : scrolled ? "#ffffff" : "#ffffff";
             const shouldGlow = isHovered || active;
-            const commonClass = "group relative whitespace-nowrap px-2.5 py-2 font-poppins text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
+            const commonClass = "group relative whitespace-nowrap px-2.5 py-1.5 font-poppins text-[15px] font-medium tracking-[0.01em] transition-colors duration-200";
             const content = <motion.span className="relative inline-flex items-center" animate={{ color: responsiveColor, textShadow: shouldGlow ? `0 0 14px ${item.accent}55` : "0 0 0 rgba(0,0,0,0)" }} transition={{ color: { duration: 0.22, ease: "easeOut" }, textShadow: { duration: 0.25, ease: "easeOut" } }}>
               {item.label}
               <motion.span aria-hidden="true" className="pointer-events-none absolute -inset-x-2 -inset-y-1 -z-10 rounded-full" style={{ background: `radial-gradient(circle, ${item.accent}18 0%, transparent 72%)` }} initial={{ opacity: 0, scale: 0.85 }} animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }} transition={{ duration: 0.22, ease: "easeOut" }} />
