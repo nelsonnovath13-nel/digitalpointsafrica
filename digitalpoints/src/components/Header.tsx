@@ -4,18 +4,18 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 
 type NavItem = {
   label: string;
-  to: string;
-  end?: boolean;
-  anchor?: boolean;
+  href: string;
   accent: string;
 };
 
 const links: NavItem[] = [
-  { to: "/", label: "HOME", end: true, accent: "#00c7c3" },
-  { to: "/about", label: "ABOUT US", accent: "#2d8cff" },
-  { to: "/video-production", label: "VIDEO PRODUCTION", accent: "#8a4dff" },
-  { to: "#embroidery", label: "EMBROIDERY", anchor: true, accent: "#f59e0b" },
-  { to: "#promotion", label: "PROMOTION", anchor: true, accent: "#ec4899" },
+  { label: "HOME", href: "#", accent: "#00c7c3" },
+  { label: "ABOUT US", href: "#", accent: "#2d8cff" },
+  { label: "CORE SERVICES", href: "#", accent: "#8a4dff" },
+  { label: "PRINT SERVICES", href: "#", accent: "#f59e0b" },
+  { label: "PROMOTIONS", href: "#", accent: "#ec4899" },
+  { label: "DIGITAL TRAININGS", href: "#", accent: "#10b981" },
+  { label: "CONTACT US", href: "#", accent: "#06b6d4" },
 ];
 
 function DigitalPointsLogo() {
@@ -69,8 +69,7 @@ export default function Header() {
     };
   }, []);
 
-  const isActive = (item: NavItem) => item.anchor ? isHome && hash === item.to : item.end ? pathname === item.to : pathname.startsWith(item.to);
-  const getAnchorHref = (item: NavItem) => (item.anchor ? (isHome ? item.to : `/${item.to}`) : item.to);
+  const isActive = (item: NavItem) => item.label === "HOME" && isHome && !hash;
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
@@ -88,17 +87,14 @@ export default function Header() {
               <motion.span aria-hidden="true" className="pointer-events-none absolute -bottom-1 left-0 right-0 h-[2px] origin-center rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 9px ${item.accent}70` }} initial={{ opacity: 0, scaleX: 0 }} animate={isHovered && !active ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }} transition={{ duration: 0.2, ease: "easeOut" }} />
               {active && <motion.span layoutId="active-nav-indicator" aria-hidden="true" className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}80` }} initial={{ opacity: 0, scaleX: 0.35 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ opacity: { duration: 0.18 }, scaleX: { type: "spring", stiffness: 500, damping: 35 }, layout: { type: "spring", stiffness: 500, damping: 35 } }} />}
             </motion.span>;
-            return item.anchor ? <motion.a key={item.label} href={getAnchorHref(item)} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)} onClick={() => setOpen(false)}>{content}</motion.a> : <motion.div key={item.label} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)}><NavLink to={item.to} end={item.end} className={commonClass}>{content}</NavLink></motion.div>;
+            return <motion.a key={item.label} href={item.href} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)} onClick={() => setOpen(false)}>{content}</motion.a>;
           })}
         </nav>
         <div className="flex items-center gap-3">
-          <motion.div animate={{ boxShadow: ["0 0 0 0 rgba(0,199,195,0)", "0 0 0 7px rgba(0,199,195,0.10)", "0 0 0 0 rgba(0,199,195,0)"] }} transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }} className="hidden rounded-[12px] lg:block">
-            <Link to="/contact" className="group inline-flex h-[50px] items-center gap-2.5 rounded-[10px] border border-black/10 bg-cream-50/90 px-6 font-poppins text-[14px] font-semibold tracking-[0.01em] text-[#050b1f] shadow-[0_8px_24px_rgba(5,11,31,0.10)] backdrop-blur-md transition-all duration-200 hover:bg-[#08bdb8] hover:text-black" onClick={() => setOpen(false)}><span className="h-2 w-2 rounded-full bg-[#08bdb8] shadow-[0_0_10px_rgba(8,189,184,0.65)] transition-colors duration-200 group-hover:bg-[#050b1f]" />CONTACTS</Link>
-          </motion.div>
           <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-white/30 bg-black/15 text-white backdrop-blur-md lg:hidden"><span className="relative block h-3.5 w-5"><span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} /><span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} /></span></button>
         </div>
       </div>
-      <AnimatePresence>{open && <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden border-t border-black/10 bg-cream-50/90 backdrop-blur-xl lg:hidden"><nav className="flex flex-col px-6 py-4" aria-label="Mobile navigation">{[...links, { to: "/contact", label: "CONTACTS", accent: "#10b981" }].map((item, index) => { const active = isActive(item); const mobileIndicator = active ? <span className="h-1.5 w-8 rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}70` }} /> : null; return <div key={item.label}>{index > 0 && <div className="h-px bg-ink-950/10" />}{item.anchor ? <a href={getAnchorHref(item)} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 font-poppins text-sm font-medium" style={{ color: active ? item.accent : "#050b1f" }}>{item.label}{mobileIndicator}</a> : <NavLink to={item.to} end={item.end} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 font-poppins text-sm font-medium" style={({ isActive: routeActive }) => ({ color: routeActive ? item.accent : "#050b1f" })}>{item.label}{mobileIndicator}</NavLink>}</div>; })}</nav></motion.div>}</AnimatePresence>
+      <AnimatePresence>{open && <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden border-t border-black/10 bg-cream-50/90 backdrop-blur-xl lg:hidden"><nav className="flex flex-col px-6 py-4" aria-label="Mobile navigation">{links.map((item, index) => { const active = isActive(item); const mobileIndicator = active ? <span className="h-1.5 w-8 rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}70` }} /> : null; return <div key={item.label}>{index > 0 && <div className="h-px bg-ink-950/10" />}{<a href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 font-poppins text-sm font-medium" style={{ color: active ? item.accent : "#050b1f" }}>{item.label}{mobileIndicator}</a>}</div>; })}</nav></motion.div>}</AnimatePresence>
     </header>
   );
 }
