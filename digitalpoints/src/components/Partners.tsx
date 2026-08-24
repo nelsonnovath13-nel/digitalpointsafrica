@@ -57,7 +57,7 @@ export default function Partners() {
             {marqueePartners.map((partner, index) => (
               <div
                 key={`${partner.name}-${index}`}
-                className="trust-marquee-logo group flex h-28 w-56 shrink-0 items-center justify-center border-r border-point-600/15 px-7 sm:h-32 sm:w-64 sm:px-9"
+                className="trust-marquee-logo group flex h-28 w-56 shrink-0 items-center justify-center overflow-hidden border-r border-point-600/15 px-5 sm:h-32 sm:w-64 sm:px-7"
                 title={partner.name}
               >
                 <span className="sr-only">{partner.name}</span>
@@ -66,7 +66,7 @@ export default function Partners() {
                   className="h-full w-full bg-no-repeat transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                   style={{
                     backgroundImage: "url('/trustees-sprite.webp')",
-                    backgroundSize: "300% 300%",
+                    backgroundSize: "420% 420%",
                     backgroundPosition: `${partner.x} ${partner.y}`,
                   }}
                 />
