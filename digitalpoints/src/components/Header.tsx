@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 type NavItem = {
   label: string;
@@ -9,13 +9,13 @@ type NavItem = {
 };
 
 const links: NavItem[] = [
-  { label: "HOME", href: "#", accent: "#00c7c3" },
-  { label: "ABOUT US", href: "#", accent: "#2d8cff" },
-  { label: "CORE SERVICES", href: "#", accent: "#8a4dff" },
-  { label: "PRINT SERVICES", href: "#", accent: "#f59e0b" },
+  { label: "HOME", href: "/", accent: "#00c7c3" },
+  { label: "ABOUT US", href: "/about", accent: "#2d8cff" },
+  { label: "CORE SERVICES", href: "/services", accent: "#8a4dff" },
+  { label: "PRINT SERVICES", href: "/printing", accent: "#f59e0b" },
   { label: "PROMOTIONS", href: "#", accent: "#ec4899" },
-  { label: "DIGITAL TRAININGS", href: "#", accent: "#10b981" },
-  { label: "CONTACT US", href: "#", accent: "#06b6d4" },
+  { label: "DIGITAL TRAININGS", href: "/training", accent: "#10b981" },
+  { label: "CONTACT US", href: "/contact", accent: "#06b6d4" },
 ];
 
 const coreServiceItems = [
@@ -33,6 +33,19 @@ const printServiceItems = [
   "Signage & 3D Branding",
   "Laser Cutting & Engraving",
 ];
+
+const serviceRoutes: Record<string, string> = {
+  "Digital Marketing": "/services",
+  "Video Production": "/video-production",
+  "Graphic Design": "/services",
+  "Social Media Management": "/services",
+  "Web Designs": "/services",
+  "Large Format Printing": "/printing",
+  "Vehicle & Item Branding": "/printing",
+  "Embroidery & Apparel Branding": "/printing",
+  "Signage & 3D Branding": "/printing",
+  "Laser Cutting & Engraving": "/printing",
+};
 
 function DigitalPointsLogo() {
   return (
@@ -86,6 +99,7 @@ function Chevron({ open }: { open: boolean }) {
 
 export default function Header() {
   const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
   const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
   const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
@@ -159,7 +173,7 @@ export default function Header() {
                   onMouseEnter={() => { setHovered(item.label); setActiveDesktopMenu(item.label); }}
                   onMouseLeave={() => { setHovered(null); setActiveDesktopMenu(null); }}
                 >
-                  <button type="button" className={commonClass} aria-haspopup="true" aria-expanded={activeDesktopMenu === item.label}>
+                  <button type="button" className={commonClass} aria-haspopup="true" aria-expanded={activeDesktopMenu === item.label} onClick={() => navigate(item.href)}>
                     {content}
                   </button>
                   <AnimatePresence>
@@ -173,9 +187,9 @@ export default function Header() {
                       >
                         <div className="grid gap-1">
                           {serviceItems.map((service) => (
-                            <a
+                            <Link
                               key={service}
-                              href="#"
+                              to={serviceRoutes[service]}
                               className="group flex items-center gap-4 rounded-[14px] px-4 py-3.5 text-[#252b32] transition-all duration-200 hover:bg-[#00aaa8]/8"
                               onClick={() => setActiveDesktopMenu(null)}
                             >
@@ -183,7 +197,7 @@ export default function Header() {
                                 <ServiceIcon name={service} />
                               </span>
                               <span className="font-poppins text-[15px] font-medium">{service}</span>
-                            </a>
+                            </Link>
                           ))}
                         </div>
                       </motion.div>
@@ -192,17 +206,18 @@ export default function Header() {
                 </div>
               );
             }
-            return <motion.a key={item.label} href={item.href} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)} onClick={() => setOpen(false)}>{content}</motion.a>;
+            if (item.href === "#") return <motion.a key={item.label} href={item.href} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)}>{content}</motion.a>;
+            return <Link key={item.label} to={item.href} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)} onClick={closeMobileMenu}>{content}</Link>;
           })}
         </nav>
         <div className="flex items-center gap-3">
-          <a
-            href="#"
-            onClick={() => setOpen(false)}
+          <Link
+            to="/contact"
+            onClick={closeMobileMenu}
             className="hidden rounded-full border border-white/25 bg-white px-4 py-2 font-poppins text-[13px] font-semibold tracking-[0.08em] text-[#050b0b] transition-colors duration-200 hover:bg-white/90 lg:inline-flex"
           >
             CONTACT US
-          </a>
+          </Link>
           <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-white/30 bg-black/15 text-white backdrop-blur-md lg:hidden"><span className="relative block h-3.5 w-5"><span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} /><span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} /></span></button>
         </div>
       </div>
@@ -241,9 +256,15 @@ export default function Header() {
                   if (!hasChildren) {
                     return (
                       <div key={item.label} className="border-b border-[#111827]/10">
-                        <a href={item.href} onClick={closeMobileMenu} className="flex min-h-[70px] items-center py-4 font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]" style={{ color: active ? item.accent : undefined }}>
-                          {item.label}
-                        </a>
+                        item.href === "#" ? (
+                          <a href="#" onClick={closeMobileMenu} className="flex min-h-[70px] items-center py-4 font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]" style={{ color: active ? item.accent : undefined }}>
+                            {item.label}
+                          </a>
+                        ) : (
+                          <Link to={item.href} onClick={closeMobileMenu} className="flex min-h-[70px] items-center py-4 font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]" style={{ color: active ? item.accent : undefined }}>
+                            {item.label}
+                          </Link>
+                        )
                       </div>
                     );
                   }
@@ -270,9 +291,9 @@ export default function Header() {
                           >
                             <div className="space-y-1 pb-5">
                               {children.map((child) => (
-                                <a key={child} href="#" onClick={closeMobileMenu} className="block rounded-xl px-4 py-2.5 font-poppins text-[15px] font-medium text-[#374151] transition-colors hover:bg-[#00aaa8]/8 hover:text-[#008f8d]">
+                                <Link key={child} to={serviceRoutes[child]} onClick={closeMobileMenu} className="block rounded-xl px-4 py-2.5 font-poppins text-[15px] font-medium text-[#374151] transition-colors hover:bg-[#00aaa8]/8 hover:text-[#008f8d]">
                                   {child}
-                                </a>
+                                </Link>
                               ))}
                             </div>
                           </motion.div>
@@ -283,9 +304,9 @@ export default function Header() {
                 })}
               </nav>
 
-              <a href="#" onClick={closeMobileMenu} className="mt-7 flex min-h-[58px] w-full items-center justify-center rounded-full bg-[#00aaa8] px-6 font-poppins text-[17px] font-semibold text-white shadow-[0_12px_28px_rgba(0,170,168,0.22)] transition-colors duration-200 hover:bg-[#009694]">
+              <Link to="/contact" onClick={closeMobileMenu} className="mt-7 flex min-h-[58px] w-full items-center justify-center rounded-full bg-[#00aaa8] px-6 font-poppins text-[17px] font-semibold text-white shadow-[0_12px_28px_rgba(0,170,168,0.22)] transition-colors duration-200 hover:bg-[#009694]">
                 CONTACT US
-              </a>
+              </Link>
             </motion.div>
           </motion.div>
         )}
