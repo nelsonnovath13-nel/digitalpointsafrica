@@ -18,6 +18,22 @@ const links: NavItem[] = [
   { label: "CONTACT US", href: "#", accent: "#06b6d4" },
 ];
 
+const coreServiceItems = [
+  "Digital Marketing",
+  "Video Production",
+  "Graphic Design",
+  "Social Media Management",
+  "Web Designs",
+];
+
+const printServiceItems = [
+  "Large Format Printing",
+  "Vehicle & Item Branding",
+  "Embroidery & Apparel Branding",
+  "Signage & 3D Branding",
+  "Laser Cutting & Engraving",
+];
+
 function DigitalPointsLogo() {
   return (
     <svg viewBox="0 0 520 118" role="img" aria-labelledby="digital-points-logo-title" className="block h-auto w-[190px] sm:w-[205px]">
@@ -40,12 +56,32 @@ function DigitalPointsLogo() {
   );
 }
 
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <motion.svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      className="h-4 w-4 shrink-0"
+      animate={{ rotate: open ? 180 : 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <path d="M3.5 6 8 10.5 12.5 6" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    </motion.svg>
+  );
+}
+
 export default function Header() {
   const { pathname, hash } = useLocation();
   const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
+  const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+
+  const closeMobileMenu = () => {
+    setOpen(false);
+    setExpandedMobileSection(null);
+  };
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -74,7 +110,7 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
       <div className={`flex h-[60px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
-        <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
+        <Link to="/" className="group flex shrink-0 items-center" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
         <nav className="hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
           {links.filter((item) => item.label !== "CONTACT US").map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
@@ -101,7 +137,90 @@ export default function Header() {
           <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-white/30 bg-black/15 text-white backdrop-blur-md lg:hidden"><span className="relative block h-3.5 w-5"><span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} /><span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} /></span></button>
         </div>
       </div>
-      <AnimatePresence>{open && <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden border-t border-black/10 bg-cream-50/90 backdrop-blur-xl lg:hidden"><nav className="flex flex-col px-6 py-4" aria-label="Mobile navigation">{links.map((item, index) => { const active = isActive(item); const mobileIndicator = active ? <span className="h-1.5 w-8 rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}70` }} /> : null; return <div key={item.label}>{index > 0 && <div className="h-px bg-ink-950/10" />}{<a href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 font-poppins text-sm font-medium" style={{ color: active ? item.accent : "#050b1f" }}>{item.label}{mobileIndicator}</a>}</div>; })}</nav></motion.div>}</AnimatePresence>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 top-[60px] z-[70] bg-[#050b0b]/55 px-4 py-5 backdrop-blur-xl lg:hidden"
+            onClick={closeMobileMenu}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: -16, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.985 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="mx-auto max-h-[calc(100vh-100px)] w-full max-w-[670px] overflow-y-auto rounded-[28px] bg-[#faf9f6] px-6 pb-7 pt-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mb-2 flex justify-end">
+                <button type="button" onClick={closeMobileMenu} aria-label="Close menu" className="flex h-10 w-10 items-center justify-center rounded-full text-[#111827] transition-colors hover:bg-black/5">
+                  <span className="relative block h-5 w-5"><span className="absolute left-0 top-1/2 h-[1.5px] w-5 -translate-y-1/2 rotate-45 bg-current" /><span className="absolute left-0 top-1/2 h-[1.5px] w-5 -translate-y-1/2 -rotate-45 bg-current" /></span>
+                </button>
+              </div>
+
+              <nav aria-label="Mobile navigation" className="border-t border-[#111827]/10">
+                {links.filter((item) => item.label !== "CONTACT US").map((item) => {
+                  const hasChildren = item.label === "CORE SERVICES" || item.label === "PRINT SERVICES";
+                  const children = item.label === "CORE SERVICES" ? coreServiceItems : item.label === "PRINT SERVICES" ? printServiceItems : [];
+                  const expanded = expandedMobileSection === item.label;
+                  const active = isActive(item);
+
+                  if (!hasChildren) {
+                    return (
+                      <div key={item.label} className="border-b border-[#111827]/10">
+                        <a href={item.href} onClick={closeMobileMenu} className="flex min-h-[70px] items-center py-4 font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]" style={{ color: active ? item.accent : undefined }}>
+                          {item.label}
+                        </a>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div key={item.label} className="border-b border-[#111827]/10">
+                      <button
+                        type="button"
+                        onClick={() => setExpandedMobileSection((current) => current === item.label ? null : item.label)}
+                        aria-expanded={expanded}
+                        className="flex min-h-[70px] w-full items-center justify-between py-4 text-left font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]"
+                      >
+                        {item.label}
+                        <Chevron open={expanded} />
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {expanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.24, ease: "easeOut" }}
+                            className="overflow-hidden"
+                          >
+                            <div className="space-y-1 pb-5">
+                              {children.map((child) => (
+                                <a key={child} href="#" onClick={closeMobileMenu} className="block rounded-xl px-4 py-2.5 font-poppins text-[15px] font-medium text-[#374151] transition-colors hover:bg-[#00aaa8]/8 hover:text-[#008f8d]">
+                                  {child}
+                                </a>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </nav>
+
+              <a href="#" onClick={closeMobileMenu} className="mt-7 flex min-h-[58px] w-full items-center justify-center rounded-full bg-[#00aaa8] px-6 font-poppins text-[17px] font-semibold text-white shadow-[0_12px_28px_rgba(0,170,168,0.22)] transition-colors duration-200 hover:bg-[#009694]">
+                CONTACT US
+              </a>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
