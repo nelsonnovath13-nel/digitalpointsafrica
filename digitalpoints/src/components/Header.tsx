@@ -76,7 +76,7 @@ export default function Header() {
       <div className={`flex h-[60px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
         <Link to="/" className="group flex shrink-0 items-center" onClick={() => setOpen(false)} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
         <nav className="hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
-          {links.map((item) => {
+          {links.filter((item) => item.label !== "CONTACT US").map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : scrolled ? "#ffffff" : "#ffffff";
             const shouldGlow = isHovered || active;
@@ -91,6 +91,13 @@ export default function Header() {
           })}
         </nav>
         <div className="flex items-center gap-3">
+          <a
+            href="#"
+            onClick={() => setOpen(false)}
+            className="hidden rounded-full border border-white/25 bg-white px-4 py-2 font-poppins text-[13px] font-semibold tracking-[0.08em] text-[#050b0b] transition-colors duration-200 hover:bg-white/90 lg:inline-flex"
+          >
+            CONTACT US
+          </a>
           <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-white/30 bg-black/15 text-white backdrop-blur-md lg:hidden"><span className="relative block h-3.5 w-5"><span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} /><span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} /></span></button>
         </div>
       </div>
