@@ -78,8 +78,8 @@ export default function Hero() {
         </p>
 
         <div className="mt-6 flex w-full flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:justify-center sm:gap-4">
-          <Link to="/contact" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-[#08bdb8] bg-[#08bdb8] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white transition-colors duration-300 hover:border-[#0aa9a5] hover:bg-[#0aa9a5] active:bg-[#0aa9a5] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">Get Started</Link>
-          <Link to="/portfolio" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-white/90 bg-transparent px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white transition-colors duration-300 hover:border-white hover:bg-white/10 active:bg-white/10 sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">View Portfolio</Link>
+          <Link to="/contact" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-[#08bdb8] bg-[#08bdb8] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(8,189,184,0)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-[#18d1cc] hover:bg-[#10aaa6] hover:shadow-[0_14px_32px_-12px_rgba(8,189,184,0.55)] active:translate-y-0 active:scale-[0.98] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">Get Started</Link>
+          <Link to="/portfolio" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-white/70 bg-white/[0.02] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-white hover:bg-white/[0.08] hover:shadow-[0_14px_32px_-16px_rgba(255,255,255,0.24)] active:translate-y-0 active:scale-[0.98] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">View Portfolio</Link>
         </div>
       </div>
 
