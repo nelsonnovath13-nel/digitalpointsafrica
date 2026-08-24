@@ -89,6 +89,11 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-b from-transparent to-[#f7f3ea] sm:h-24"
+      />
     </section>
   );
 }
