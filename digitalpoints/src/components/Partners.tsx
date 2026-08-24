@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const partners = [
   { name: "Diakonia", x: "0%", y: "0%" },
@@ -19,32 +19,65 @@ const stats = [
   { value: "10+", label: "Combined Years of Experience" },
 ];
 
+const premiumEase = [0.22, 1, 0.36, 1] as const;
+
 export default function Partners() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section className="bg-dot-grid relative bg-cream-50 py-24 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-point-600">
           Trusted By
         </span>
-        <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-4xl">
+        <motion.h2
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.4, ease: premiumEase }}
+          className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-4xl"
+        >
           Organizations that grew with us
-        </h2>
+        </motion.h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="trust-grid-reveal mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
           {partners.map((partner, i) => (
             <motion.div
               key={partner.name}
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="flex h-24 items-center justify-center rounded-xl border border-ink-950/5 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              initial={
+                prefersReducedMotion
+                  ? false
+                  : { opacity: 0, y: 12, scale: 0.98 }
+              }
+              whileInView={
+                prefersReducedMotion
+                  ? undefined
+                  : { opacity: 1, y: 0, scale: 1 }
+              }
+              whileHover={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      y: -3,
+                      borderColor: "rgba(14, 171, 143, 0.38)",
+                      boxShadow: "0 10px 24px rgba(7, 9, 10, 0.09)",
+                    }
+              }
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{
+                duration: 0.56,
+                delay: prefersReducedMotion ? 0 : i * 0.08,
+                ease: premiumEase,
+              }}
+              className="flex h-24 items-center justify-center rounded-xl border border-ink-950/5 bg-white p-3 shadow-sm"
               title={partner.name}
             >
               <span className="sr-only">{partner.name}</span>
-              <div
+              <motion.div
                 aria-hidden="true"
                 className="h-full w-full bg-no-repeat"
+                whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+                transition={{ duration: 0.25, ease: premiumEase }}
                 style={{
                   backgroundImage: "url('/trustees-sprite.webp')",
                   backgroundSize: "300% 300%",
