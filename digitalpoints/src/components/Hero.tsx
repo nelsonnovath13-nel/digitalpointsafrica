@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 
 const rotatingWords = [
   "Designs",
-  "Marketing",
-  "Video",
-  "Printing",
+  "Websites",
+  "Videos",
   "Branding",
-  "Embroidery",
+  "Marketing",
+  "Printing",
 ];
 
 const TYPE_SPEED_MS = 95;
