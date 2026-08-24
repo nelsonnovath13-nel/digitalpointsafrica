@@ -56,6 +56,15 @@ function DigitalPointsLogo() {
   );
 }
 
+function ServiceIcon({ name }: { name: string }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (name === "Digital Marketing") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>;
+  if (name === "Video Production") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><rect x="3" y="6" width="12" height="12" rx="2" /><path d="m15 10 5-3v10l-5-3" /></svg>;
+  if (name === "Graphic Design") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="m4 16 8-8 4 4-8 8H4v-4Z" /><path d="m14 6 1.5-1.5a2 2 0 0 1 3 3L17 9" /></svg>;
+  if (name === "Social Media Management") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><circle cx="6" cy="12" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="18" cy="18" r="2" /><path d="m8 11 8-4M8 13l8 4" /></svg>;
+  return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M4 5h16v11H4z" /><path d="M8 20h8M12 16v4" /></svg>;
+}
+
 function Chevron({ open }: { open: boolean }) {
   return (
     <motion.svg
@@ -76,6 +85,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [activeDesktopMenu, setActiveDesktopMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
   const closeMobileMenu = () => {
@@ -111,7 +121,19 @@ export default function Header() {
     <header className="fixed inset-x-0 top-0 z-[60]">
       <div className={`flex h-[60px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
         <Link to="/" className="group flex shrink-0 items-center" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
-        <nav className="hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
+        <AnimatePresence>
+          {activeDesktopMenu === "CORE SERVICES" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pointer-events-none fixed inset-0 z-[-1] bg-black/45 backdrop-blur-xl"
+              aria-hidden="true"
+            />
+          )}
+        </AnimatePresence>
+        <nav className="relative hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
           {links.filter((item) => item.label !== "CONTACT US").map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : scrolled ? "#ffffff" : "#ffffff";
@@ -123,6 +145,47 @@ export default function Header() {
               <motion.span aria-hidden="true" className="pointer-events-none absolute -bottom-1 left-0 right-0 h-[2px] origin-center rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 9px ${item.accent}70` }} initial={{ opacity: 0, scaleX: 0 }} animate={isHovered && !active ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }} transition={{ duration: 0.2, ease: "easeOut" }} />
               {active && <motion.span layoutId="active-nav-indicator" aria-hidden="true" className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}80` }} initial={{ opacity: 0, scaleX: 0.35 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ opacity: { duration: 0.18 }, scaleX: { type: "spring", stiffness: 500, damping: 35 }, layout: { type: "spring", stiffness: 500, damping: 35 } }} />}
             </motion.span>;
+            if (item.label === "CORE SERVICES") {
+              return (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => { setHovered(item.label); setActiveDesktopMenu(item.label); }}
+                  onMouseLeave={() => { setHovered(null); setActiveDesktopMenu(null); }}
+                >
+                  <button type="button" className={commonClass} aria-haspopup="true" aria-expanded={activeDesktopMenu === item.label}>
+                    {content}
+                  </button>
+                  <AnimatePresence>
+                    {activeDesktopMenu === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.985 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.985 }}
+                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                        className="absolute left-1/2 top-[calc(100%+20px)] z-[80] w-[390px] -translate-x-1/2 rounded-[22px] border border-white/70 bg-[#faf9f6]/98 p-3 shadow-[0_28px_80px_rgba(0,0,0,0.28)] backdrop-blur-md"
+                      >
+                        <div className="grid gap-1">
+                          {coreServiceItems.map((service) => (
+                            <a
+                              key={service}
+                              href="#"
+                              className="group flex items-center gap-4 rounded-[14px] px-4 py-3.5 text-[#252b32] transition-all duration-200 hover:bg-[#00aaa8]/8"
+                              onClick={() => setActiveDesktopMenu(null)}
+                            >
+                              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#00aaa8]/8 text-[#009a98] transition-colors group-hover:bg-[#00aaa8]/14">
+                                <ServiceIcon name={service} />
+                              </span>
+                              <span className="font-poppins text-[15px] font-medium">{service}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            }
             return <motion.a key={item.label} href={item.href} className={commonClass} onMouseEnter={() => setHovered(item.label)} onMouseLeave={() => setHovered(null)} onClick={() => setOpen(false)}>{content}</motion.a>;
           })}
         </nav>
