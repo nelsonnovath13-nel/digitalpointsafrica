@@ -21,27 +21,12 @@ const stats = [
 
 const premiumEase = [0.22, 1, 0.36, 1] as const;
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 12, scale: 0.98 },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.56, delay: index * 0.08, ease: premiumEase },
-  }),
-  hover: {
-    y: -3,
-    borderColor: "rgba(14, 171, 143, 0.38)",
-    boxShadow: "0 10px 24px rgba(7, 9, 10, 0.09)",
-    transition: { duration: 0.25, ease: premiumEase },
-  },
-};
-
 export default function Partners() {
   const prefersReducedMotion = useReducedMotion();
+  const marqueePartners = [...partners, ...partners];
 
   return (
-    <section className="bg-dot-grid relative bg-cream-50 py-24 sm:py-28">
+    <section className="bg-dot-grid relative overflow-hidden bg-cream-50 py-24 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-point-600">
           Trusted By
@@ -55,34 +40,43 @@ export default function Partners() {
         >
           Organizations that grew with us
         </motion.h2>
+      </div>
 
-        <div className="trust-grid-reveal mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-          {partners.map((partner, i) => (
-            <motion.div
-              key={partner.name}
-              variants={cardVariants}
-              custom={i}
-              initial={prefersReducedMotion ? false : "hidden"}
-              whileInView={prefersReducedMotion ? undefined : "visible"}
-              whileHover={prefersReducedMotion ? undefined : "hover"}
-              viewport={{ once: true, amount: 0.25 }}
-              className="group flex h-24 items-center justify-center rounded-xl border border-ink-950/5 bg-white p-3 shadow-sm"
-              title={partner.name}
-            >
-              <span className="sr-only">{partner.name}</span>
-              <motion.div
-                aria-hidden="true"
-                className="h-full w-full bg-no-repeat transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
-                style={{
-                  backgroundImage: "url('/trustees-sprite.webp')",
-                  backgroundSize: "300% 300%",
-                  backgroundPosition: `${partner.x} ${partner.y}`,
-                }}
-              />
-            </motion.div>
-          ))}
+      <motion.div
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+        whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.56, ease: premiumEase }}
+        className="trust-marquee-frame mt-12 border-y border-point-600/25 bg-white/35"
+      >
+        <div className="trust-marquee-mask">
+          <div
+            className="trust-marquee-track"
+            aria-label="Organizations trusted by Digital Points"
+          >
+            {marqueePartners.map((partner, index) => (
+              <div
+                key={`${partner.name}-${index}`}
+                className="trust-marquee-logo group flex h-28 w-56 shrink-0 items-center justify-center border-r border-point-600/15 px-7 sm:h-32 sm:w-64 sm:px-9"
+                title={partner.name}
+              >
+                <span className="sr-only">{partner.name}</span>
+                <div
+                  aria-hidden="true"
+                  className="h-full w-full bg-no-repeat transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
+                  style={{
+                    backgroundImage: "url('/trustees-sprite.webp')",
+                    backgroundSize: "300% 300%",
+                    backgroundPosition: `${partner.x} ${partner.y}`,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
+      </motion.div>
 
+      <div className="mx-auto max-w-6xl px-6">
         <div className="mt-16 grid grid-cols-2 gap-8 border-t border-ink-950/10 pt-12 sm:grid-cols-4">
           {stats.map((s, i) => (
             <motion.div
@@ -100,6 +94,46 @@ export default function Partners() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        .trust-marquee-frame {
+          position: relative;
+        }
+
+        .trust-marquee-mask {
+          overflow: hidden;
+          width: 100%;
+        }
+
+        .trust-marquee-track {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: trust-marquee-scroll 30s linear infinite;
+        }
+
+        .trust-marquee-frame:hover .trust-marquee-track {
+          animation-play-state: paused;
+        }
+
+        @keyframes trust-marquee-scroll {
+          from { transform: translate3d(0, 0, 0); }
+          to { transform: translate3d(-50%, 0, 0); }
+        }
+
+        @media (max-width: 640px) {
+          .trust-marquee-track {
+            animation-duration: 24s;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .trust-marquee-track {
+            animation: none;
+            transform: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }
