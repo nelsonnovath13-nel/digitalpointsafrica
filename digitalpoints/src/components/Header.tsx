@@ -256,7 +256,7 @@ export default function Header() {
                   if (!hasChildren) {
                     return (
                       <div key={item.label} className="border-b border-[#111827]/10">
-                        item.href === "#" ? (
+                        {item.href === "#" ? (
                           <a href="#" onClick={closeMobileMenu} className="flex min-h-[70px] items-center py-4 font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]" style={{ color: active ? item.accent : undefined }}>
                             {item.label}
                           </a>
@@ -264,7 +264,7 @@ export default function Header() {
                           <Link to={item.href} onClick={closeMobileMenu} className="flex min-h-[70px] items-center py-4 font-poppins text-[18px] font-semibold tracking-[0.01em] text-[#111827]" style={{ color: active ? item.accent : undefined }}>
                             {item.label}
                           </Link>
-                        )
+                        )}
                       </div>
                     );
                   }
