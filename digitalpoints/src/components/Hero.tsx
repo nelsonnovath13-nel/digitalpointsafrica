@@ -77,16 +77,9 @@ export default function Hero() {
           <span className="block md:whitespace-nowrap">We bring together creativity, technology and strategy to build brands that connect, engage, and grow.</span>
         </p>
 
-        <div className="mt-6 flex w-full flex-col items-center gap-2.5 sm:mt-8 sm:flex-row sm:justify-center sm:gap-3.5">
-          <div>
-            <Link to="/portfolio" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white bg-white px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-[#050b1f] shadow-[0_8px_22px_rgba(5,11,31,0.08)] transition-colors duration-300 hover:border-[#050b1f] hover:bg-[#050b1f] hover:text-white active:bg-[#050b1f] active:text-white sm:h-[47px] sm:min-w-[195px] sm:text-[13.5px]">View our Portfolio</Link>
-          </div>
-          <div>
-            <Link to="/services" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white transition-colors duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Explore Our Services</Link>
-          </div>
-          <div>
-            <Link to="/contact" className="inline-flex h-[45px] min-w-[205px] items-center justify-center border border-white/90 bg-transparent px-5 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white transition-colors duration-300 hover:border-white hover:bg-white/95 hover:text-[#050b1f] active:bg-white active:text-[#050b1f] sm:h-[47px] sm:min-w-[205px] sm:text-[13.5px]">Start a Project</Link>
-          </div>
+        <div className="mt-6 flex w-full flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:justify-center sm:gap-4">
+          <Link to="/contact" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-[#08bdb8] bg-[#08bdb8] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white transition-colors duration-300 hover:border-[#0aa9a5] hover:bg-[#0aa9a5] active:bg-[#0aa9a5] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">Get Started</Link>
+          <Link to="/portfolio" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-white/90 bg-transparent px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white transition-colors duration-300 hover:border-white hover:bg-white/10 active:bg-white/10 sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">View Portfolio</Link>
         </div>
       </div>
 
