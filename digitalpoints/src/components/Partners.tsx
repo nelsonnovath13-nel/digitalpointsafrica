@@ -21,6 +21,22 @@ const stats = [
 
 const premiumEase = [0.22, 1, 0.36, 1] as const;
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.98 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.56, delay: index * 0.08, ease: premiumEase },
+  }),
+  hover: {
+    y: -3,
+    borderColor: "rgba(14, 171, 143, 0.38)",
+    boxShadow: "0 10px 24px rgba(7, 9, 10, 0.09)",
+    transition: { duration: 0.25, ease: premiumEase },
+  },
+};
+
 export default function Partners() {
   const prefersReducedMotion = useReducedMotion();
 
@@ -44,40 +60,19 @@ export default function Partners() {
           {partners.map((partner, i) => (
             <motion.div
               key={partner.name}
-              initial={
-                prefersReducedMotion
-                  ? false
-                  : { opacity: 0, y: 12, scale: 0.98 }
-              }
-              whileInView={
-                prefersReducedMotion
-                  ? undefined
-                  : { opacity: 1, y: 0, scale: 1 }
-              }
-              whileHover={
-                prefersReducedMotion
-                  ? undefined
-                  : {
-                      y: -3,
-                      borderColor: "rgba(14, 171, 143, 0.38)",
-                      boxShadow: "0 10px 24px rgba(7, 9, 10, 0.09)",
-                    }
-              }
+              variants={cardVariants}
+              custom={i}
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView={prefersReducedMotion ? undefined : "visible"}
+              whileHover={prefersReducedMotion ? undefined : "hover"}
               viewport={{ once: true, amount: 0.25 }}
-              transition={{
-                duration: 0.56,
-                delay: prefersReducedMotion ? 0 : i * 0.08,
-                ease: premiumEase,
-              }}
-              className="flex h-24 items-center justify-center rounded-xl border border-ink-950/5 bg-white p-3 shadow-sm"
+              className="group flex h-24 items-center justify-center rounded-xl border border-ink-950/5 bg-white p-3 shadow-sm"
               title={partner.name}
             >
               <span className="sr-only">{partner.name}</span>
               <motion.div
                 aria-hidden="true"
-                className="h-full w-full bg-no-repeat"
-                whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
-                transition={{ duration: 0.25, ease: premiumEase }}
+                className="h-full w-full bg-no-repeat transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                 style={{
                   backgroundImage: "url('/trustees-sprite.webp')",
                   backgroundSize: "300% 300%",
