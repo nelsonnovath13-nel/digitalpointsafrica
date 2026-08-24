@@ -62,6 +62,11 @@ function ServiceIcon({ name }: { name: string }) {
   if (name === "Video Production") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><rect x="3" y="6" width="12" height="12" rx="2" /><path d="m15 10 5-3v10l-5-3" /></svg>;
   if (name === "Graphic Design") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="m4 16 8-8 4 4-8 8H4v-4Z" /><path d="m14 6 1.5-1.5a2 2 0 0 1 3 3L17 9" /></svg>;
   if (name === "Social Media Management") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><circle cx="6" cy="12" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="18" cy="18" r="2" /><path d="m8 11 8-4M8 13l8 4" /></svg>;
+  if (name === "Large Format Printing") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><rect x="5" y="4" width="14" height="16" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></svg>;
+  if (name === "Vehicle & Item Branding") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M3 14h18l-2-6H7l-4 6Z" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /></svg>;
+  if (name === "Embroidery & Apparel Branding") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M7 5 4 8l4 3v8h8v-8l4-3-3-3-5 3-5-3Z" /></svg>;
+  if (name === "Signage & 3D Branding") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M5 4h14v12H5z" /><path d="M8 20h8M12 16v4" /></svg>;
+  if (name === "Laser Cutting & Engraving") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M12 3v18M5 7l14 10M19 7 5 17" /><circle cx="12" cy="12" r="3" /></svg>;
   return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M4 5h16v11H4z" /><path d="M8 20h8M12 16v4" /></svg>;
 }
 
@@ -122,7 +127,7 @@ export default function Header() {
       <div className={`flex h-[60px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
         <Link to="/" className="group flex shrink-0 items-center" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
         <AnimatePresence>
-          {activeDesktopMenu === "CORE SERVICES" && (
+          {(activeDesktopMenu === "CORE SERVICES" || activeDesktopMenu === "PRINT SERVICES") && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -145,7 +150,8 @@ export default function Header() {
               <motion.span aria-hidden="true" className="pointer-events-none absolute -bottom-1 left-0 right-0 h-[2px] origin-center rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 9px ${item.accent}70` }} initial={{ opacity: 0, scaleX: 0 }} animate={isHovered && !active ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }} transition={{ duration: 0.2, ease: "easeOut" }} />
               {active && <motion.span layoutId="active-nav-indicator" aria-hidden="true" className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}80` }} initial={{ opacity: 0, scaleX: 0.35 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ opacity: { duration: 0.18 }, scaleX: { type: "spring", stiffness: 500, damping: 35 }, layout: { type: "spring", stiffness: 500, damping: 35 } }} />}
             </motion.span>;
-            if (item.label === "CORE SERVICES") {
+            if (item.label === "CORE SERVICES" || item.label === "PRINT SERVICES") {
+              const serviceItems = item.label === "CORE SERVICES" ? coreServiceItems : printServiceItems;
               return (
                 <div
                   key={item.label}
@@ -166,7 +172,7 @@ export default function Header() {
                         className="absolute left-1/2 top-[calc(100%+20px)] z-[80] w-[390px] -translate-x-1/2 rounded-[22px] border border-white/90 bg-[#faf9f6] p-3 shadow-[0_28px_80px_rgba(0,0,0,0.32)]"
                       >
                         <div className="grid gap-1">
-                          {coreServiceItems.map((service) => (
+                          {serviceItems.map((service) => (
                             <a
                               key={service}
                               href="#"
