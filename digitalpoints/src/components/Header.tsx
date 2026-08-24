@@ -128,12 +128,12 @@ export default function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="pointer-events-none fixed inset-0 z-[-1] bg-black/45 backdrop-blur-xl"
+              className="pointer-events-none fixed inset-0 z-[70] bg-[#050b0b]/55 backdrop-blur-xl"
               aria-hidden="true"
             />
           )}
         </AnimatePresence>
-        <nav className="relative hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
+        <nav className="relative z-[80] hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
           {links.filter((item) => item.label !== "CONTACT US").map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : scrolled ? "#ffffff" : "#ffffff";
@@ -163,7 +163,7 @@ export default function Header() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.985 }}
                         transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute left-1/2 top-[calc(100%+20px)] z-[80] w-[390px] -translate-x-1/2 rounded-[22px] border border-white/70 bg-[#faf9f6]/98 p-3 shadow-[0_28px_80px_rgba(0,0,0,0.28)] backdrop-blur-md"
+                        className="absolute left-1/2 top-[calc(100%+20px)] z-[80] w-[390px] -translate-x-1/2 rounded-[22px] border border-white/90 bg-[#faf9f6] p-3 shadow-[0_28px_80px_rgba(0,0,0,0.32)]"
                       >
                         <div className="grid gap-1">
                           {coreServiceItems.map((service) => (
