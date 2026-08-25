@@ -20,12 +20,24 @@ export default function FinalCTA() {
         >
           Ready to grow faster?
         </motion.h2>
-        <p className="mx-auto mt-4 max-w-xl text-white/60">
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mx-auto mt-4 max-w-xl text-white/60"
+        >
           Tell us about your business — we'll reply on WhatsApp within the day
           with a clear next step.
-        </p>
+        </motion.p>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-10 grid gap-4 sm:grid-cols-3"
+        >
           <a
             href="https://wa.me/255714214247"
             target="_blank"
@@ -46,7 +58,7 @@ export default function FinalCTA() {
           >
             Request Quotation
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

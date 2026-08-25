@@ -57,7 +57,7 @@ export default function Hero() {
     <section
       className="relative h-[520px] min-h-[520px] w-full overflow-hidden sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]"
       style={{
-        background: "radial-gradient(70% 55% at 50% 0%, rgba(8,189,184,0.07) 0%, rgba(8,189,184,0.02) 42%, rgba(0,0,0,0) 72%), #050B0B",
+        background: "linear-gradient(120deg, #050807 0%, #04100e 35%, #0a2b27 65%, #123f39 100%)",
       }}
     >
 
@@ -66,11 +66,11 @@ export default function Hero() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[1.55rem] font-semibold leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
+          className="font-display text-[1.55rem] font-normal leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
           <span className="block whitespace-nowrap">We make your brand</span>
           <span className="block whitespace-nowrap">stand out through</span>
           <span className="relative block min-h-[1.08em] text-white" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
-            <span className="inline-flex min-w-[9ch] items-baseline justify-center font-extrabold">
+            <span className="inline-flex min-w-[9ch] items-baseline justify-center font-extrabold" style={{ fontSize: "0.85em" }}>
               {typedWord}
               <span aria-hidden="true" className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-white/90 animate-pulse align-baseline" />
             </span>
@@ -94,12 +94,6 @@ export default function Hero() {
           <Link to="/contact" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-white/70 bg-white/[0.02] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-white hover:bg-white/[0.08] hover:shadow-[0_14px_32px_-16px_rgba(255,255,255,0.24)] active:translate-y-0 active:scale-[0.98] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">Work With Us</Link>
         </motion.div>
       </div>
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 sm:h-40"
-        style={{ background: "linear-gradient(to bottom, rgba(247,243,234,0) 0%, rgba(247,243,234,0.16) 35%, rgba(247,243,234,0.58) 68%, #f7f3ea 100%)" }}
-      />
     </section>
   );
 }

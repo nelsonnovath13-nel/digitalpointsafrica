@@ -1,4 +1,7 @@
 import { useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+
+const premiumEase = [0.22, 1, 0.36, 1] as const;
 
 const printingServices = [
   {
@@ -63,11 +66,18 @@ export default function PrintingServices() {
   };
 
   const stopDragging = () => setIsDragging(false);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section id="printing-services" className="relative overflow-hidden bg-cream-50 py-24 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <motion.div
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: premiumEase }}
+          className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+        >
           <div className="max-w-2xl">
             <span className="text-xs font-medium uppercase tracking-[0.25em] text-point-600">
               Printing & Branding
@@ -98,7 +108,7 @@ export default function PrintingServices() {
               →
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="relative">
@@ -122,9 +132,13 @@ export default function PrintingServices() {
         >
           <div aria-hidden="true" className="w-[max(0px,calc((100vw-1280px)/2))] shrink-0" />
 
-          {printingServices.map((service) => (
-            <article
+          {printingServices.map((service, index) => (
+            <motion.article
               key={service.name}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 32, scale: 0.97 }}
+              whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease: premiumEase }}
               className="group relative h-[460px] w-[82vw] shrink-0 snap-start overflow-hidden rounded-3xl bg-ink-950 sm:h-[520px] sm:w-[420px] lg:w-[460px]"
             >
               <img
@@ -145,7 +159,7 @@ export default function PrintingServices() {
                   {service.name}
                 </h3>
               </div>
-            </article>
+            </motion.article>
           ))}
 
           <div aria-hidden="true" className="w-6 shrink-0" />

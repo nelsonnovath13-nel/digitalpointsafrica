@@ -41,12 +41,12 @@ const services = [
 ] as const;
 
 const SERVICE_COUNT = services.length;
-const SCROLL_HEIGHT_VH = 520;
-const ENTRANCE_PORTION = 0.18;
+const SCROLL_HEIGHT_VH = 380;
+const ENTRANCE_PORTION = 0.14;
 const TRANSITION_PORTION = 1 - ENTRANCE_PORTION;
 const WIPE_PORTION = 0.88;
 const CONTENT_SETTLE_PORTION = 0.92;
-const LERP = 0.085;
+const LERP = 0.12;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -219,8 +219,13 @@ export default function StickyServices() {
           <div
             ref={wipeRef}
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] will-change-transform"
-            style={{ transform: "translate3d(120vw, 0, 0)", opacity: 0 }}
+            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] backdrop-blur-[2px] will-change-transform"
+            style={{
+              transform: "translate3d(120vw, 0, 0)",
+              opacity: 0,
+              background:
+                "linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 30%, rgba(32,203,171,0.4) 50%, rgba(255,255,255,0.16) 70%, rgba(255,255,255,0) 100%)",
+            }}
           />
 
           <div className="relative z-20 flex h-full items-end px-6 pb-16 sm:px-10 sm:pb-20 lg:px-16 lg:pb-20">

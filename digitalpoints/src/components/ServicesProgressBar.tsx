@@ -51,12 +51,12 @@ export default function ServicesProgressBar() {
     <div
       ref={barRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-[70] h-[3px] bg-transparent opacity-0 transition-opacity duration-200"
-      style={{ willChange: "opacity" }}
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[70] h-[4px] bg-white/10 opacity-0 transition-opacity duration-200"
+      style={{ willChange: "opacity", bottom: "max(0px, env(safe-area-inset-bottom))" }}
     >
       <div
         ref={fillRef}
-        className="h-full w-full origin-left bg-[#20cbab]"
+        className="h-full w-full origin-left bg-[#20cbab] shadow-[0_0_10px_rgba(32,203,171,0.65)]"
         style={{ transform: "scaleX(0)", willChange: "transform" }}
       />
     </div>

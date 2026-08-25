@@ -1,15 +1,15 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 const partners = [
-  { name: "Diakonia", x: "0%", y: "0%" },
-  { name: "ECSA Health Community", x: "50%", y: "0%" },
-  { name: "Double A Transfer & Gateway", x: "100%", y: "0%" },
-  { name: "UNICEF", x: "0%", y: "50%" },
-  { name: "ECOWAS", x: "50%", y: "50%" },
-  { name: "USAID", x: "100%", y: "50%" },
-  { name: "Hypermed Health Care", x: "0%", y: "100%" },
-  { name: "YWAM", x: "50%", y: "100%" },
-  { name: "World's Children", x: "100%", y: "100%" },
+  { name: "Diakonia", src: "/images/trustees/diakonia.webp" },
+  { name: "ECSA Health Community", src: "/images/trustees/ecsa-health-community.webp" },
+  { name: "Double A Transfer & Getaway", src: "/images/trustees/double-a-transfer-getaway.webp" },
+  { name: "UNICEF", src: "/images/trustees/unicef.webp" },
+  { name: "ECOWAS", src: "/images/trustees/ecowas.webp" },
+  { name: "USAID", src: "/images/trustees/usaid.webp" },
+  { name: "Hypermed Health Care", src: "/images/trustees/hypermed-health-care.webp" },
+  { name: "YWAM", src: "/images/trustees/ywam.webp" },
+  { name: "World's Children", src: "/images/trustees/worlds-children.webp" },
 ];
 
 const stats = [
@@ -57,18 +57,15 @@ export default function Partners() {
             {marqueePartners.map((partner, index) => (
               <div
                 key={`${partner.name}-${index}`}
-                className="trust-marquee-logo group flex h-28 w-56 shrink-0 items-center justify-center overflow-hidden border-r border-point-600/15 px-5 sm:h-32 sm:w-64 sm:px-7"
+                className="trust-marquee-logo group flex h-36 w-64 shrink-0 items-center justify-center overflow-hidden border-r border-point-600/15 px-6 sm:h-44 sm:w-80 sm:px-9"
                 title={partner.name}
               >
-                <span className="sr-only">{partner.name}</span>
-                <div
-                  aria-hidden="true"
-                  className="h-full w-full bg-no-repeat transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
-                  style={{
-                    backgroundImage: "url('/trustees-sprite.webp')",
-                    backgroundSize: "420% 420%",
-                    backgroundPosition: `${partner.x} ${partner.y}`,
-                  }}
+                <img
+                  src={partner.src}
+                  alt={partner.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-contain transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                 />
               </div>
             ))}
