@@ -39,7 +39,7 @@ export default function FinalCTA() {
           className="mt-10 grid gap-4 sm:grid-cols-3"
         >
           <a
-            href="https://wa.me/255714214247"
+            href="https://wa.me/255750126654"
             target="_blank"
             rel="noreferrer"
             className="rounded-2xl bg-point-500 px-6 py-4 text-sm font-semibold text-ink-950 transition hover:bg-point-400"

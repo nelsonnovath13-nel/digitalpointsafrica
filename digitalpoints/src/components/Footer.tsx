@@ -19,7 +19,7 @@ const moreLinks = [
 ];
 
 const socials = [
-  { label: "Instagram", href: "#" },
+  { label: "Instagram", href: "https://www.instagram.com/digitalpointstz" },
   { label: "Facebook", href: "#" },
   { label: "LinkedIn", href: "#" },
   { label: "YouTube", href: "#" },
@@ -143,19 +143,21 @@ export default function Footer() {
                 Get in Touch
               </p>
               <div className="mt-4 space-y-3 text-sm text-white/70">
-                <a href="https://wa.me/255714214247" className="block hover:text-white">
-                  +255 714 214 247
+                <a href="https://wa.me/255750126654" className="block hover:text-white">
+                  +255 750 126 654
                 </a>
                 <a href="mailto:hello@digitalpoints.co.tz" className="block hover:text-white">
                   hello@digitalpoints.co.tz
                 </a>
-                <p className="text-white/50">Moshi, Kilimanjaro, Tanzania</p>
+                <p className="text-white/50">Arusha, Tanzania</p>
               </div>
               <div className="mt-5 flex gap-3">
                 {socials.map((s) => (
                   <a
                     key={s.label}
                     href={s.href}
+                    target={s.href.startsWith("http") ? "_blank" : undefined}
+                    rel={s.href.startsWith("http") ? "noreferrer" : undefined}
                     aria-label={s.label}
                     className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-xs text-white/70 transition hover:border-point-400/50 hover:text-point-300"
                   >

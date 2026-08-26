@@ -109,7 +109,7 @@ export default function Services() {
 
       <div className="mx-auto mt-16 max-w-3xl px-6 text-center">
         <a
-          href="https://wa.me/255714214247"
+          href="https://wa.me/255750126654"
           target="_blank"
           rel="noreferrer"
           className="inline-flex items-center gap-2 rounded-full bg-point-500 px-8 py-4 text-sm font-semibold text-ink-950 transition hover:bg-point-400"

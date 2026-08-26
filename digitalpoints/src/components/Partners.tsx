@@ -73,22 +73,24 @@ export default function Partners() {
         </div>
       </motion.div>
 
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mt-16 grid grid-cols-2 gap-8 border-t border-ink-950/10 pt-12 sm:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-            >
-              <p className="font-display text-4xl font-semibold text-point-600 sm:text-5xl">
-                {s.value}
-              </p>
-              <p className="mt-2 text-sm text-ink-950/50">{s.label}</p>
-            </motion.div>
-          ))}
+      <div className="relative -mb-24 mt-16 bg-ink-950 py-12 pb-16 sm:-mb-28 sm:pb-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <p className="font-display text-4xl font-semibold text-point-400 sm:text-5xl">
+                  {s.value}
+                </p>
+                <p className="mt-2 text-sm text-white/55">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 

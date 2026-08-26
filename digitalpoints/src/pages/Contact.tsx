@@ -19,20 +19,20 @@ export default function Contact() {
           <div className="rounded-3xl border border-ink-950/5 bg-white p-8 shadow-sm">
             <h2 className="font-display text-lg font-semibold text-ink-950">Reach us directly</h2>
             <div className="mt-4 space-y-3 text-sm text-ink-950/70">
-              <a href="https://wa.me/255714214247" className="block hover:text-point-700">
-                WhatsApp — +255 714 214 247
+              <a href="https://wa.me/255750126654" className="block hover:text-point-700">
+                WhatsApp — +255 750 126 654
               </a>
               <a href="mailto:hello@digitalpoints.co.tz" className="block hover:text-point-700">
                 hello@digitalpoints.co.tz
               </a>
-              <p className="text-ink-950/50">Moshi, Kilimanjaro, Tanzania</p>
+              <p className="text-ink-950/50">Arusha, Tanzania</p>
             </div>
           </div>
           <div className="h-64 overflow-hidden rounded-3xl border border-ink-950/5 shadow-sm">
             <iframe
               title="Digital Points location"
               className="h-full w-full grayscale"
-              src="https://www.google.com/maps?q=Moshi,Tanzania&output=embed"
+              src="https://www.google.com/maps?q=Arusha,Tanzania&output=embed"
               loading="lazy"
             />
           </div>

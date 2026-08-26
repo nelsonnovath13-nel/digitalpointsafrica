@@ -195,7 +195,7 @@ export default function VideoProduction() {
               </p>
             </div>
             <a
-              href="https://wa.me/255714214247"
+              href="https://wa.me/255750126654"
               target="_blank"
               rel="noreferrer"
               className="whitespace-nowrap rounded-full bg-point-500 px-6 py-3 text-sm font-semibold text-ink-950 transition hover:bg-point-400"
