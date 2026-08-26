@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 const premiumEase = [0.22, 1, 0.36, 1] as const;
@@ -8,31 +8,31 @@ const printingServices = [
     name: "Embroidery",
     badge: "Uniforms & Merchandise",
     image:
-      "https://images.pexels.com/photos/37332553/pexels-photo-37332553.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/37332553/pexels-photo-37332553.jpeg?auto=compress&cs=tinysrgb&w=960",
   },
   {
     name: "Branding",
     badge: "Corporate Identity",
     image:
-      "https://images.pexels.com/photos/30688593/pexels-photo-30688593.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/30688593/pexels-photo-30688593.jpeg?auto=compress&cs=tinysrgb&w=960",
   },
   {
     name: "Digital Marketing",
     badge: "Online Promotion",
     image:
-      "https://images.pexels.com/photos/20209020/pexels-photo-20209020.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/20209020/pexels-photo-20209020.jpeg?auto=compress&cs=tinysrgb&w=960",
   },
   {
     name: "Promotion",
     badge: "Promotional Items",
     image:
-      "https://images.pexels.com/photos/29630126/pexels-photo-29630126.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/29630126/pexels-photo-29630126.jpeg?auto=compress&cs=tinysrgb&w=960",
   },
   {
     name: "Video production",
     badge: "Brand Storytelling",
     image:
-      "https://images.pexels.com/photos/15718298/pexels-photo-15718298.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "https://images.pexels.com/photos/15718298/pexels-photo-15718298.jpeg?auto=compress&cs=tinysrgb&w=960",
   },
 ];
 
@@ -68,29 +68,80 @@ export default function PrintingServices() {
   const stopDragging = () => setIsDragging(false);
   const prefersReducedMotion = useReducedMotion();
 
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+        event.preventDefault();
+        window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
+      }
+    };
+
+    slider.addEventListener("wheel", handleWheel, { passive: false });
+    return () => slider.removeEventListener("wheel", handleWheel);
+  }, []);
+
   return (
     <section id="printing-services" className="relative overflow-hidden bg-cream-50 py-24 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: premiumEase }}
+          variants={
+            prefersReducedMotion
+              ? undefined
+              : { hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } } }
+          }
           className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <span className="text-xs font-medium uppercase tracking-[0.25em] text-point-600">
+            <motion.span
+              variants={
+                prefersReducedMotion
+                  ? undefined
+                  : { hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0 } }
+              }
+              transition={{ duration: 0.5, ease: premiumEase }}
+              className="block text-xs font-medium uppercase tracking-[0.25em] text-point-600"
+            >
               Printing & Branding
-            </span>
-            <h2 className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-4xl">
+            </motion.span>
+            <motion.h2
+              variants={
+                prefersReducedMotion
+                  ? undefined
+                  : { hidden: { opacity: 0, y: 22, filter: "blur(6px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)" } }
+              }
+              transition={{ duration: 0.6, ease: premiumEase }}
+              className="mt-3 font-display text-3xl font-semibold text-ink-950 sm:text-4xl"
+            >
               Our Printing Services
-            </h2>
-            <p className="mt-4 text-sm leading-7 text-ink-950/55 sm:text-base">
+            </motion.h2>
+            <motion.p
+              variants={
+                prefersReducedMotion
+                  ? undefined
+                  : { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }
+              }
+              transition={{ duration: 0.55, ease: premiumEase }}
+              className="mt-4 text-sm leading-7 text-ink-950/55 sm:text-base"
+            >
               From branded materials to promotional merchandise, Digital Points provides printing and branding services designed to meet different business and creative needs.
-            </p>
+            </motion.p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <motion.div
+            variants={
+              prefersReducedMotion
+                ? undefined
+                : { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }
+            }
+            transition={{ duration: 0.5, ease: premiumEase }}
+            className="flex items-center gap-3"
+          >
             <button
               type="button"
               onClick={() => scrollCards(-1)}
@@ -107,7 +158,7 @@ export default function PrintingServices() {
             >
               →
             </button>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
@@ -145,6 +196,8 @@ export default function PrintingServices() {
                 src={service.image}
                 alt={service.name}
                 draggable={false}
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink-950/90 via-ink-950/30 to-ink-950/10" />

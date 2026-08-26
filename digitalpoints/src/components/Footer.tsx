@@ -66,62 +66,33 @@ export default function Footer() {
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: footerRef, offset: ["start end", "start start"] });
 
-  const panelY = useTransform(scrollYProgress, [0, 1], [56, 0]);
+  const panelY = useTransform(scrollYProgress, [0, 1], [90, 0]);
   const panelRadius = useTransform(scrollYProgress, [0, 1], [36, 0]);
 
   useEffect(() => {
     const footer = footerRef.current;
     const behind = footer?.previousElementSibling as HTMLElement | null;
-    if (!footer || !behind || shouldReduceMotion) return;
+    if (!behind || shouldReduceMotion) return;
 
     const original = {
-      position: behind.style.position,
-      top: behind.style.top,
-      zIndex: behind.style.zIndex,
-      transform: behind.style.transform,
       filter: behind.style.filter,
       willChange: behind.style.willChange,
     };
 
-    behind.style.position = "sticky";
-    behind.style.top = "0px";
-    behind.style.zIndex = "0";
-    behind.style.willChange = "transform, filter";
+    behind.style.willChange = "filter";
 
-    const startY = behind.offsetTop;
-    const travel = Math.max(behind.offsetHeight * 0.92, 1);
-    let frame: number | null = null;
-
-    const update = () => {
-      frame = null;
-      const progress = Math.min(Math.max((window.scrollY - startY) / travel, 0), 1);
-      const scale = 1 - progress * 0.05;
-      const dim = progress * 0.35;
-      behind.style.transform = `scale3d(${scale}, ${scale}, 1)`;
+    const unsubscribe = scrollYProgress.on("change", (progress) => {
+      const clamped = Math.max(0, Math.min(1, progress));
+      const dim = clamped * 0.3;
       behind.style.filter = `brightness(${1 - dim})`;
-    };
-
-    const requestUpdate = () => {
-      if (frame !== null) return;
-      frame = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate, { passive: true });
+    });
 
     return () => {
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      if (frame !== null) window.cancelAnimationFrame(frame);
-      behind.style.position = original.position;
-      behind.style.top = original.top;
-      behind.style.zIndex = original.zIndex;
-      behind.style.transform = original.transform;
+      unsubscribe();
       behind.style.filter = original.filter;
       behind.style.willChange = original.willChange;
     };
-  }, [shouldReduceMotion]);
+  }, [scrollYProgress, shouldReduceMotion]);
 
   async function handleSubscribe(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -150,7 +121,7 @@ export default function Footer() {
       <motion.div
         className="relative flex min-h-screen flex-col justify-end overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
         style={{
-          background: "linear-gradient(160deg, #0c443d 0%, #07090a 65%)",
+          background: "linear-gradient(190deg, #07090a 0%, #0c443d 45%, #07090a 100%)",
           ...(shouldReduceMotion
             ? {}
             : { y: panelY, borderTopLeftRadius: panelRadius, borderTopRightRadius: panelRadius }),

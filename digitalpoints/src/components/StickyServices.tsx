@@ -85,6 +85,9 @@ export default function StickyServices() {
     const stage = stageRef.current;
     if (!section || !stage) return;
 
+    const images = Array.from(section.querySelectorAll<HTMLElement>("[data-service-image]"));
+    let isVisible = true;
+
     const setTargetFromScroll = () => {
       const rect = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
@@ -92,7 +95,7 @@ export default function StickyServices() {
     };
 
     const setImageReveal = (transitionProgress: number) => {
-      section.querySelectorAll<HTMLElement>("[data-service-image]").forEach((image) => {
+      images.forEach((image) => {
         const index = Number(image.dataset.serviceImage);
         if (index === 0) return;
         const reveal = clamp(
@@ -146,8 +149,19 @@ export default function StickyServices() {
         setActiveIndex(completedIndex);
       }
 
-      frameRef.current = window.requestAnimationFrame(render);
+      frameRef.current = isVisible ? window.requestAnimationFrame(render) : null;
     };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && frameRef.current === null) {
+          frameRef.current = window.requestAnimationFrame(render);
+        }
+      },
+      { rootMargin: "200% 0px" },
+    );
+    observer.observe(section);
 
     setTargetFromScroll();
     window.addEventListener("scroll", setTargetFromScroll, { passive: true });
@@ -157,6 +171,7 @@ export default function StickyServices() {
     return () => {
       window.removeEventListener("scroll", setTargetFromScroll);
       window.removeEventListener("resize", setTargetFromScroll);
+      observer.disconnect();
       if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
     };
