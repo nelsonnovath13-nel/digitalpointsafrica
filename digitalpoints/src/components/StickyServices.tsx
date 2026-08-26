@@ -73,7 +73,6 @@ function useReducedMotion() {
 export default function StickyServices() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const wipeRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
@@ -84,8 +83,7 @@ export default function StickyServices() {
   useEffect(() => {
     const section = sectionRef.current;
     const stage = stageRef.current;
-    const wipe = wipeRef.current;
-    if (!section || !stage || !wipe) return;
+    if (!section || !stage) return;
 
     const setTargetFromScroll = () => {
       const rect = section.getBoundingClientRect();
@@ -132,21 +130,6 @@ export default function StickyServices() {
 
       const transitionBase = Math.floor(transitionProgress);
       const localProgress = transitionProgress - transitionBase;
-      const hasActiveTransition = transitionBase < SERVICE_COUNT - 1 && progress > ENTRANCE_PORTION;
-
-      if (hasActiveTransition && !reducedMotion && localProgress < WIPE_PORTION) {
-        const paneProgress = easeOutCubic(localProgress / WIPE_PORTION);
-        const viewportWidth = window.innerWidth;
-        const paneWidth = Math.max(viewportWidth * 0.42, 320);
-        const startX = -paneWidth * 1.25;
-        const endX = viewportWidth + paneWidth * 0.25;
-        const x = startX + (endX - startX) * paneProgress;
-        wipe.style.transform = `translate3d(${x}px, 0, 0)`;
-        wipe.style.opacity = "1";
-      } else {
-        wipe.style.opacity = "0";
-        wipe.style.transform = "translate3d(120vw, 0, 0)";
-      }
 
       // The image is revealed during the sweep, but the service copy waits until
       // the wipe has completely exited. The final small interval lets the
@@ -208,25 +191,20 @@ export default function StickyServices() {
               style={{
                 zIndex: index,
                 clipPath: index === 0 ? "inset(0)" : "inset(0 100% 0 0)",
+                filter: "brightness(1.32)",
               }}
             />
           ))}
 
           <div className="absolute inset-0 z-10 bg-[#07090a]/55" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#07090a]/90 via-[#07090a]/55 to-transparent" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#07090a]/80 via-transparent to-[#07090a]/20" />
-
           <div
-            ref={wipeRef}
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-[-8%] left-0 z-30 w-[42vw] min-w-[320px] backdrop-blur-[2px] will-change-transform"
+            className="absolute inset-0 z-10"
             style={{
-              transform: "translate3d(120vw, 0, 0)",
-              opacity: 0,
               background:
-                "linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 30%, rgba(32,203,171,0.4) 50%, rgba(255,255,255,0.16) 70%, rgba(255,255,255,0) 100%)",
+                "linear-gradient(to right, #07090a 0%, rgba(7,9,10,0.82) 38%, rgba(255,255,255,0.05) 46%, rgba(7,9,10,0.5) 54%, transparent 68%)",
             }}
           />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#07090a]/80 via-transparent to-[#07090a]/20" />
 
           <div className="relative z-20 flex h-full items-end px-6 pb-16 sm:px-10 sm:pb-20 lg:px-16 lg:pb-20">
             <div className="w-full max-w-6xl">
