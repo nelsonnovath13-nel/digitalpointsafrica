@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { submitLead } from "../lib/leads";
 
@@ -19,14 +20,108 @@ const moreLinks = [
 ];
 
 const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/digitalpointstz" },
-  { label: "Facebook", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "YouTube", href: "#" },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/digitalpointstz",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-4 w-4">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    label: "Facebook",
+    href: "#",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+        <path d="M13.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.87.24-1.46 1.5-1.46h1.6V4.34C15.9 4.24 15 4.17 13.9 4.17c-2.28 0-3.84 1.39-3.84 3.94v2.19H7.5v3h2.56V21h3.44Z" />
+      </svg>
+    ),
+  },
+  {
+    label: "LinkedIn",
+    href: "#",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+        <path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3.25a1.97 1.97 0 1 0 0 3.94 1.97 1.97 0 0 0 0-3.94ZM20.44 20h-3.37v-6.03c0-1.44-.03-3.29-2-3.29-2.01 0-2.32 1.57-2.32 3.19V20H9.38V8.5h3.24v1.57h.05c.45-.85 1.55-1.75 3.19-1.75 3.41 0 4.04 2.24 4.04 5.16V20Z" />
+      </svg>
+    ),
+  },
+  {
+    label: "YouTube",
+    href: "#",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+        <path d="M21.6 7.6a2.9 2.9 0 0 0-2.05-2.06C17.8 5 12 5 12 5s-5.8 0-7.55.54A2.9 2.9 0 0 0 2.4 7.6 30.4 30.4 0 0 0 2 12a30.4 30.4 0 0 0 .4 4.4 2.9 2.9 0 0 0 2.05 2.06C6.2 19 12 19 12 19s5.8 0 7.55-.54A2.9 2.9 0 0 0 21.6 16.4 30.4 30.4 0 0 0 22 12a30.4 30.4 0 0 0-.4-4.4ZM10 15V9l5.2 3-5.2 3Z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Footer() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const footerRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: footerRef, offset: ["start end", "start start"] });
+
+  const panelY = useTransform(scrollYProgress, [0, 1], [56, 0]);
+  const panelRadius = useTransform(scrollYProgress, [0, 1], [36, 0]);
+
+  useEffect(() => {
+    const footer = footerRef.current;
+    const behind = footer?.previousElementSibling as HTMLElement | null;
+    if (!footer || !behind || shouldReduceMotion) return;
+
+    const original = {
+      position: behind.style.position,
+      top: behind.style.top,
+      zIndex: behind.style.zIndex,
+      transform: behind.style.transform,
+      filter: behind.style.filter,
+      willChange: behind.style.willChange,
+    };
+
+    behind.style.position = "sticky";
+    behind.style.top = "0px";
+    behind.style.zIndex = "0";
+    behind.style.willChange = "transform, filter";
+
+    const startY = behind.offsetTop;
+    const travel = Math.max(behind.offsetHeight * 0.92, 1);
+    let frame: number | null = null;
+
+    const update = () => {
+      frame = null;
+      const progress = Math.min(Math.max((window.scrollY - startY) / travel, 0), 1);
+      const scale = 1 - progress * 0.05;
+      const dim = progress * 0.35;
+      behind.style.transform = `scale3d(${scale}, ${scale}, 1)`;
+      behind.style.filter = `brightness(${1 - dim})`;
+    };
+
+    const requestUpdate = () => {
+      if (frame !== null) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      behind.style.position = original.position;
+      behind.style.top = original.top;
+      behind.style.zIndex = original.zIndex;
+      behind.style.transform = original.transform;
+      behind.style.filter = original.filter;
+      behind.style.willChange = original.willChange;
+    };
+  }, [shouldReduceMotion]);
 
   async function handleSubscribe(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,20 +146,14 @@ export default function Footer() {
   }
 
   return (
-    <footer className="relative bg-cream-50">
-      {/* Angled top edge — the triangle wedge fill matches the gradient below it
-         so it reads as a single continuous shape once the page above is cream. */}
-      <div
-        className="h-16 w-full sm:h-24"
-        style={{
-          background: "#0c443d",
-          clipPath: "polygon(0 100%, 100% 0, 100% 100%)",
-        }}
-      />
-      <div
-        className="relative"
+    <footer ref={footerRef} className="relative z-10 isolate">
+      <motion.div
+        className="relative flex min-h-screen flex-col justify-end overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
         style={{
           background: "linear-gradient(160deg, #0c443d 0%, #07090a 65%)",
+          ...(shouldReduceMotion
+            ? {}
+            : { y: panelY, borderTopLeftRadius: panelRadius, borderTopRightRadius: panelRadius }),
         }}
       >
         <div className="mx-auto max-w-7xl px-6 pb-14 pt-10">
@@ -161,7 +250,7 @@ export default function Footer() {
                     aria-label={s.label}
                     className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-xs text-white/70 transition hover:border-point-400/50 hover:text-point-300"
                   >
-                    {s.label[0]}
+                    {s.icon}
                   </a>
                 ))}
               </div>
@@ -173,7 +262,7 @@ export default function Footer() {
             <p>Website Design · Video Production · AI Automation — Tanzania</p>
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }
