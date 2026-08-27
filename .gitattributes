@@ -1,2 +1,6 @@
 *.mp4 filter=lfs diff=lfs merge=lfs -text
 *.MP4 filter=lfs diff=lfs merge=lfs -text
+
+# Vercel doesn't resolve Git LFS pointers for deployed static assets, so
+# site-served videos must be committed as plain binaries instead.
+digitalpoints/public/media/video/*.mp4 -filter -diff -merge -text
