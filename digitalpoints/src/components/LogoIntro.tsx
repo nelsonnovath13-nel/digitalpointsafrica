@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 /**
- * One-time brand splash shown on a fresh site load (not on in-app route
- * changes — it lives outside <Routes> so it only mounts once). Purely
- * decorative: aria-hidden, no focusable content, unmounts itself from the
- * DOM once finished, and never blocks navigation beyond its own brief,
- * fixed-position overlay.
+ * Brand splash shown on a fresh site load (not on in-app route changes —
+ * it lives outside <Routes> so it only mounts once per app boot), then
+ * again after a long gap away (REPEAT_AFTER_MS). Purely decorative:
+ * aria-hidden, no focusable content, unmounts itself from the DOM once
+ * finished, and never blocks navigation beyond its own brief, fixed-
+ * position overlay.
  *
  * Colors/fonts are the same ones Header.tsx uses for the wordmark, so this
  * intentionally does not introduce new brand tokens.
  */
 
-const SESSION_KEY = "dp-intro-seen";
+const LAST_SEEN_KEY = "dp-intro-last-seen";
+const REPEAT_AFTER_MS = 24 * 60 * 60 * 1000; // show again after a day away
 const WELCOME_MS = 500;
 const BRAND_HOLD_MS = 650;
 const EXIT_MS = 380;
@@ -40,8 +42,9 @@ export default function LogoIntro() {
   const [shouldRender] = useState(() => {
     if (typeof window === "undefined") return false;
     try {
-      if (window.sessionStorage.getItem(SESSION_KEY)) return false;
-      window.sessionStorage.setItem(SESSION_KEY, "1");
+      const lastSeen = Number(window.localStorage.getItem(LAST_SEEN_KEY) ?? 0);
+      if (Date.now() - lastSeen < REPEAT_AFTER_MS) return false;
+      window.localStorage.setItem(LAST_SEEN_KEY, String(Date.now()));
       return true;
     } catch {
       return true;
