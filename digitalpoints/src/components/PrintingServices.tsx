@@ -136,9 +136,6 @@ function PrintingCard({
 
 export default function PrintingServices() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const dragStartX = useRef(0);
-  const dragStartScroll = useRef(0);
-  const [isDragging, setIsDragging] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   const scrollCards = (direction: number) => {
@@ -149,48 +146,6 @@ export default function PrintingServices() {
       left: direction * Math.min(slider.clientWidth * 0.78, 460),
       behavior: "smooth",
     });
-  };
-
-  const hasDraggedRef = useRef(false);
-  const DRAG_THRESHOLD = 6;
-
-  const handleMouseMove = (event: MouseEvent) => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-    const delta = event.clientX - dragStartX.current;
-
-    if (!hasDraggedRef.current) {
-      if (Math.abs(delta) < DRAG_THRESHOLD) return;
-      hasDraggedRef.current = true;
-      setIsDragging(true);
-    }
-
-    slider.scrollLeft = dragStartScroll.current - delta;
-  };
-
-  const suppressNextClick = (event: MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-    window.removeEventListener("click", suppressNextClick, true);
-  };
-
-  const handleMouseUp = () => {
-    if (hasDraggedRef.current) {
-      window.addEventListener("click", suppressNextClick, true);
-    }
-    hasDraggedRef.current = false;
-    setIsDragging(false);
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
-  };
-
-  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!sliderRef.current) return;
-    dragStartX.current = event.clientX;
-    dragStartScroll.current = sliderRef.current.scrollLeft;
-    hasDraggedRef.current = false;
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
   };
 
   useEffect(() => {
@@ -332,11 +287,8 @@ export default function PrintingServices() {
 
       <div
         ref={sliderRef}
-        onMouseDown={handleMouseDown}
         style={{ touchAction: "pan-y" }}
-        className={`flex snap-x snap-proximity gap-5 overflow-x-auto px-6 pb-3 [scrollbar-width:none] sm:gap-6 [&::-webkit-scrollbar]:hidden ${
-          isDragging ? "cursor-grabbing select-none" : "cursor-grab"
-        }`}
+        className="flex snap-x snap-proximity gap-5 overflow-x-auto px-6 pb-3 [scrollbar-width:none] sm:gap-6 [&::-webkit-scrollbar]:hidden"
       >
         <div aria-hidden="true" className="w-[max(0px,calc((100vw-1280px)/2))] shrink-0" />
 

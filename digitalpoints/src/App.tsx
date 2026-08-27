@@ -14,6 +14,7 @@ const VideoProduction = lazy(() => import("./pages/VideoProduction"));
 const Training = lazy(() => import("./pages/Training"));
 const Consultation = lazy(() => import("./pages/Consultation"));
 const Printing = lazy(() => import("./pages/Printing"));
+const WeddingWork = lazy(() => import("./pages/WeddingWork"));
 const Maintenance = lazy(() => import("./pages/Maintenance"));
 const Quotation = lazy(() => import("./pages/Quotation"));
 const AdminApp = lazy(() => import("./admin/AdminApp"));
@@ -42,6 +43,7 @@ function AppShell() {
           <Route path="/training" element={<Training />} />
           <Route path="/consultation" element={<Consultation />} />
           <Route path="/printing" element={<Printing />} />
+          <Route path="/wedding-work" element={<WeddingWork />} />
           <Route path="/maintenance" element={<Maintenance />} />
           <Route path="/quotation" element={<Quotation />} />
           <Route path="/video-production" element={<VideoProduction />} />

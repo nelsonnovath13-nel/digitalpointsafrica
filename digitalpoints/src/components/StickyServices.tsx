@@ -211,15 +211,14 @@ export default function StickyServices() {
             />
           ))}
 
-          <div className="absolute inset-0 z-10 bg-[#07090a]/55" />
           <div
             className="absolute inset-0 z-10"
             style={{
               background:
-                "linear-gradient(to right, #07090a 0%, rgba(7,9,10,0.82) 38%, rgba(255,255,255,0.05) 46%, rgba(7,9,10,0.5) 54%, transparent 68%)",
+                "linear-gradient(to right, rgba(7,9,10,0.88) 0%, rgba(7,9,10,0.68) 28%, rgba(7,9,10,0.32) 48%, rgba(7,9,10,0.08) 66%, transparent 82%)",
             }}
           />
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#07090a]/80 via-transparent to-[#07090a]/20" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#07090a]/70 via-transparent to-transparent" />
 
           <div className="relative z-20 flex h-full items-end px-6 pb-16 sm:px-10 sm:pb-20 lg:px-16 lg:pb-20">
             <div className="w-full max-w-6xl">

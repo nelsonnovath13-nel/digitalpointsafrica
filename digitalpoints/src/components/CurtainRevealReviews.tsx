@@ -1,5 +1,6 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 const reviews = [
   {
@@ -51,7 +52,7 @@ export default function CurtainRevealReviews() {
         <div className="sticky top-0 flex h-[100svh] min-h-[420px] items-center justify-center overflow-hidden px-4 sm:px-6">
           <motion.article
             style={reducedMotion ? undefined : { opacity: featureOpacity, scale: featureScale }}
-            className="relative z-0 w-[min(90vw,480px)] overflow-hidden rounded-3xl bg-ink-950 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.28)] sm:p-10"
+            className="group relative z-0 w-[min(90vw,480px)] overflow-hidden rounded-3xl bg-ink-950 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.28)] sm:p-10"
           >
             <div
               aria-hidden="true"
@@ -74,6 +75,22 @@ export default function CurtainRevealReviews() {
             <p className="relative mt-5 text-base leading-7 text-white/75">
               {featuredService.description}
             </p>
+
+            <div className="relative mt-7 inline-block">
+              <Link
+                to="/wedding-work"
+                className="relative inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-point-500 px-5 py-3 text-sm font-semibold text-ink-950 shadow-[0_10px_30px_rgba(8,189,184,0.35)] transition-[clip-path,background-color] duration-[900ms] ease-out hover:bg-point-400 [clip-path:inset(0_0%_0_0)] sm:[clip-path:inset(0_100%_0_0)] sm:group-hover:[clip-path:inset(0_0%_0_0)]"
+              >
+                View Our Wedding Work
+                <span aria-hidden="true">→</span>
+              </Link>
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-3 left-0 hidden -rotate-[18deg] text-xl opacity-0 transition-all duration-[900ms] ease-out sm:block sm:group-hover:left-[calc(100%-14px)] sm:group-hover:opacity-100"
+              >
+                ✏️
+              </span>
+            </div>
           </motion.article>
 
           <motion.div

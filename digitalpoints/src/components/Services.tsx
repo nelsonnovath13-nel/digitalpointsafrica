@@ -98,15 +98,40 @@ export default function Services() {
       <div className="relative z-10 mx-auto max-w-[1500px]">
         <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] lg:items-center lg:gap-8">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-70px" }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            variants={{ hidden: {}, show: { transition: { delayChildren: 0.05 } } }}
             className="w-full"
           >
-            <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-[#08bdb8]">
-              <span className="block">The Digital Points Way</span>
-            </h2>
+            <div className="relative inline-block">
+              <motion.h2
+                variants={{
+                  hidden: { clipPath: "inset(0 100% 0 0)" },
+                  show: {
+                    clipPath: "inset(0 0% 0 0)",
+                    transition: { duration: 1.15, ease: [0.65, 0, 0.35, 1] },
+                  },
+                }}
+                className="font-display text-[clamp(2rem,4.2vw,3.6rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-[#08bdb8]"
+              >
+                <span className="block">The Digital Points Way</span>
+              </motion.h2>
+              <motion.span
+                aria-hidden="true"
+                variants={{
+                  hidden: { opacity: 0, left: "0%" },
+                  show: {
+                    opacity: [0, 1, 1, 0],
+                    left: ["0%", "0%", "97%", "100%"],
+                    transition: { duration: 1.35, times: [0, 0.08, 0.88, 1], ease: "easeInOut" },
+                  },
+                }}
+                className="pointer-events-none absolute -top-3 -rotate-[18deg] text-2xl sm:-top-4 sm:text-3xl"
+              >
+                ✏️
+              </motion.span>
+            </div>
             <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.65, delay: 0.12 }} style={{ transformOrigin: "left" }} className="mt-5 h-[2px] w-full bg-[#08bdb8]" />
             <p className="mt-5 max-w-[720px] font-display text-[clamp(0.92rem,1.08vw,1.15rem)] leading-[1.42] tracking-[-0.018em] text-[#171919]">
               At Digital Points, we believe that every great business starts with an idea, but an idea needs the right creativity, identity, and strategy to become a successful brand. That is why our work is built around three simple but powerful principles:
