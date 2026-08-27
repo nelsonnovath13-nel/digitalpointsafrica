@@ -197,13 +197,12 @@ export default function PrintingServices() {
     const slider = sliderRef.current;
     if (!slider) return;
 
-    // A horizontally-scrollable element with no vertical overflow will, by
-    // default, consume vertical wheel input as horizontal scroll — which
-    // makes the page feel stuck when the cursor happens to be over the
-    // cards. Forward vertical-dominant wheel gestures back to the page.
-    // Rapid wheel events are batched into a single rAF-scheduled scroll so
-    // they don't pile up (each one forcing its own synchronous layout),
-    // which is what reads as a stuck/delayed scroll.
+    // A scrollable element (even overflow-x hidden) can still "capture" a
+    // wheel gesture at the browser level and simply swallow it — no scroll
+    // happens anywhere, on this element or the page. Forwarding vertical-
+    // dominant wheel input to the page ourselves is what actually prevents
+    // that. Rapid events are batched into a single rAF-scheduled scroll so
+    // they don't pile up (each one forcing its own synchronous layout).
     let pendingDeltaY = 0;
     let rafId: number | null = null;
 
@@ -223,10 +222,6 @@ export default function PrintingServices() {
 
     slider.addEventListener("wheel", handleWheel, { passive: false });
 
-    // Touch: the slider only accepts native vertical panning (touch-action
-    // below), so a vertical swipe always scrolls the page — it can never get
-    // locked into the horizontal card track. Horizontal swipes are handled
-    // manually here since the browser won't pan them natively.
     let touchStartX = 0;
     let touchStartY = 0;
     let touchStartScrollLeft = 0;

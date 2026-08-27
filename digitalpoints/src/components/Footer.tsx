@@ -3,6 +3,13 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { Link } from "react-router-dom";
 import { submitLead } from "../lib/leads";
 
+const stats = [
+  { value: "25+", label: "Clients" },
+  { value: "7+", label: "Projects Delivered" },
+  { value: "3", label: "Years in Business" },
+  { value: "10+", label: "Combined Years of Experience" },
+];
+
 const quickLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
@@ -65,13 +72,15 @@ export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const riseRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  // Same mechanism as the "Digital Points Way" card: the panel is already
+  // rendered (slightly scaled down, rounded) the instant it pins, then grows
+  // to fully cover the screen — never fully off-screen, so there's no blank
+  // gap between the trustees section and the footer.
   const { scrollYProgress } = useScroll({ target: riseRef, offset: ["start start", "end end"] });
 
-  // The panel starts fully below the viewport and rides up to completely
-  // cover it — a deliberate "bring the page up" moment, not an ordinary
-  // scroll reveal.
-  const panelY = useTransform(scrollYProgress, [0, 1], ["100%", "0%"]);
-  const panelRadius = useTransform(scrollYProgress, [0, 1], [56, 0]);
+  const panelScale = useTransform(scrollYProgress, [0, 0.22], [0.86, 1]);
+  const panelY = useTransform(scrollYProgress, [0, 0.22], [56, 0]);
+  const panelRadius = useTransform(scrollYProgress, [0, 0.22], [48, 0]);
 
   useEffect(() => {
     const footer = footerRef.current;
@@ -122,17 +131,42 @@ export default function Footer() {
 
   return (
     <footer ref={footerRef} className="relative z-10 isolate">
-      <div ref={riseRef} className="relative h-[170vh]">
-        <div className="sticky top-0 h-screen overflow-hidden">
+      <div ref={riseRef} className="relative h-[140vh] bg-[#07090a]">
+        <div className="sticky top-0 h-screen overflow-hidden bg-[#07090a]">
           <motion.div
-            className="relative flex h-full flex-col justify-end overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
+            className="relative flex h-full flex-col justify-between overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
             style={{
               background: "linear-gradient(190deg, #07090a 0%, #0c443d 45%, #07090a 100%)",
+              transformOrigin: "center top",
               ...(shouldReduceMotion
                 ? {}
-                : { y: panelY, borderTopLeftRadius: panelRadius, borderTopRightRadius: panelRadius }),
+                : {
+                    y: panelY,
+                    scale: panelScale,
+                    borderTopLeftRadius: panelRadius,
+                    borderTopRightRadius: panelRadius,
+                  }),
             }}
           >
+        <div className="mx-auto w-full max-w-6xl px-6 pt-16 sm:pt-20">
+          <div className="grid grid-cols-2 gap-8 border-b border-white/10 pb-14 sm:grid-cols-4">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <p className="font-display text-4xl font-semibold text-point-400 sm:text-5xl">
+                  {s.value}
+                </p>
+                <p className="mt-2 text-sm text-white/55">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
         <div className="mx-auto max-w-7xl px-6 pb-14 pt-10">
           <div className="grid gap-12 sm:grid-cols-[1.3fr_1fr_1fr_1fr]">
             <div>
