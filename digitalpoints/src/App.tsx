@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LogoIntro from "./components/LogoIntro";
 import { FloatingChatWidget, GetInTouchTab } from "./components/FloatingSupport";
 import Home from "./pages/Home";
 
@@ -33,6 +34,7 @@ function AppShell() {
 
   return (
     <div className="bg-cream-50">
+      {!isAdmin && <LogoIntro />}
       {!isAdmin && <Header />}
       <Suspense fallback={null}>
         <Routes>
