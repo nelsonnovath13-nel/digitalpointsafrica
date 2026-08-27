@@ -63,11 +63,15 @@ const socials = [
 export default function Footer() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const footerRef = useRef<HTMLElement>(null);
+  const riseRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: footerRef, offset: ["start end", "start start"] });
+  const { scrollYProgress } = useScroll({ target: riseRef, offset: ["start start", "end end"] });
 
-  const panelY = useTransform(scrollYProgress, [0, 1], [90, 0]);
-  const panelRadius = useTransform(scrollYProgress, [0, 1], [36, 0]);
+  // The panel starts fully below the viewport and rides up to completely
+  // cover it — a deliberate "bring the page up" moment, not an ordinary
+  // scroll reveal.
+  const panelY = useTransform(scrollYProgress, [0, 1], ["100%", "0%"]);
+  const panelRadius = useTransform(scrollYProgress, [0, 1], [56, 0]);
 
   useEffect(() => {
     const footer = footerRef.current;
@@ -118,15 +122,17 @@ export default function Footer() {
 
   return (
     <footer ref={footerRef} className="relative z-10 isolate">
-      <motion.div
-        className="relative flex min-h-screen flex-col justify-end overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
-        style={{
-          background: "linear-gradient(190deg, #07090a 0%, #0c443d 45%, #07090a 100%)",
-          ...(shouldReduceMotion
-            ? {}
-            : { y: panelY, borderTopLeftRadius: panelRadius, borderTopRightRadius: panelRadius }),
-        }}
-      >
+      <div ref={riseRef} className="relative h-[170vh]">
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <motion.div
+            className="relative flex h-full flex-col justify-end overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
+            style={{
+              background: "linear-gradient(190deg, #07090a 0%, #0c443d 45%, #07090a 100%)",
+              ...(shouldReduceMotion
+                ? {}
+                : { y: panelY, borderTopLeftRadius: panelRadius, borderTopRightRadius: panelRadius }),
+            }}
+          >
         <div className="mx-auto max-w-7xl px-6 pb-14 pt-10">
           <div className="grid gap-12 sm:grid-cols-[1.3fr_1fr_1fr_1fr]">
             <div>
@@ -233,7 +239,9 @@ export default function Footer() {
             <p>Website Design · Video Production · AI Automation — Tanzania</p>
           </div>
         </div>
-      </motion.div>
+          </motion.div>
+        </div>
+      </div>
     </footer>
   );
 }

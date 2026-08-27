@@ -49,22 +49,10 @@ const serviceRoutes: Record<string, string> = {
 
 function DigitalPointsLogo() {
   return (
-    <svg viewBox="0 0 520 118" role="img" aria-labelledby="digital-points-logo-title" className="block h-auto w-[190px] sm:w-[205px]">
+    <svg viewBox="0 0 380 118" role="img" aria-labelledby="digital-points-logo-title" className="block h-auto w-[140px] sm:w-[155px]">
       <title id="digital-points-logo-title">Digital Points</title>
-      <defs>
-        <linearGradient id="dp-logo-gradient" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#64e5e1" />
-          <stop offset="48%" stopColor="#22d0cc" />
-          <stop offset="100%" stopColor="#00aaa8" />
-        </linearGradient>
-      </defs>
-      <g fill="url(#dp-logo-gradient)">
-        <rect x="0" y="0" width="34" height="92" rx="2" /><rect x="0" y="0" width="86" height="28" rx="2" />
-        <rect x="52" y="28" width="34" height="28" rx="2" /><rect x="0" y="64" width="52" height="28" rx="2" />
-        <rect x="86" y="0" width="34" height="92" rx="2" /><rect x="52" y="64" width="34" height="28" rx="2" />
-      </g>
-      <text x="146" y="49" fill="#3a3a3a" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">DIGITAL</text>
-      <text x="176" y="100" fill="#08c9c5" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">POINTS</text>
+      <text x="0" y="49" fill="#8f97a3" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">DIGITAL</text>
+      <text x="30" y="100" fill="#08c9c5" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">POINTS</text>
     </svg>
   );
 }

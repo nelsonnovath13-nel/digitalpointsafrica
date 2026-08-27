@@ -3,21 +3,27 @@ import { motion } from "framer-motion";
 const brandTeal = "#08bdb8";
 
 function ImpactMark() {
+  const wordVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } },
+  };
   return (
     <motion.svg
       viewBox="0 0 400 460"
-      initial={{ opacity: 0, scale: 0.85, rotate: -6 }}
-      whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      variants={{ hidden: {}, show: { transition: { staggerChildren: 0.22, delayChildren: 0.05 } } }}
       className="absolute inset-0 h-full w-full"
       aria-label="Create, Brand, Grow — Impact"
     >
-      <path
+      <motion.path
         d="M88.5,206.6 L210.3,132.6 Q330,60 330,200 L330,260 Q330,400 210.3,327.4 L88.5,253.4 Q50,230 88.5,206.6 Z"
         fill={brandTeal}
+        variants={{ hidden: { opacity: 0, scale: 0.82, rotate: -6 }, show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
+        style={{ transformOrigin: "200px 230px" }}
       />
-      <text
+      <motion.text
         x="195"
         y="242"
         textAnchor="middle"
@@ -26,48 +32,55 @@ function ImpactMark() {
         fontWeight={800}
         fontSize="40"
         letterSpacing="-1"
+        variants={wordVariants}
       >
         IMPACT
-      </text>
-      <text
-        x="168"
-        y="118"
-        textAnchor="middle"
-        fill={brandTeal}
-        fontFamily="'Mona Sans', sans-serif"
-        fontWeight={800}
-        fontSize="26"
-        letterSpacing="1"
-        transform="rotate(-31.3 168 118)"
-      >
-        CREATE
-      </text>
-      <text
-        x="168"
-        y="358"
-        textAnchor="middle"
-        fill={brandTeal}
-        fontFamily="'Mona Sans', sans-serif"
-        fontWeight={800}
-        fontSize="26"
-        letterSpacing="1"
-        transform="rotate(31.3 168 358)"
-      >
-        BRAND
-      </text>
-      <text
-        x="372"
-        y="230"
-        textAnchor="middle"
-        fill={brandTeal}
-        fontFamily="'Mona Sans', sans-serif"
-        fontWeight={800}
-        fontSize="26"
-        letterSpacing="1"
-        transform="rotate(90 372 230)"
-      >
-        GROW
-      </text>
+      </motion.text>
+      <g transform="rotate(-31.3 168 118)">
+        <motion.text
+          x="168"
+          y="118"
+          textAnchor="middle"
+          fill={brandTeal}
+          fontFamily="'Mona Sans', sans-serif"
+          fontWeight={800}
+          fontSize="26"
+          letterSpacing="1"
+          variants={wordVariants}
+        >
+          CREATE
+        </motion.text>
+      </g>
+      <g transform="rotate(31.3 168 358)">
+        <motion.text
+          x="168"
+          y="358"
+          textAnchor="middle"
+          fill={brandTeal}
+          fontFamily="'Mona Sans', sans-serif"
+          fontWeight={800}
+          fontSize="26"
+          letterSpacing="1"
+          variants={wordVariants}
+        >
+          BRAND
+        </motion.text>
+      </g>
+      <g transform="rotate(90 372 230)">
+        <motion.text
+          x="372"
+          y="230"
+          textAnchor="middle"
+          fill={brandTeal}
+          fontFamily="'Mona Sans', sans-serif"
+          fontWeight={800}
+          fontSize="26"
+          letterSpacing="1"
+          variants={wordVariants}
+        >
+          GROW
+        </motion.text>
+      </g>
     </motion.svg>
   );
 }

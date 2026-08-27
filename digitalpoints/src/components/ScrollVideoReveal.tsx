@@ -24,25 +24,27 @@ export default function ScrollVideoReveal() {
     offset: ["start start", "end end"],
   });
 
-  // One continuous, bidirectional scroll journey: compact → full viewport → exit.
+  // One continuous, bidirectional scroll journey: compact → full viewport → quick exit.
+  // The exit is deliberately short so the card slides fully away instead of
+  // lingering invisible on screen while the section keeps scrolling.
   const scale = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.5, 0.78, 1],
-    [0.62, 1, 1, 0.76, 0.5],
+    [0, 0.22, 0.58, 0.9, 1],
+    [0.62, 1, 1, 0.9, 0.62],
   );
   const y = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.62, 1],
-    [36, 0, 0, -72],
+    [0, 0.22, 0.58, 1],
+    [36, 0, 0, -110],
   );
   const radius = useTransform(
     scrollYProgress,
-    [0, 0.24, 0.5, 0.82, 1],
-    [32, 0, 0, 20, 32],
+    [0, 0.24, 0.58, 0.9, 1],
+    [32, 0, 0, 24, 40],
   );
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.08, 0.78, 1],
+    [0, 0.08, 0.9, 1],
     [0.9, 1, 1, 0],
   );
 
@@ -61,7 +63,7 @@ export default function ScrollVideoReveal() {
     <section
       ref={sectionRef}
       id="scroll-video-reveal"
-      className="relative h-[260vh] w-full bg-[#07090a]"
+      className="relative h-[190vh] w-full bg-[#07090a]"
       aria-label="Digital Points video reveal"
     >
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden px-4 sm:px-8">

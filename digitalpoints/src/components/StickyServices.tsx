@@ -116,9 +116,9 @@ export default function StickyServices() {
       const progress = currentProgressRef.current;
       const entranceRaw = clamp(progress / ENTRANCE_PORTION, 0, 1);
       const entrance = reducedMotion ? entranceRaw : easeOutCubic(entranceRaw);
-      const scale = 0.9 + entrance * 0.1;
-      const translateY = (1 - entrance) * 8;
-      const radius = Math.max(0, 28 * (1 - entrance));
+      const scale = 0.82 + entrance * 0.18;
+      const translateY = (1 - entrance) * 10;
+      const radius = Math.max(0, 40 * (1 - entrance));
 
       stage.style.transform = `translate3d(0, ${translateY}vh, 0) scale(${scale})`;
       stage.style.borderRadius = `${radius}px`;
@@ -159,7 +159,7 @@ export default function StickyServices() {
           frameRef.current = window.requestAnimationFrame(render);
         }
       },
-      { rootMargin: "200% 0px" },
+      { rootMargin: "40% 0px" },
     );
     observer.observe(section);
 
@@ -190,7 +190,7 @@ export default function StickyServices() {
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden bg-[#07090a]">
         <div
           ref={stageRef}
-          className="relative h-[92svh] w-[94vw] overflow-hidden bg-[#07090a] shadow-[0_30px_80px_rgba(0,0,0,0.35)] will-change-transform"
+          className="relative h-full w-full overflow-hidden bg-[#07090a] shadow-[0_30px_80px_rgba(0,0,0,0.35)] will-change-transform"
           style={{ transformOrigin: "center center" }}
         >
           {services.map((item, index) => (
