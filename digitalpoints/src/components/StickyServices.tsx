@@ -42,7 +42,7 @@ const services = [
 
 const SERVICE_COUNT = services.length;
 const SCROLL_HEIGHT_VH = 380;
-const ENTRANCE_PORTION = 0.14;
+const ENTRANCE_PORTION = 0.09;
 const TRANSITION_PORTION = 1 - ENTRANCE_PORTION;
 const WIPE_PORTION = 0.88;
 const CONTENT_SETTLE_PORTION = 0.92;
@@ -116,12 +116,14 @@ export default function StickyServices() {
       const progress = currentProgressRef.current;
       const entranceRaw = clamp(progress / ENTRANCE_PORTION, 0, 1);
       const entrance = reducedMotion ? entranceRaw : easeOutCubic(entranceRaw);
-      const scale = 0.82 + entrance * 0.18;
-      const translateY = (1 - entrance) * 10;
+      const scale = 0.92 + entrance * 0.08;
+      const translateY = (1 - entrance) * 24;
       const radius = Math.max(0, 40 * (1 - entrance));
+      const opacity = reducedMotion ? 1 : 0.4 + entrance * 0.6;
 
       stage.style.transform = `translate3d(0, ${translateY}vh, 0) scale(${scale})`;
       stage.style.borderRadius = `${radius}px`;
+      stage.style.opacity = `${opacity}`;
 
       const transitionProgress = clamp(
         ((progress - ENTRANCE_PORTION) / TRANSITION_PORTION) * (SERVICE_COUNT - 1),
@@ -226,7 +228,7 @@ export default function StickyServices() {
                 <p className="mb-5 text-xs font-medium uppercase tracking-[0.22em] text-[#20cbab] sm:text-sm">
                   {service.number} — {service.name}
                 </p>
-                <div key={`content-${service.number}`} className="animate-[service-content-in_280ms_ease-out]">
+                <div key={`content-${service.number}`} className="animate-[service-content-in_620ms_cubic-bezier(0.22,1,0.36,1)]">
                   <h2
                     id={`digital-points-service-${service.number}`}
                     className="font-display text-[clamp(3.1rem,8vw,8rem)] font-semibold leading-[0.88] tracking-[-0.065em] text-white"
@@ -258,8 +260,8 @@ export default function StickyServices() {
 
       <style>{`
         @keyframes service-content-in {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(4px); }
+          to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
         @media (prefers-reduced-motion: reduce) {
           #homepage-services * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
