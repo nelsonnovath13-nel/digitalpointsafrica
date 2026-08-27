@@ -8,9 +8,8 @@ import {
 } from "framer-motion";
 
 const video = {
-  src: "https://videos.pexels.com/video-files/7989439/7989439-hd_1920_1080_25fps.mp4",
-  poster:
-    "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?q=80&w=1600&auto=format&fit=crop",
+  src: "/media/video/video-production.mp4",
+  poster: "/media/video/video-production-poster.jpg",
 };
 
 export default function ScrollVideoReveal() {
