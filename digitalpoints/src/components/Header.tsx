@@ -49,11 +49,11 @@ const serviceRoutes: Record<string, string> = {
 
 function DigitalPointsLogo() {
   return (
-    <svg viewBox="0 0 380 118" role="img" aria-labelledby="digital-points-logo-title" className="block h-auto w-[140px] sm:w-[155px]">
-      <title id="digital-points-logo-title">Digital Points</title>
-      <text x="0" y="49" fill="#8f97a3" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">DIGITAL</text>
-      <text x="30" y="100" fill="#08c9c5" fontFamily="Poppins, Arial, sans-serif" fontSize="43" fontWeight="800" letterSpacing="1.5">POINTS</text>
-    </svg>
+    <img
+      src="/logo/dp-logo-white.png"
+      alt="Digital Points"
+      className="block h-11 w-auto sm:h-12"
+    />
   );
 }
 

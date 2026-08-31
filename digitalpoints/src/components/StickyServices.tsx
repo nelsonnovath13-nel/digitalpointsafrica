@@ -104,7 +104,7 @@ export default function StickyServices() {
       // Let the rise start while the section is still approaching from
       // below (not yet pinned), finishing exactly as it locks into place —
       // so it's never pinned while still showing an unrisen, empty card.
-      const preRoll = viewportH * 0.6;
+      const preRoll = viewportH * 0.85;
       const totalSpan = preRoll + travel;
       entrancePortionRef.current = preRoll / totalSpan;
       targetProgressRef.current = clamp((preRoll - rect.top) / totalSpan, 0, 1);

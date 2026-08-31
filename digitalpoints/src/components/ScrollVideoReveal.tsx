@@ -18,32 +18,33 @@ export default function ScrollVideoReveal() {
   const reducedMotion = useReducedMotion();
   const inView = useInView(sectionRef, { margin: "25% 0px" });
 
+  // Tracks the card's whole visible lifetime (from the moment it starts
+  // entering from below to the moment it's fully scrolled past), not just
+  // the pinned window — so it finishes entering well before it locks into
+  // place instead of sitting dark/unformed through the entire approach.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end start"],
   });
 
-  // One continuous, bidirectional scroll journey: compact → full viewport → quick exit.
-  // The exit is deliberately short so the card slides fully away instead of
-  // lingering invisible on screen while the section keeps scrolling.
   const scale = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.58, 0.9, 1],
-    [0.62, 1, 1, 0.9, 0.62],
+    [0, 0.42, 0.75, 1],
+    [0.62, 1, 1, 0.62],
   );
   const y = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.58, 1],
+    [0, 0.42, 0.75, 1],
     [36, 0, 0, -110],
   );
   const radius = useTransform(
     scrollYProgress,
-    [0, 0.24, 0.58, 0.9, 1],
-    [32, 0, 0, 24, 40],
+    [0, 0.45, 0.75, 1],
+    [32, 0, 0, 40],
   );
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.08, 0.9, 1],
+    [0, 0.18, 0.75, 1],
     [0.9, 1, 1, 0],
   );
 
