@@ -85,7 +85,7 @@ export default function ScrollVideoReveal() {
             borderRadius: reducedMotion ? 0 : radius,
             opacity: reducedMotion ? 1 : opacity,
           }}
-          className="relative h-full w-full max-w-[1600px] overflow-hidden bg-[#151716] shadow-[0_28px_90px_rgba(0,0,0,0.38)] will-change-transform"
+          className="relative aspect-[4/5] max-h-[72vh] w-full max-w-[1600px] overflow-hidden bg-[#151716] shadow-[0_28px_90px_rgba(0,0,0,0.38)] will-change-transform sm:aspect-auto sm:h-full sm:max-h-none"
         >
           <div
             className="absolute inset-0 bg-cover bg-center"
