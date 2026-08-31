@@ -56,7 +56,7 @@ export default function Partners() {
                 <img
                   src={partner.src}
                   alt={partner.name}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   className="h-full w-full object-contain transition-transform duration-200 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                 />
