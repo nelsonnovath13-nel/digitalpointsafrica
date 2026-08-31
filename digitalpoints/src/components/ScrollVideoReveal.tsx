@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useInView,
@@ -12,10 +12,25 @@ const video = {
   poster: "/media/video/video-production-poster.jpg",
 };
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
+
 export default function ScrollVideoReveal() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const inView = useInView(sectionRef, { margin: "25% 0px" });
 
   // Tracks the card's whole visible lifetime (from the moment it starts
@@ -77,15 +92,15 @@ export default function ScrollVideoReveal() {
       className="relative h-[190vh] w-full bg-[#07090a]"
       aria-label="Digital Points video reveal"
     >
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden px-4 sm:px-8">
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden sm:px-8">
         <motion.div
           style={{
-            scale: reducedMotion ? 1 : scale,
-            y: reducedMotion ? 0 : y,
-            borderRadius: reducedMotion ? 0 : radius,
-            opacity: reducedMotion ? 1 : opacity,
+            scale: reducedMotion || isMobile ? 1 : scale,
+            y: reducedMotion || isMobile ? 0 : y,
+            borderRadius: reducedMotion || isMobile ? 0 : radius,
+            opacity: reducedMotion || isMobile ? 1 : opacity,
           }}
-          className="relative aspect-[4/5] max-h-[72vh] w-full max-w-[1600px] overflow-hidden bg-[#151716] shadow-[0_28px_90px_rgba(0,0,0,0.38)] will-change-transform sm:aspect-auto sm:h-full sm:max-h-none"
+          className="relative h-full w-full max-w-[1600px] overflow-hidden bg-[#151716] shadow-[0_28px_90px_rgba(0,0,0,0.38)] will-change-transform"
         >
           <div
             className="absolute inset-0 bg-cover bg-center"
