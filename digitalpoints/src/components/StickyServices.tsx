@@ -38,12 +38,20 @@ const services = [
       "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1600&auto=format&fit=crop",
     href: "/services",
   },
+  {
+    number: "05",
+    name: "Web Design",
+    description:
+      "Design and build fast, modern websites that represent your brand well and turn visitors into customers.",
+    image:
+      "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=1600&auto=format&fit=crop",
+    href: "/services",
+  },
 ] as const;
 
 const SERVICE_COUNT = services.length;
-const SCROLL_HEIGHT_VH = 380;
+const SCROLL_HEIGHT_VH = 460;
 const ENTRANCE_PORTION = 0.09;
-const TRANSITION_PORTION = 1 - ENTRANCE_PORTION;
 const WIPE_PORTION = 0.88;
 const CONTENT_SETTLE_PORTION = 0.92;
 const LERP = 0.12;
@@ -76,6 +84,7 @@ export default function StickyServices() {
   const frameRef = useRef<number | null>(null);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
+  const entrancePortionRef = useRef(ENTRANCE_PORTION);
   const activeIndexRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const reducedMotion = useReducedMotion();
@@ -90,8 +99,15 @@ export default function StickyServices() {
 
     const setTargetFromScroll = () => {
       const rect = section.getBoundingClientRect();
-      const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
-      targetProgressRef.current = clamp(-rect.top / travel, 0, 1);
+      const viewportH = window.innerHeight;
+      const travel = Math.max(section.offsetHeight - viewportH, 1);
+      // Let the rise start while the section is still approaching from
+      // below (not yet pinned), finishing exactly as it locks into place —
+      // so it's never pinned while still showing an unrisen, empty card.
+      const preRoll = viewportH * 0.6;
+      const totalSpan = preRoll + travel;
+      entrancePortionRef.current = preRoll / totalSpan;
+      targetProgressRef.current = clamp((preRoll - rect.top) / totalSpan, 0, 1);
     };
 
     const setImageReveal = (transitionProgress: number) => {
@@ -114,7 +130,8 @@ export default function StickyServices() {
       currentProgressRef.current = Math.abs(target - next) < 0.0001 ? target : next;
 
       const progress = currentProgressRef.current;
-      const entranceRaw = clamp(progress / ENTRANCE_PORTION, 0, 1);
+      const entrancePortion = entrancePortionRef.current;
+      const entranceRaw = clamp(progress / entrancePortion, 0, 1);
       const entrance = reducedMotion ? entranceRaw : easeOutCubic(entranceRaw);
       const scale = 0.92 + entrance * 0.08;
       const translateY = (1 - entrance) * 24;
@@ -126,7 +143,7 @@ export default function StickyServices() {
       stage.style.opacity = `${opacity}`;
 
       const transitionProgress = clamp(
-        ((progress - ENTRANCE_PORTION) / TRANSITION_PORTION) * (SERVICE_COUNT - 1),
+        ((progress - entrancePortion) / (1 - entrancePortion)) * (SERVICE_COUNT - 1),
         0,
         SERVICE_COUNT - 1,
       );
@@ -252,7 +269,7 @@ export default function StickyServices() {
 
           <div className="absolute bottom-7 right-6 z-40 flex items-center gap-3 sm:right-10">
             <span className="text-sm font-semibold tabular-nums text-white">
-              {service.number} <span className="text-white/30">/ 04</span>
+              {service.number} <span className="text-white/30">/ {String(SERVICE_COUNT).padStart(2, "0")}</span>
             </span>
           </div>
         </div>

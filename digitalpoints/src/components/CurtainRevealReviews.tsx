@@ -39,11 +39,14 @@ export default function CurtainRevealReviews() {
     offset: ["start end", "end start"],
   });
 
-  const leftX = useTransform(scrollYProgress, [0.15, 0.6], ["0%", "-115%"]);
-  const rightX = useTransform(scrollYProgress, [0.15, 0.6], ["0%", "115%"]);
-  const curtainOpacity = useTransform(scrollYProgress, [0.6, 0.75], [1, 0]);
-  const featureOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
-  const featureScale = useTransform(scrollYProgress, [0.3, 0.5], [0.92, 1]);
+  // The card finishes appearing well before the curtain panels are gone, so
+  // there's a long, generous stretch where the card is fully complete while
+  // the side photos are still visibly there (not yet fully slid away).
+  const leftX = useTransform(scrollYProgress, [0.12, 0.78], ["0%", "-115%"]);
+  const rightX = useTransform(scrollYProgress, [0.12, 0.78], ["0%", "115%"]);
+  const curtainOpacity = useTransform(scrollYProgress, [0.82, 0.94], [1, 0]);
+  const featureOpacity = useTransform(scrollYProgress, [0.16, 0.34], [0, 1]);
+  const featureScale = useTransform(scrollYProgress, [0.16, 0.34], [0.92, 1]);
 
   return (
     <section className="relative bg-cream-50" aria-label="Customer reviews">

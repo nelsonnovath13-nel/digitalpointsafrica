@@ -163,7 +163,16 @@ export default function PrintingServices() {
 
     const flushScroll = () => {
       rafId = null;
+      // The page has `scroll-behavior: smooth` globally (for anchor links).
+      // Passing behavior:"auto" here should already override that for this
+      // one call, but forcing it at the element level too removes any
+      // ambiguity — rapid programmatic scrollBy calls fighting a smooth
+      // CSS scroll-behavior is exactly what reads as "stuck/laggy".
+      const html = document.documentElement;
+      const previousBehavior = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
       window.scrollBy({ top: pendingDeltaY, left: 0, behavior: "auto" });
+      html.style.scrollBehavior = previousBehavior;
       pendingDeltaY = 0;
     };
 
@@ -287,7 +296,7 @@ export default function PrintingServices() {
 
       <div
         ref={sliderRef}
-        style={{ touchAction: "pan-y" }}
+        style={{ touchAction: "pan-y", overscrollBehaviorX: "contain", WebkitOverflowScrolling: "touch" }}
         className="flex snap-x snap-proximity gap-5 overflow-x-auto px-6 pb-3 [scrollbar-width:none] sm:gap-6 [&::-webkit-scrollbar]:hidden"
       >
         <div aria-hidden="true" className="w-[max(0px,calc((100vw-1280px)/2))] shrink-0" />
