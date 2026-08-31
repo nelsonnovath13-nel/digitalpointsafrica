@@ -54,7 +54,18 @@ export default function ScrollVideoReveal() {
 
     void element.play().catch(() => undefined);
 
+    // Occasionally the initial load stalls (no data ever arrives even
+    // though the request fired) rather than erroring out cleanly. If
+    // nothing has loaded after a few seconds, force a fresh load/play.
+    const stallTimer = window.setTimeout(() => {
+      if (element.readyState === 0) {
+        element.load();
+        void element.play().catch(() => undefined);
+      }
+    }, 4000);
+
     return () => {
+      window.clearTimeout(stallTimer);
       element.pause();
     };
   }, [inView]);
@@ -91,7 +102,7 @@ export default function ScrollVideoReveal() {
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               className="absolute inset-0 h-full w-full object-cover"
               aria-label="Digital Points visual story"
             />
