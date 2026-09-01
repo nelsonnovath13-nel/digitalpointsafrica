@@ -89,7 +89,7 @@ export default function ScrollVideoReveal() {
     <section
       ref={sectionRef}
       id="scroll-video-reveal"
-      className="relative h-[190vh] w-full bg-[#07090a]"
+      className="relative h-[122vh] w-full bg-[#07090a] sm:h-[190vh]"
       aria-label="Digital Points video reveal"
     >
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden sm:px-8">

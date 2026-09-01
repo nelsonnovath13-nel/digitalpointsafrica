@@ -72,15 +72,16 @@ export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const riseRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  // Same mechanism as the "Digital Points Way" card: the panel is already
-  // rendered (slightly scaled down, rounded) the instant it pins, then grows
-  // to fully cover the screen — never fully off-screen, so there's no blank
-  // gap between the trustees section and the footer.
-  const { scrollYProgress } = useScroll({ target: riseRef, offset: ["start start", "end end"] });
+  // Tracks the whole approach (from the moment this block starts entering
+  // the viewport), not just the pinned window, and finishes growing right
+  // as it locks into place — so the card already fully covers the screen
+  // the instant scrolling gets here, instead of pinning on an empty dark
+  // backdrop that then grows into the card.
+  const { scrollYProgress } = useScroll({ target: riseRef, offset: ["start end", "end end"] });
 
-  const panelScale = useTransform(scrollYProgress, [0, 0.22], [0.86, 1]);
-  const panelY = useTransform(scrollYProgress, [0, 0.22], [56, 0]);
-  const panelRadius = useTransform(scrollYProgress, [0, 0.22], [48, 0]);
+  const panelScale = useTransform(scrollYProgress, [0, 0.4], [0.86, 1]);
+  const panelY = useTransform(scrollYProgress, [0, 0.4], [56, 0]);
+  const panelRadius = useTransform(scrollYProgress, [0, 0.4], [48, 0]);
 
   useEffect(() => {
     const footer = footerRef.current;

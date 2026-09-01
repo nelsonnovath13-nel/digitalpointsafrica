@@ -39,19 +39,19 @@ export default function CurtainRevealReviews() {
     offset: ["start end", "end start"],
   });
 
-  // The card finishes appearing well before the curtain panels are gone, so
-  // there's a long, generous stretch where the card is fully complete while
-  // the side photos are still visibly there (not yet fully slid away).
-  const leftX = useTransform(scrollYProgress, [0.12, 0.78], ["0%", "-115%"]);
-  const rightX = useTransform(scrollYProgress, [0.12, 0.78], ["0%", "115%"]);
-  const curtainOpacity = useTransform(scrollYProgress, [0.82, 0.94], [1, 0]);
-  const featureOpacity = useTransform(scrollYProgress, [0.16, 0.34], [0, 1]);
-  const featureScale = useTransform(scrollYProgress, [0.16, 0.34], [0.92, 1]);
+  // The curtain only ever parts partway — both photos stay clearly visible
+  // the whole time, never sliding fully away — and the card finishes
+  // appearing well within that same short window, so scrolling settles into
+  // this one composed shot before moving straight on to the reviews below.
+  const leftX = useTransform(scrollYProgress, [0.15, 0.45], ["0%", "-42%"]);
+  const rightX = useTransform(scrollYProgress, [0.15, 0.45], ["0%", "42%"]);
+  const featureOpacity = useTransform(scrollYProgress, [0.18, 0.36], [0, 1]);
+  const featureScale = useTransform(scrollYProgress, [0.18, 0.36], [0.92, 1]);
 
   return (
     <section className="relative bg-cream-50" aria-label="Customer reviews">
-      {/* Curtain reveal: opening the wedding photos uncovers exactly one featured card. */}
-      <div ref={curtainRef} className="relative h-[150vh] overflow-clip">
+      {/* Curtain reveal: the photos part just enough to uncover the card, then hold. */}
+      <div ref={curtainRef} className="relative h-[110vh] overflow-clip">
         <div className="sticky top-0 flex h-[100svh] min-h-[420px] items-center justify-center overflow-hidden px-4 sm:px-6">
           <motion.article
             style={reducedMotion ? undefined : { opacity: featureOpacity, scale: featureScale }}
@@ -97,7 +97,7 @@ export default function CurtainRevealReviews() {
           </motion.article>
 
           <motion.div
-            style={reducedMotion ? undefined : { x: leftX, opacity: curtainOpacity }}
+            style={reducedMotion ? undefined : { x: leftX }}
             className="absolute inset-y-0 left-0 z-10 w-1/2 overflow-hidden rounded-r-3xl will-change-transform"
           >
             {/* Unsplash - free license, badilisha na picha halisi ya mteja ukipenda baadaye */}
@@ -111,7 +111,7 @@ export default function CurtainRevealReviews() {
           </motion.div>
 
           <motion.div
-            style={reducedMotion ? undefined : { x: rightX, opacity: curtainOpacity }}
+            style={reducedMotion ? undefined : { x: rightX }}
             className="absolute inset-y-0 right-0 z-10 w-1/2 overflow-hidden rounded-l-3xl will-change-transform"
           >
             {/* Unsplash - free license, badilisha na picha halisi ya mteja ukipenda baadaye */}
