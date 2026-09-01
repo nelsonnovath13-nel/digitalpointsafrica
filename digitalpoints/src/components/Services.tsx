@@ -1,6 +1,133 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const brandTeal = "#08bdb8";
+
+const TRIANGLE_PATH =
+  "M88.5,206.6 L210.3,132.6 Q330,60 330,200 L330,260 Q330,400 210.3,327.4 L88.5,253.4 Q50,230 88.5,206.6 Z";
+
+const springSettle = { type: "spring" as const, stiffness: 140, damping: 16, mass: 0.7 };
+
+/**
+ * Desktop-only entrance: the mark draws itself in (stroke traces the
+ * outline, then the fill settles), each word flies in from its own arc
+ * direction with a spring overshoot, and the whole mark carries a subtle
+ * scroll-linked parallax rotation while the section is in view.
+ */
+function ImpactMarkPro() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: wrapRef, offset: ["start end", "end start"] });
+  const parallaxRotate = useTransform(scrollYProgress, [0, 0.5, 1], [-4, 0, 4]);
+
+  const wordVariants = {
+    hidden: { opacity: 0, scale: 0.7 },
+    show: { opacity: 1, scale: 1, transition: springSettle },
+  };
+
+  return (
+    <motion.div ref={wrapRef} style={{ rotate: parallaxRotate }} className="absolute inset-0 h-full w-full">
+      <motion.svg
+        viewBox="0 0 400 460"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.4 }}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.14, delayChildren: 0.55 } } }}
+        className="h-full w-full"
+        aria-label="Create, Brand, Grow — Impact"
+      >
+        <motion.path
+          d={TRIANGLE_PATH}
+          fill="none"
+          stroke={brandTeal}
+          strokeWidth={2.5}
+          pathLength={1}
+          initial={{ strokeDashoffset: 1, opacity: 1 }}
+          whileInView={{ strokeDashoffset: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
+          style={{ strokeDasharray: 1 }}
+        />
+        <motion.path
+          d={TRIANGLE_PATH}
+          fill={brandTeal}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.62, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformOrigin: "200px 230px" }}
+        />
+        <motion.text
+          x="195"
+          y="242"
+          textAnchor="middle"
+          fill="#ffffff"
+          fontFamily="'Mona Sans', sans-serif"
+          fontWeight={800}
+          fontSize="40"
+          letterSpacing="-1"
+          variants={{ hidden: { opacity: 0, scale: 0.6 }, show: { opacity: 1, scale: 1, transition: { ...springSettle, delay: 0.05 } } }}
+          style={{ transformOrigin: "195px 230px" }}
+        >
+          IMPACT
+        </motion.text>
+        <g transform="rotate(-31.3 168 118)">
+          <motion.text
+            x="168"
+            y="118"
+            textAnchor="middle"
+            fill={brandTeal}
+            fontFamily="'Mona Sans', sans-serif"
+            fontWeight={800}
+            fontSize="26"
+            letterSpacing="1"
+            variants={{
+              hidden: { opacity: 0, x: -46, y: -26, rotate: -18 },
+              show: { opacity: 1, x: 0, y: 0, rotate: 0, transition: springSettle },
+            }}
+          >
+            CREATE
+          </motion.text>
+        </g>
+        <g transform="rotate(31.3 168 358)">
+          <motion.text
+            x="168"
+            y="358"
+            textAnchor="middle"
+            fill={brandTeal}
+            fontFamily="'Mona Sans', sans-serif"
+            fontWeight={800}
+            fontSize="26"
+            letterSpacing="1"
+            variants={{
+              hidden: { opacity: 0, x: -46, y: 26, rotate: 18 },
+              show: { opacity: 1, x: 0, y: 0, rotate: 0, transition: springSettle },
+            }}
+          >
+            BRAND
+          </motion.text>
+        </g>
+        <g transform="rotate(90 372 230)">
+          <motion.text
+            x="372"
+            y="230"
+            textAnchor="middle"
+            fill={brandTeal}
+            fontFamily="'Mona Sans', sans-serif"
+            fontWeight={800}
+            fontSize="26"
+            letterSpacing="1"
+            variants={{
+              hidden: { opacity: 0, x: 52, rotate: 24 },
+              show: { opacity: 1, x: 0, rotate: 0, transition: springSettle },
+            }}
+          >
+            GROW
+          </motion.text>
+        </g>
+      </motion.svg>
+    </motion.div>
+  );
+}
 
 function ImpactMark() {
   const wordVariants = {
@@ -145,7 +272,12 @@ export default function Services() {
             transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="relative mx-auto mt-8 h-[280px] w-full max-w-[420px] lg:mt-0 lg:h-[340px]"
           >
-            <ImpactMark />
+            <div className="lg:hidden">
+              <ImpactMark />
+            </div>
+            <div className="hidden lg:block lg:h-full lg:w-full">
+              <ImpactMarkPro />
+            </div>
             <motion.div aria-hidden="true" className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" style={{ backgroundColor: brandTeal, opacity: 0.06 }} animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} />
           </motion.div>
         </div>
