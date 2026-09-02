@@ -290,8 +290,8 @@ export default function Hero() {
         </AnimatePresence>
       </div>
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8 lg:grid lg:grid-cols-[46%_54%] lg:grid-rows-[1fr] lg:items-center lg:justify-items-stretch lg:gap-10 lg:overflow-hidden lg:px-10 lg:pb-0 lg:pt-10 lg:text-left xl:grid-cols-[44%_56%] xl:gap-14 xl:px-16">
-        <div className="flex flex-col items-center lg:items-start">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8 lg:items-stretch lg:overflow-hidden lg:px-10 lg:pb-0 lg:pt-10 lg:text-left xl:px-16">
+        <div className="flex flex-col items-center lg:relative lg:z-10 lg:max-w-[540px] lg:items-start xl:max-w-[600px]">
         <motion.h1
           initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -337,10 +337,20 @@ export default function Hero() {
           initial={shouldReduceMotion ? false : { opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.6, delay: shouldReduceMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="hidden h-full min-h-0 w-full overflow-hidden lg:block"
+          className="pointer-events-none absolute inset-y-0 left-[6%] right-0 z-0 hidden min-h-0 overflow-hidden lg:block"
         >
           <HeroImageColumns />
         </motion.div>
+
+        {/* Scrim so the headline stays dominant over the images peeking through behind it */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-[1] hidden lg:block"
+          style={{
+            background:
+              "linear-gradient(90deg, #04100e 0%, #04100e 18%, rgba(4,16,14,0.94) 34%, rgba(4,16,14,0.7) 48%, rgba(4,16,14,0.32) 62%, rgba(4,16,14,0.05) 76%, transparent 88%)",
+          }}
+        />
       </div>
 
       <style>{`
