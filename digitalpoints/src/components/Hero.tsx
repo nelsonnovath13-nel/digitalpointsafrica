@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { Link } from "react-router-dom";
+import HeroImageColumns from "./HeroImageColumns";
 
 const rotatingWords = [
   "Designs",
@@ -178,7 +179,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       onClick={handleHeroClick}
-      className="relative h-[520px] min-h-[520px] w-full overflow-hidden sm:h-[540px] sm:min-h-[540px] lg:h-[555px] lg:min-h-[555px]"
+      className="relative h-[520px] min-h-[520px] w-full overflow-hidden sm:h-[540px] sm:min-h-[540px] lg:h-[640px] lg:min-h-[640px]"
       style={{
         background: "linear-gradient(120deg, #050807 0%, #04100e 35%, #0a2b27 65%, #123f39 100%)",
       }}
@@ -289,7 +290,8 @@ export default function Hero() {
         </AnimatePresence>
       </div>
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8 lg:grid lg:grid-cols-[46%_54%] lg:grid-rows-[1fr] lg:items-center lg:justify-items-stretch lg:gap-10 lg:overflow-hidden lg:px-10 lg:pb-0 lg:pt-10 lg:text-left xl:grid-cols-[44%_56%] xl:gap-14 xl:px-16">
+        <div className="flex flex-col items-center lg:items-start">
         <motion.h1
           initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -309,15 +311,15 @@ export default function Hero() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.45, delay: shouldReduceMotion ? 0 : 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-4 max-w-[980px] px-2 font-poppins text-[12px] font-normal leading-[1.45] tracking-[-0.01em] text-white/80 sm:mt-5 sm:text-[14px] md:text-[15px] lg:text-[16px] lg:leading-[1.5]">
-          <span className="block md:whitespace-nowrap">We bring together creativity, technology and strategy to build brands that connect, engage, and grow.</span>
+          className="mt-4 max-w-[980px] px-2 font-poppins text-[12px] font-normal leading-[1.45] tracking-[-0.01em] text-white/80 sm:mt-5 sm:text-[14px] md:text-[15px] lg:max-w-none lg:px-0 lg:text-[16px] lg:leading-[1.5]">
+          <span className="block md:whitespace-nowrap lg:whitespace-normal">We bring together creativity, technology and strategy to build brands that connect, engage, and grow.</span>
         </motion.p>
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.5, delay: shouldReduceMotion ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 flex w-full flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:justify-center sm:gap-4">
+          className="mt-6 flex w-full flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:justify-center sm:gap-4 lg:justify-start">
           <Link to="/portfolio" className="group relative inline-flex h-[46px] min-w-[180px] items-center justify-center overflow-hidden rounded-full border border-[#08bdb8] bg-[#08bdb8] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(8,189,184,0)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-[#18d1cc] hover:bg-[#10aaa6] hover:shadow-[0_14px_32px_-12px_rgba(8,189,184,0.55)] active:translate-y-0 active:scale-[0.98] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">
             {!shouldReduceMotion && (
               <span
@@ -328,6 +330,16 @@ export default function Hero() {
             <span className="relative">Explore Portfolio</span>
           </Link>
           <Link to="/contact" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-white/70 bg-white/[0.02] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-white hover:bg-white/[0.08] hover:shadow-[0_14px_32px_-16px_rgba(255,255,255,0.24)] active:translate-y-0 active:scale-[0.98] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">Work With Us</Link>
+        </motion.div>
+        </div>
+
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: shouldReduceMotion ? 0.1 : 0.6, delay: shouldReduceMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="hidden h-full min-h-0 w-full overflow-hidden lg:block"
+        >
+          <HeroImageColumns />
         </motion.div>
       </div>
 
