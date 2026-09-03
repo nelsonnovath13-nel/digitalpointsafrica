@@ -181,7 +181,7 @@ export default function Hero() {
       onClick={handleHeroClick}
       className="relative h-[520px] min-h-[520px] w-full overflow-hidden sm:h-[540px] sm:min-h-[540px] lg:h-[640px] lg:min-h-[640px]"
       style={{
-        background: "linear-gradient(120deg, #050807 0%, #04100e 35%, #0a2b27 65%, #123f39 100%)",
+        background: "linear-gradient(120deg, #071211 0%, #0a2420 35%, #124a41 65%, #1a5c50 100%)",
       }}
     >
       {/* Background depth orbs */}
@@ -348,7 +348,7 @@ export default function Hero() {
           className="pointer-events-none absolute inset-0 z-[1] hidden lg:block"
           style={{
             background:
-              "linear-gradient(90deg, #04100e 0%, #04100e 18%, rgba(4,16,14,0.94) 34%, rgba(4,16,14,0.7) 48%, rgba(4,16,14,0.32) 62%, rgba(4,16,14,0.05) 76%, transparent 88%)",
+              "linear-gradient(90deg, #071211 0%, #071211 14%, rgba(7,18,17,0.88) 30%, rgba(7,18,17,0.58) 46%, rgba(7,18,17,0.24) 60%, rgba(7,18,17,0.02) 74%, transparent 86%)",
           }}
         />
       </div>

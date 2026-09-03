@@ -68,6 +68,7 @@ export default function HeroImageColumns() {
                   loading={colIndex < 2 && i === 0 ? "eager" : "lazy"}
                   decoding="async"
                   className="h-full w-full object-cover"
+                  style={{ filter: "brightness(1.18) saturate(1.12)" }}
                 />
               </div>
             ))}
