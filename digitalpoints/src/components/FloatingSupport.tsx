@@ -88,13 +88,14 @@ export function FloatingChatWidget() {
 
 export function GetInTouchTab() {
   return (
-    <div className="fixed bottom-5 left-5 z-40 sm:left-6">
+    <div className="fixed bottom-5 left-0 z-40">
       <Link
         to="/contact"
-        className="get-in-touch-tab flex items-center gap-2.5 rounded-full bg-[#08bdb8] px-5 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-ink-950 transition hover:bg-[#0aa9a5]"
+        aria-label="Get In Touch"
+        className="get-in-touch-tab group flex h-11 w-11 items-center gap-2.5 overflow-hidden whitespace-nowrap rounded-r-full bg-[#08bdb8] pl-3.5 text-xs font-semibold uppercase tracking-[0.15em] text-ink-950 transition-[width] duration-300 ease-out hover:w-[185px]"
       >
-        <span aria-hidden="true" className="get-in-touch-dot h-2 w-2 rounded-full bg-white" />
-        Get In Touch
+        <span aria-hidden="true" className="get-in-touch-dot h-2 w-2 shrink-0 rounded-full bg-white" />
+        <span className="opacity-0 transition-opacity duration-200 group-hover:opacity-100">Get In Touch</span>
       </Link>
       <style>{`
         .get-in-touch-tab {
