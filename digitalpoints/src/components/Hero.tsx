@@ -291,7 +291,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8 lg:items-stretch lg:overflow-hidden lg:px-10 lg:pb-0 lg:pt-10 lg:text-left xl:px-16">
-        <div className="flex flex-col items-center lg:relative lg:z-10 lg:max-w-[540px] lg:items-start xl:max-w-[600px]">
+        <div className="flex flex-col items-center lg:relative lg:z-10 lg:ml-8 lg:max-w-[540px] lg:items-start xl:ml-14 xl:max-w-[600px]">
         <motion.h1
           initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
