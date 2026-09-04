@@ -61,7 +61,7 @@ function PrintingCard({
       whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.55, delay: index * 0.08, ease: premiumEase }}
-      className="relative h-[460px] w-[82vw] shrink-0 snap-start sm:h-[520px] sm:w-[420px] lg:w-[460px]"
+      className="relative h-[380px] w-[78vw] shrink-0 snap-start sm:h-[520px] sm:w-[420px] lg:w-[460px]"
     >
       <div
         role="button"
@@ -272,7 +272,7 @@ export default function PrintingServices() {
                 : { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }
             }
             transition={{ duration: 0.5, ease: premiumEase }}
-            className="flex items-center gap-3"
+            className="hidden items-center gap-3 sm:flex"
           >
             <button
               type="button"

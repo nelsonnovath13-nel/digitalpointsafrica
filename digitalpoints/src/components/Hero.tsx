@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { Link } from "react-router-dom";
-import HeroImageColumns from "./HeroImageColumns";
+import HeroImageColumns, { HeroImageStripMobile } from "./HeroImageColumns";
 
 const rotatingWords = [
   "Designs",
@@ -179,7 +179,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       onClick={handleHeroClick}
-      className="relative h-[520px] min-h-[520px] w-full overflow-hidden sm:h-[540px] sm:min-h-[540px] lg:h-[640px] lg:min-h-[640px]"
+      className="relative h-[640px] min-h-[640px] w-full overflow-hidden sm:h-[660px] sm:min-h-[660px] lg:h-[640px] lg:min-h-[640px]"
       style={{
         background: "linear-gradient(120deg, #071211 0%, #0a2420 35%, #124a41 65%, #1a5c50 100%)",
       }}
@@ -332,6 +332,15 @@ export default function Hero() {
           <Link to="/contact" className="inline-flex h-[46px] min-w-[180px] items-center justify-center rounded-full border border-white/70 bg-white/[0.02] px-7 font-poppins text-[13px] font-medium tracking-[-0.01em] text-white shadow-[0_0_0_0_rgba(255,255,255,0)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:scale-[1.02] hover:border-white hover:bg-white/[0.08] hover:shadow-[0_14px_32px_-16px_rgba(255,255,255,0.24)] active:translate-y-0 active:scale-[0.98] sm:h-[48px] sm:min-w-[185px] sm:text-[13.5px]">Work With Us</Link>
         </motion.div>
         </div>
+
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: shouldReduceMotion ? 0.1 : 0.5, delay: shouldReduceMotion ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-8 w-full lg:hidden"
+        >
+          <HeroImageStripMobile />
+        </motion.div>
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, x: 16 }}
