@@ -337,7 +337,7 @@ export default function Hero() {
           initial={shouldReduceMotion ? false : { opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.6, delay: shouldReduceMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute inset-y-0 left-[6%] right-0 z-0 hidden min-h-0 overflow-hidden lg:block"
+          className="pointer-events-none absolute inset-y-0 left-[6%] right-4 z-0 hidden min-h-0 overflow-hidden lg:block xl:right-8"
         >
           <HeroImageColumns />
         </motion.div>

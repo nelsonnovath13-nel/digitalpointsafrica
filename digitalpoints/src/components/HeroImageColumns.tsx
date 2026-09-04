@@ -40,7 +40,7 @@ export default function HeroImageColumns() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none relative ml-auto mr-0 grid h-full max-w-[440px] grid-cols-2 gap-3 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
+      className="pointer-events-none relative ml-auto mr-0 grid h-full max-w-[510px] grid-cols-2 gap-3.5 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
     >
       {columns.map((column, colIndex) => (
         <div key={colIndex} className="relative h-full overflow-hidden">
