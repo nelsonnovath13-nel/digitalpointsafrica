@@ -298,7 +298,7 @@ export default function Hero() {
           className="font-display text-[1.55rem] font-normal leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
           <span className="block whitespace-nowrap">Powering brands</span>
           <span className="block whitespace-nowrap lg:text-center">with</span>
-          <span className="relative block min-h-[1.08em] text-white" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
+          <span className="relative block min-h-[1.08em] text-white lg:pl-10 xl:pl-14" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
             <span className="inline-flex min-w-[9ch] items-baseline justify-center font-extrabold" style={{ fontSize: "0.85em" }}>
               {typedWord}
               <span aria-hidden="true" className="ml-[3px] inline-block h-[0.88em] w-[2px] translate-y-[0.04em] bg-white/90 animate-pulse align-baseline" />
@@ -345,7 +345,7 @@ export default function Hero() {
           initial={shouldReduceMotion ? false : { opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.6, delay: shouldReduceMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute inset-y-0 left-[6%] right-4 z-0 hidden min-h-0 overflow-hidden lg:block xl:right-8"
+          className="pointer-events-none absolute inset-y-0 left-[6%] right-10 z-0 hidden min-h-0 overflow-hidden lg:block xl:right-20"
         >
           <HeroImageColumns />
         </motion.div>
