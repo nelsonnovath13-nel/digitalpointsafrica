@@ -10,41 +10,60 @@ type NavItem = {
 
 const links: NavItem[] = [
   { label: "HOME", href: "/", accent: "#00c7c3" },
-  { label: "ABOUT US", href: "/about", accent: "#2d8cff" },
-  { label: "CORE SERVICES", href: "/services", accent: "#8a4dff" },
-  { label: "PRINT SERVICES", href: "/printing", accent: "#f59e0b" },
-  { label: "PROMOTIONS", href: "#", accent: "#ec4899" },
-  { label: "DIGITAL TRAININGS", href: "/training", accent: "#10b981" },
-  { label: "CONTACT US", href: "/contact", accent: "#06b6d4" },
+  { label: "SERVICES", href: "/services", accent: "#8a4dff" },
+  { label: "PROJECTS", href: "/portfolio", accent: "#ec4899" },
+  { label: "PRINT", href: "/printing", accent: "#f59e0b" },
+  { label: "MARKETING", href: "/services", accent: "#ff7a45" },
+  { label: "TRAININGS", href: "/training", accent: "#10b981" },
+  { label: "ABOUT", href: "/about", accent: "#2d8cff" },
+  { label: "CONTACT", href: "/contact", accent: "#06b6d4" },
 ];
 
-const coreServiceItems = [
-  "Digital Marketing",
-  "Video Production",
-  "Graphic Design",
-  "Social Media Management",
-  "Web Designs",
+type MegaCategory = { title: string; route: string; items: string[] };
+
+const servicesMenu: MegaCategory[] = [
+  {
+    title: "Digital Marketing",
+    route: "/services",
+    items: ["Social Media", "SEO", "Paid Ads", "Content Marketing", "Email Marketing", "Digital Campaigns", "Analytics & Reporting"],
+  },
+  {
+    title: "Web, App & Systems",
+    route: "/services",
+    items: ["Website Design & Development", "Mobile App Development", "Web Applications", "Business Management Systems", "Custom Software Solutions", "E-Commerce Solutions", "System Integration & Automation"],
+  },
+  {
+    title: "Video Production",
+    route: "/video-production",
+    items: ["Corporate & Brand Videos", "Promotional Videos", "Social Media Content", "Event & Conference Coverage", "Product & Service Videos", "Interviews & Testimonials", "Photography & Videography", "Video Editing & Post-Production"],
+  },
+  {
+    title: "Print & Branding",
+    route: "/printing",
+    items: ["Brand Identity Design", "Logo Design", "Corporate Profiles & Stationery", "Embroidery", "Marketing & Promotional Materials", "Business Cards & Brochures", "Banners, Posters & Signage", "Packaging & Label Design", "Large Format & Digital Printing"],
+  },
 ];
 
-const printServiceItems = [
-  "Large Format Printing",
-  "Vehicle & Item Branding",
-  "Embroidery & Apparel Branding",
-  "Signage & 3D Branding",
-  "Laser Cutting & Engraving",
+const printMenuItems: MegaCategory[] = [
+  {
+    title: "Print Services",
+    route: "/printing",
+    items: ["Digital Printing", "Large Format Printing", "UV & Custom Material Printing", "Packaging & Label Printing", "Apparel & Promotional Printing"],
+  },
 ];
 
-const serviceRoutes: Record<string, string> = {
-  "Digital Marketing": "/services",
-  "Video Production": "/video-production",
-  "Graphic Design": "/services",
-  "Social Media Management": "/services",
-  "Web Designs": "/services",
-  "Large Format Printing": "/printing",
-  "Vehicle & Item Branding": "/printing",
-  "Embroidery & Apparel Branding": "/printing",
-  "Signage & 3D Branding": "/printing",
-  "Laser Cutting & Engraving": "/printing",
+const marketingMenu: MegaCategory[] = [
+  { title: "Digital Marketing", route: "/services", items: ["Social Media Marketing", "Social Media Management", "Paid Advertising", "Content Marketing"] },
+  { title: "Social Media", route: "/services", items: ["Instagram", "Facebook", "TikTok", "LinkedIn", "Content Marketing"] },
+  { title: "Campaign Content", route: "/services", items: ["Promotional Content", "Copywriting", "Creative Campaigns"] },
+  { title: "Advertising", route: "/services", items: ["Meta Ads", "Google Ads", "Online Advertising Campaigns"] },
+  { title: "Marketing Strategy", route: "/services", items: ["Brand Positioning", "Campaign Strategy", "Audience Strategy", "Growth Strategy"] },
+];
+
+const megaMenus: Record<string, MegaCategory[]> = {
+  SERVICES: servicesMenu,
+  PRINT: printMenuItems,
+  MARKETING: marketingMenu,
 };
 
 function DigitalPointsLogo() {
@@ -55,20 +74,6 @@ function DigitalPointsLogo() {
       className="block h-11 w-auto sm:h-12"
     />
   );
-}
-
-function ServiceIcon({ name }: { name: string }) {
-  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-  if (name === "Digital Marketing") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>;
-  if (name === "Video Production") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><rect x="3" y="6" width="12" height="12" rx="2" /><path d="m15 10 5-3v10l-5-3" /></svg>;
-  if (name === "Graphic Design") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="m4 16 8-8 4 4-8 8H4v-4Z" /><path d="m14 6 1.5-1.5a2 2 0 0 1 3 3L17 9" /></svg>;
-  if (name === "Social Media Management") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><circle cx="6" cy="12" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="18" cy="18" r="2" /><path d="m8 11 8-4M8 13l8 4" /></svg>;
-  if (name === "Large Format Printing") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><rect x="5" y="4" width="14" height="16" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></svg>;
-  if (name === "Vehicle & Item Branding") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M3 14h18l-2-6H7l-4 6Z" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /></svg>;
-  if (name === "Embroidery & Apparel Branding") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M7 5 4 8l4 3v8h8v-8l4-3-3-3-5 3-5-3Z" /></svg>;
-  if (name === "Signage & 3D Branding") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M5 4h14v12H5z" /><path d="M8 20h8M12 16v4" /></svg>;
-  if (name === "Laser Cutting & Engraving") return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M12 3v18M5 7l14 10M19 7 5 17" /><circle cx="12" cy="12" r="3" /></svg>;
-  return <svg viewBox="0 0 24 24" className="h-5 w-5" {...common}><path d="M4 5h16v11H4z" /><path d="M8 20h8M12 16v4" /></svg>;
 }
 
 function Chevron({ open }: { open: boolean }) {
@@ -129,7 +134,7 @@ export default function Header() {
       <div className={`flex h-[60px] w-full items-center justify-between gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
         <Link to="/" className="group flex shrink-0 items-center" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
         <AnimatePresence>
-          {(activeDesktopMenu === "CORE SERVICES" || activeDesktopMenu === "PRINT SERVICES") && (
+          {activeDesktopMenu !== null && megaMenus[activeDesktopMenu] && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -141,7 +146,7 @@ export default function Header() {
           )}
         </AnimatePresence>
         <nav className="relative z-[80] hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
-          {links.filter((item) => item.label !== "CONTACT US").map((item) => {
+          {links.filter((item) => item.label !== "CONTACT").map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : scrolled ? "#ffffff" : "#ffffff";
             const shouldGlow = isHovered || active;
@@ -152,8 +157,9 @@ export default function Header() {
               <motion.span aria-hidden="true" className="pointer-events-none absolute -bottom-1 left-0 right-0 h-[2px] origin-center rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 9px ${item.accent}70` }} initial={{ opacity: 0, scaleX: 0 }} animate={isHovered && !active ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }} transition={{ duration: 0.2, ease: "easeOut" }} />
               {active && <motion.span layoutId="active-nav-indicator" aria-hidden="true" className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full" style={{ backgroundColor: item.accent, boxShadow: `0 0 8px ${item.accent}80` }} initial={{ opacity: 0, scaleX: 0.35 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ opacity: { duration: 0.18 }, scaleX: { type: "spring", stiffness: 500, damping: 35 }, layout: { type: "spring", stiffness: 500, damping: 35 } }} />}
             </motion.span>;
-            if (item.label === "CORE SERVICES" || item.label === "PRINT SERVICES") {
-              const serviceItems = item.label === "CORE SERVICES" ? coreServiceItems : printServiceItems;
+            if (megaMenus[item.label]) {
+              const categories = megaMenus[item.label];
+              const isSingleColumn = categories.length === 1;
               return (
                 <div
                   key={item.label}
@@ -166,29 +172,64 @@ export default function Header() {
                   </button>
                   <AnimatePresence>
                     {activeDesktopMenu === item.label && (
+                      <div className="fixed left-1/2 top-[80px] z-[80] -translate-x-1/2">
                       <motion.div
                         initial={{ opacity: 0, y: -10, scale: 0.985 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.985 }}
                         transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute left-1/2 top-[calc(100%+20px)] z-[80] w-[390px] -translate-x-1/2 rounded-[22px] border border-white/90 bg-[#faf9f6] p-3 shadow-[0_28px_80px_rgba(0,0,0,0.32)]"
+                        className={`rounded-[22px] border border-white/90 bg-[#faf9f6] shadow-[0_28px_80px_rgba(0,0,0,0.32)] ${
+                          isSingleColumn ? "w-[360px] p-3" : "w-[min(92vw,880px)] p-6"
+                        }`}
                       >
-                        <div className="grid gap-1">
-                          {serviceItems.map((service) => (
-                            <Link
-                              key={service}
-                              to={serviceRoutes[service]}
-                              className="group flex items-center gap-4 rounded-[14px] px-4 py-3.5 text-[#252b32] transition-all duration-200 hover:bg-[#00aaa8]/8"
-                              onClick={() => setActiveDesktopMenu(null)}
-                            >
-                              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#00aaa8]/8 text-[#009a98] transition-colors group-hover:bg-[#00aaa8]/14">
-                                <ServiceIcon name={service} />
-                              </span>
-                              <span className="font-poppins text-[15px] font-medium">{service}</span>
-                            </Link>
-                          ))}
+                        <div
+                          className={
+                            isSingleColumn
+                              ? "grid gap-1"
+                              : `grid grid-cols-2 gap-x-8 gap-y-6 ${categories.length >= 5 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`
+                          }
+                        >
+                          {categories.map((category) =>
+                            isSingleColumn ? (
+                              category.items.map((service) => (
+                                <Link
+                                  key={service}
+                                  to={category.route}
+                                  className="group flex items-center gap-3 rounded-[14px] px-4 py-3.5 text-[#252b32] transition-all duration-200 hover:bg-[#00aaa8]/8"
+                                  onClick={() => setActiveDesktopMenu(null)}
+                                >
+                                  <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#00aaa8]" />
+                                  <span className="font-poppins text-[15px] font-medium">{service}</span>
+                                </Link>
+                              ))
+                            ) : (
+                              <div key={category.title}>
+                                <Link
+                                  to={category.route}
+                                  onClick={() => setActiveDesktopMenu(null)}
+                                  className="mb-2.5 block font-poppins text-[13px] font-semibold uppercase tracking-[0.06em] text-[#00918f]"
+                                >
+                                  {category.title}
+                                </Link>
+                                <ul className="space-y-1.5">
+                                  {category.items.map((service) => (
+                                    <li key={service}>
+                                      <Link
+                                        to={category.route}
+                                        onClick={() => setActiveDesktopMenu(null)}
+                                        className="block rounded-lg px-1.5 py-1 font-poppins text-[13.5px] font-medium leading-snug text-[#3a4249] transition-colors duration-150 hover:bg-[#00aaa8]/8 hover:text-[#00595a]"
+                                      >
+                                        {service}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ),
+                          )}
                         </div>
                       </motion.div>
+                      </div>
                     )}
                   </AnimatePresence>
                 </div>
@@ -235,9 +276,9 @@ export default function Header() {
               </div>
 
               <nav aria-label="Mobile navigation" className="border-t border-[#111827]/10">
-                {links.filter((item) => item.label !== "CONTACT US").map((item) => {
-                  const hasChildren = item.label === "CORE SERVICES" || item.label === "PRINT SERVICES";
-                  const children = item.label === "CORE SERVICES" ? coreServiceItems : item.label === "PRINT SERVICES" ? printServiceItems : [];
+                {links.filter((item) => item.label !== "CONTACT").map((item) => {
+                  const categories = megaMenus[item.label];
+                  const hasChildren = Boolean(categories);
                   const expanded = expandedMobileSection === item.label;
                   const active = isActive(item);
 
@@ -277,11 +318,26 @@ export default function Header() {
                             transition={{ duration: 0.24, ease: "easeOut" }}
                             className="overflow-hidden"
                           >
-                            <div className="space-y-1 pb-5">
-                              {children.map((child) => (
-                                <Link key={child} to={serviceRoutes[child]} onClick={closeMobileMenu} className="block rounded-xl px-4 py-2.5 font-poppins text-[15px] font-medium text-[#374151] transition-colors hover:bg-[#00aaa8]/8 hover:text-[#008f8d]">
-                                  {child}
-                                </Link>
+                            <div className="space-y-4 pb-5">
+                              {categories!.map((category) => (
+                                <div key={category.title}>
+                                  {categories!.length > 1 && (
+                                    <Link
+                                      to={category.route}
+                                      onClick={closeMobileMenu}
+                                      className="mb-1 block px-4 font-poppins text-[12px] font-semibold uppercase tracking-[0.06em] text-[#00918f]"
+                                    >
+                                      {category.title}
+                                    </Link>
+                                  )}
+                                  <div className="space-y-1">
+                                    {category.items.map((child) => (
+                                      <Link key={child} to={category.route} onClick={closeMobileMenu} className="block rounded-xl px-4 py-2.5 font-poppins text-[15px] font-medium text-[#374151] transition-colors hover:bg-[#00aaa8]/8 hover:text-[#008f8d]">
+                                        {child}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </div>
                               ))}
                             </div>
                           </motion.div>

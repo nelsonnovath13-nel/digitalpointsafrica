@@ -45,46 +45,61 @@ function BrandTile() {
   );
 }
 
-// Mobile gets its own, distinct treatment: a single horizontal auto-scrolling
-// strip instead of tall vertical columns, since there isn't enough spare
-// height on a phone screen for the desktop layout to work.
+const mobileStripRows: Tile[][] = [
+  mobileStripItems.slice(0, 3),
+  mobileStripItems.slice(3, 6),
+];
+
+function HeroStripRow({ items, reverse, rowIndex }: { items: Tile[]; reverse: boolean; rowIndex: number }) {
+  return (
+    <div className={`hero-strip-track flex w-max gap-3 px-5 ${reverse ? "hero-strip-track-reverse" : ""}`}>
+      {[...items, ...items].map((tile, i) =>
+        tile.type === "brand" ? (
+          <div key={i} className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-white/5">
+            <BrandTile />
+          </div>
+        ) : (
+          <button
+            key={i}
+            type="button"
+            aria-label={tile.label}
+            className="hero-tile relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
+          >
+            <img
+              src={tile.src}
+              alt={tile.label}
+              loading={rowIndex === 0 && i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className="h-full w-full object-cover"
+              style={{ filter: "brightness(1.18) saturate(1.12)" }}
+            />
+            <span
+              aria-hidden="true"
+              className="hero-tile-scrim pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent"
+            />
+            <span
+              aria-hidden="true"
+              className="hero-tile-label pointer-events-none absolute inset-x-0 bottom-0 px-2.5 py-2 font-poppins text-[10.5px] font-semibold uppercase leading-tight tracking-[0.04em] text-white"
+            >
+              {tile.label}
+            </span>
+          </button>
+        ),
+      )}
+    </div>
+  );
+}
+
+// Mobile gets its own, distinct treatment: two horizontal auto-scrolling rows
+// (moving in opposite directions) instead of tall vertical columns, since
+// there isn't enough spare height on a phone screen for the desktop layout.
 export function HeroImageStripMobile() {
   return (
     <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-      <div className="hero-strip-track flex w-max gap-3 px-5">
-        {[...mobileStripItems, ...mobileStripItems].map((tile, i) =>
-          tile.type === "brand" ? (
-            <div key={i} className="h-44 w-44 shrink-0 overflow-hidden rounded-2xl bg-white/5">
-              <BrandTile />
-            </div>
-          ) : (
-            <button
-              key={i}
-              type="button"
-              aria-label={tile.label}
-              className="hero-tile relative h-44 w-44 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
-            >
-              <img
-                src={tile.src}
-                alt={tile.label}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                className="h-full w-full object-cover"
-                style={{ filter: "brightness(1.18) saturate(1.12)" }}
-              />
-              <span
-                aria-hidden="true"
-                className="hero-tile-scrim pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent"
-              />
-              <span
-                aria-hidden="true"
-                className="hero-tile-label pointer-events-none absolute inset-x-0 bottom-0 px-3 py-2 font-poppins text-[12px] font-semibold uppercase leading-tight tracking-[0.04em] text-white"
-              >
-                {tile.label}
-              </span>
-            </button>
-          ),
-        )}
+      <div className="flex flex-col gap-3">
+        {mobileStripRows.map((rowItems, rowIndex) => (
+          <HeroStripRow key={rowIndex} items={rowItems} reverse={rowIndex === 1} rowIndex={rowIndex} />
+        ))}
       </div>
 
       <style>{`
@@ -92,8 +107,15 @@ export function HeroImageStripMobile() {
           from { transform: translate3d(0, 0, 0); }
           to { transform: translate3d(-50%, 0, 0); }
         }
+        @keyframes hero-strip-scroll-reverse {
+          from { transform: translate3d(-50%, 0, 0); }
+          to { transform: translate3d(0, 0, 0); }
+        }
         .hero-strip-track {
-          animation: hero-strip-scroll 24s linear infinite;
+          animation: hero-strip-scroll 22s linear infinite;
+        }
+        .hero-strip-track-reverse {
+          animation-name: hero-strip-scroll-reverse;
         }
         .hero-strip-track:has(.hero-tile:active),
         .hero-strip-track:has(.hero-tile:focus-visible) {
