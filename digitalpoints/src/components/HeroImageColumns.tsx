@@ -55,7 +55,7 @@ function HeroStripRow({ items, reverse, rowIndex }: { items: Tile[]; reverse: bo
     <div className={`hero-strip-track flex w-max gap-3 px-5 ${reverse ? "hero-strip-track-reverse" : ""}`}>
       {[...items, ...items].map((tile, i) =>
         tile.type === "brand" ? (
-          <div key={i} className="h-36 w-36 shrink-0 overflow-hidden rounded-2xl bg-white/5">
+          <div key={i} className="h-40 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/5">
             <BrandTile />
           </div>
         ) : (
@@ -63,7 +63,7 @@ function HeroStripRow({ items, reverse, rowIndex }: { items: Tile[]; reverse: bo
             key={i}
             type="button"
             aria-label={tile.label}
-            className="hero-tile relative h-36 w-36 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
+            className="hero-tile relative h-40 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
           >
             <img
               src={tile.src}
