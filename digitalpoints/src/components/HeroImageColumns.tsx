@@ -54,7 +54,7 @@ export function HeroImageStripMobile() {
       <div className="hero-strip-track flex w-max gap-3 px-5">
         {[...mobileStripItems, ...mobileStripItems].map((tile, i) =>
           tile.type === "brand" ? (
-            <div key={i} className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-white/5">
+            <div key={i} className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-white/5">
               <BrandTile />
             </div>
           ) : (
@@ -62,7 +62,7 @@ export function HeroImageStripMobile() {
               key={i}
               type="button"
               aria-label={tile.label}
-              className="hero-tile relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
+              className="hero-tile relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
             >
               <img
                 src={tile.src}

@@ -104,12 +104,25 @@ function PrintingCard({
               draggable={false}
               onClick={(event) => event.stopPropagation()}
               onKeyDown={(event) => event.stopPropagation()}
-              className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
+              className="pointer-events-none absolute inset-0 z-10 hidden items-center justify-center sm:flex"
               aria-label={`Explore ${service.name}`}
             >
               <span className="pointer-events-none flex h-28 w-28 scale-90 items-center justify-center rounded-full bg-point-600 text-center font-poppins text-[13px] font-semibold leading-tight text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 ease-out group-hover:scale-100 group-hover:pointer-events-auto group-hover:opacity-100">
                 Explore Printing
               </span>
+            </a>
+
+            {/* Hover doesn't work reliably on touch, so mobile gets a plain,
+                always-visible button instead of the hover-reveal circle. */}
+            <a
+              href="/printing"
+              draggable={false}
+              onClick={(event) => event.stopPropagation()}
+              className="absolute bottom-6 right-6 z-10 inline-flex items-center gap-1.5 rounded-full bg-point-600 px-4 py-2 font-poppins text-[12px] font-semibold text-white shadow-[0_8px_20px_rgba(0,0,0,0.35)] sm:hidden"
+              aria-label={`Explore ${service.name}`}
+            >
+              Explore
+              <span aria-hidden="true">→</span>
             </a>
           </div>
 

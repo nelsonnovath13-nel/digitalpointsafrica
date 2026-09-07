@@ -1,6 +1,20 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
 
 const reviews = [
   {
@@ -33,18 +47,21 @@ const featuredService = {
 export default function CurtainRevealReviews() {
   const curtainRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: curtainRef,
     offset: ["start end", "end start"],
   });
 
-  // The curtain only ever parts partway — both photos stay clearly visible
-  // the whole time, never sliding fully away — and the card finishes
-  // appearing well within that same short window, so scrolling settles into
-  // this one composed shot before moving straight on to the reviews below.
-  const leftX = useTransform(scrollYProgress, [0.15, 0.45], ["0%", "-42%"]);
-  const rightX = useTransform(scrollYProgress, [0.15, 0.45], ["0%", "42%"]);
+  // The curtain only ever parts partway on desktop — both photos stay
+  // clearly visible, never sliding fully away — and the card finishes
+  // appearing well within that same short window. On mobile the card takes
+  // up nearly the full width, so a partial 42% parting still overlaps the
+  // text; the photos need to clear almost entirely there to stay readable.
+  const partDistance = isMobile ? "-92%" : "-42%";
+  const leftX = useTransform(scrollYProgress, [0.15, 0.45], ["0%", partDistance]);
+  const rightX = useTransform(scrollYProgress, [0.15, 0.45], ["0%", isMobile ? "92%" : "42%"]);
   const featureOpacity = useTransform(scrollYProgress, [0.18, 0.36], [0, 1]);
   const featureScale = useTransform(scrollYProgress, [0.18, 0.36], [0.92, 1]);
 
