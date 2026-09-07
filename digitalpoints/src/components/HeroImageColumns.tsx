@@ -54,7 +54,7 @@ export function HeroImageStripMobile() {
       <div className="hero-strip-track flex w-max gap-3 px-5">
         {[...mobileStripItems, ...mobileStripItems].map((tile, i) =>
           tile.type === "brand" ? (
-            <div key={i} className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-white/5">
+            <div key={i} className="h-44 w-44 shrink-0 overflow-hidden rounded-2xl bg-white/5">
               <BrandTile />
             </div>
           ) : (
@@ -62,7 +62,7 @@ export function HeroImageStripMobile() {
               key={i}
               type="button"
               aria-label={tile.label}
-              className="hero-tile relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
+              className="hero-tile relative h-44 w-44 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
             >
               <img
                 src={tile.src}
@@ -78,7 +78,7 @@ export function HeroImageStripMobile() {
               />
               <span
                 aria-hidden="true"
-                className="hero-tile-label pointer-events-none absolute inset-x-0 bottom-0 px-2 py-1.5 font-poppins text-[9px] font-semibold uppercase leading-tight tracking-[0.04em] text-white"
+                className="hero-tile-label pointer-events-none absolute inset-x-0 bottom-0 px-3 py-2 font-poppins text-[12px] font-semibold uppercase leading-tight tracking-[0.04em] text-white"
               >
                 {tile.label}
               </span>
@@ -94,6 +94,10 @@ export function HeroImageStripMobile() {
         }
         .hero-strip-track {
           animation: hero-strip-scroll 24s linear infinite;
+        }
+        .hero-strip-track:has(.hero-tile:active),
+        .hero-strip-track:has(.hero-tile:focus-visible) {
+          animation-play-state: paused;
         }
         .hero-tile-scrim {
           opacity: 0;
