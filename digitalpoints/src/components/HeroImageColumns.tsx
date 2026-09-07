@@ -55,7 +55,7 @@ function HeroStripRow({ items, reverse, rowIndex }: { items: Tile[]; reverse: bo
     <div className={`hero-strip-track flex w-max gap-3 px-5 ${reverse ? "hero-strip-track-reverse" : ""}`}>
       {[...items, ...items].map((tile, i) =>
         tile.type === "brand" ? (
-          <div key={i} className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-white/5">
+          <div key={i} className="h-36 w-36 shrink-0 overflow-hidden rounded-2xl bg-white/5">
             <BrandTile />
           </div>
         ) : (
@@ -63,7 +63,7 @@ function HeroStripRow({ items, reverse, rowIndex }: { items: Tile[]; reverse: bo
             key={i}
             type="button"
             aria-label={tile.label}
-            className="hero-tile relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
+            className="hero-tile relative h-36 w-36 shrink-0 overflow-hidden rounded-2xl bg-white/5 text-left"
           >
             <img
               src={tile.src}
@@ -79,7 +79,7 @@ function HeroStripRow({ items, reverse, rowIndex }: { items: Tile[]; reverse: bo
             />
             <span
               aria-hidden="true"
-              className="hero-tile-label pointer-events-none absolute inset-x-0 bottom-0 px-2.5 py-2 font-poppins text-[10.5px] font-semibold uppercase leading-tight tracking-[0.04em] text-white"
+              className="hero-tile-label pointer-events-none absolute inset-x-0 bottom-0 px-2.5 py-2 font-poppins text-[11px] font-semibold uppercase leading-tight tracking-[0.04em] text-white"
             >
               {tile.label}
             </span>
