@@ -296,7 +296,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[1.55rem] font-normal leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
-          <span className="block whitespace-nowrap">Powering brands</span>
+          <span className="block whitespace-nowrap uppercase">Powering brands</span>
           <span className="block whitespace-nowrap lg:text-center">with</span>
           <span className="relative block min-h-[1.08em] text-white lg:pl-10 xl:pl-14" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
             <span className="inline-flex min-w-[9ch] items-baseline justify-center font-extrabold" style={{ fontSize: "0.85em" }}>
