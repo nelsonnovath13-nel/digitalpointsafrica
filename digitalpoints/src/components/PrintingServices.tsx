@@ -150,6 +150,8 @@ function PrintingCard({
 export default function PrintingServices() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const isInteractingRef = useRef(false);
+  const resumeTimeoutRef = useRef<number | null>(null);
 
   const scrollCards = (direction: number) => {
     const slider = sliderRef.current;
@@ -210,6 +212,19 @@ export default function PrintingServices() {
       touchStartY = touch.clientY;
       touchStartScrollLeft = slider.scrollLeft;
       touchAxis = null;
+
+      // Pause autoplay while the person is actually touching the slider,
+      // and keep it paused for a little while after they let go so it
+      // doesn't immediately fight a card they just settled on.
+      isInteractingRef.current = true;
+      if (resumeTimeoutRef.current !== null) window.clearTimeout(resumeTimeoutRef.current);
+    };
+
+    const handleTouchEnd = () => {
+      if (resumeTimeoutRef.current !== null) window.clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = window.setTimeout(() => {
+        isInteractingRef.current = false;
+      }, 2200);
     };
 
     const handleTouchMove = (event: TouchEvent) => {
@@ -230,14 +245,83 @@ export default function PrintingServices() {
 
     slider.addEventListener("touchstart", handleTouchStart, { passive: true });
     slider.addEventListener("touchmove", handleTouchMove, { passive: false });
+    slider.addEventListener("touchend", handleTouchEnd, { passive: true });
+    slider.addEventListener("touchcancel", handleTouchEnd, { passive: true });
 
     return () => {
       slider.removeEventListener("wheel", handleWheel);
       slider.removeEventListener("touchstart", handleTouchStart);
       slider.removeEventListener("touchmove", handleTouchMove);
+      slider.removeEventListener("touchend", handleTouchEnd);
+      slider.removeEventListener("touchcancel", handleTouchEnd);
       if (rafId !== null) window.cancelAnimationFrame(rafId);
+      if (resumeTimeoutRef.current !== null) window.clearTimeout(resumeTimeoutRef.current);
     };
   }, []);
+
+  // Mobile only: the cards drift by themselves slowly, pausing while the
+  // person is touching/dragging (see isInteractingRef above) and resuming
+  // a couple of seconds after they let go.
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider || prefersReducedMotion) return;
+
+    const isMobile = () => window.matchMedia("(max-width: 639px)").matches;
+
+    let frameId: number | null = null;
+    let isVisible = true;
+    // `scrollLeft` rounds to whole pixels on read, so accumulating a
+    // sub-pixel-per-frame speed in a plain JS variable (rather than reading
+    // it back each tick) is what actually lets the drift add up instead of
+    // being truncated back to the same integer every frame.
+    let floatScrollLeft = slider.scrollLeft;
+
+    // CSS scroll-snap takes ownership of scrollLeft once a real touch
+    // sequence has happened on the container — after that, direct JS writes
+    // to scrollLeft are silently ignored while snapping is active. Autoplay
+    // needs snap switched off while it's actively driving the scroll, and
+    // switched back on whenever a person is in control (so their swipes
+    // still land cleanly on a card).
+    let snapActive = true;
+
+    const tick = () => {
+      const shouldAutoplay = isMobile() && isVisible && !isInteractingRef.current;
+
+      if (shouldAutoplay && snapActive) {
+        slider.style.scrollSnapType = "none";
+        snapActive = false;
+      } else if (!shouldAutoplay && !snapActive) {
+        slider.style.scrollSnapType = "x proximity";
+        snapActive = true;
+        floatScrollLeft = slider.scrollLeft;
+      }
+
+      if (shouldAutoplay) {
+        const maxScroll = slider.scrollWidth - slider.clientWidth;
+        if (maxScroll > 0) {
+          floatScrollLeft += 0.6;
+          if (floatScrollLeft >= maxScroll - 1) floatScrollLeft = 0;
+          slider.scrollLeft = floatScrollLeft;
+        }
+      } else {
+        floatScrollLeft = slider.scrollLeft;
+      }
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    });
+    observer.observe(slider);
+
+    frameId = window.requestAnimationFrame(tick);
+
+    return () => {
+      observer.disconnect();
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      slider.style.scrollSnapType = "x proximity";
+    };
+  }, [prefersReducedMotion]);
 
   return (
     <section id="printing-services" className="relative overflow-hidden bg-cream-50 py-24 sm:py-28">
@@ -309,8 +393,8 @@ export default function PrintingServices() {
 
       <div
         ref={sliderRef}
-        style={{ touchAction: "pan-y", overscrollBehaviorX: "contain", WebkitOverflowScrolling: "touch" }}
-        className="flex snap-x snap-proximity gap-5 overflow-x-auto px-6 pb-3 [scrollbar-width:none] sm:gap-6 [&::-webkit-scrollbar]:hidden"
+        style={{ touchAction: "pan-y", overscrollBehaviorX: "contain", WebkitOverflowScrolling: "touch", scrollSnapType: "x proximity" }}
+        className="flex gap-5 overflow-x-auto px-6 pb-3 [scrollbar-width:none] sm:gap-6 [&::-webkit-scrollbar]:hidden"
       >
         <div aria-hidden="true" className="w-[max(0px,calc((100vw-1280px)/2))] shrink-0" />
 
