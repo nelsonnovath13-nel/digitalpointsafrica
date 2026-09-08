@@ -311,7 +311,9 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.45, delay: shouldReduceMotion ? 0 : 0.12, ease: [0.22, 1, 0.36, 1] }}
           className="mt-4 max-w-[980px] px-2 font-poppins text-[12px] font-normal leading-[1.45] tracking-[-0.01em] text-white/80 sm:mt-5 sm:text-[14px] md:text-[15px] lg:max-w-none lg:px-0 lg:text-[16px] lg:leading-[1.5]">
-          <span className="block md:whitespace-nowrap lg:whitespace-normal">We bring together creativity, technology and strategy to build brands that connect, engage, and grow.</span>
+          <span className="block whitespace-nowrap">We bring together creativity, technology,</span>
+          <span className="block whitespace-nowrap">and strategy to build brands that connect,</span>
+          <span className="block whitespace-nowrap">engage and grow.</span>
         </motion.p>
 
         <motion.div

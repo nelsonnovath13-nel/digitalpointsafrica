@@ -131,8 +131,9 @@ export default function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
-      <div className={`flex h-[60px] w-full items-center gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-0 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
-        <Link to="/" className="group flex shrink-0 items-center lg:justify-self-end lg:mr-6 xl:mr-10" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
+      <div className={`h-[60px] w-full transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
+      <div className="mx-auto flex h-[60px] w-full max-w-[1500px] items-center gap-5 px-6 sm:px-8 lg:px-10 xl:px-16">
+        <Link to="/" className="group flex shrink-0 items-center lg:ml-8 xl:ml-14" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
         <AnimatePresence>
           {activeDesktopMenu !== null && megaMenus[activeDesktopMenu] && (
             <motion.div
@@ -145,7 +146,7 @@ export default function Header() {
             />
           )}
         </AnimatePresence>
-        <nav className="relative z-[80] hidden items-center rounded-[22px] px-5 py-1.5 lg:flex" aria-label="Main navigation">
+        <nav className="z-[80] hidden items-center rounded-[22px] px-5 py-1.5 lg:flex lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2" aria-label="Main navigation">
           {links.filter((item) => item.label !== "CONTACT").map((item) => {
             const active = isActive(item); const isHovered = hovered === item.label;
             const responsiveColor = isHovered || active ? item.accent : scrolled ? "#ffffff" : "#ffffff";
@@ -249,6 +250,7 @@ export default function Header() {
           </Link>
           <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-white/30 bg-black/15 text-white backdrop-blur-md lg:hidden"><span className="relative block h-3.5 w-5"><span className={`absolute left-0 top-0 h-px w-5 bg-current transition ${open ? "translate-y-[6px] rotate-45" : ""}`} /><span className={`absolute bottom-0 left-0 h-px w-5 bg-current transition ${open ? "-translate-y-[6px] -rotate-45" : ""}`} /></span></button>
         </div>
+      </div>
       </div>
 
       <AnimatePresence>
