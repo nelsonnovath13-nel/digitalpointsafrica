@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import HeroImageColumns, { HeroImageStripMobile } from "./HeroImageColumns";
 
 const rotatingWords = [
-  "AI",
-  "Technology",
-  "Branding",
-  "Design",
-  "Marketing",
+  "ai",
+  "technology",
+  "branding",
+  "design",
+  "marketing",
 ];
 
 const TYPE_SPEED_MS = 95;
@@ -296,8 +296,8 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[1.55rem] font-normal leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
-          <span className="block whitespace-nowrap">Powering brands</span>
-          <span className="relative block min-h-[1.08em] whitespace-nowrap text-white" aria-live="polite" aria-label={rotatingWords[wordIndex]}>
+          <span className="block whitespace-nowrap" style={{ fontSize: "1.14em" }}>Powering brands</span>
+          <span className="relative block min-h-[1.08em] whitespace-nowrap text-white" style={{ fontSize: "0.8em" }} aria-live="polite" aria-label={rotatingWords[wordIndex]}>
             with{" "}
             <span className="inline-flex items-baseline font-extrabold">
               {typedWord}
