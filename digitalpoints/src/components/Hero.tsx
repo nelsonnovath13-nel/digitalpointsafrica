@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import HeroImageColumns, { HeroImageStripMobile } from "./HeroImageColumns";
 
 const rotatingWords = [
-  "ai technology",
-  "branding",
-  "design",
-  "marketing",
+  "AI",
+  "Technology",
+  "Branding",
+  "Design",
+  "Marketing",
 ];
 
 const TYPE_SPEED_MS = 95;
@@ -288,15 +289,15 @@ export default function Hero() {
         </AnimatePresence>
       </div>
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-14 text-center sm:px-6 sm:pb-8 lg:items-stretch lg:overflow-hidden lg:px-10 lg:pb-0 lg:pt-10 lg:text-left xl:px-16">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1500px] flex-col items-center justify-center px-5 pb-6 pt-24 text-center sm:px-6 sm:pb-8 sm:pt-20 lg:items-stretch lg:overflow-hidden lg:px-10 lg:pb-0 lg:pt-10 lg:text-left xl:px-16">
         <div className="flex flex-col items-center lg:relative lg:z-10 lg:ml-8 lg:max-w-[540px] lg:items-start xl:ml-14 xl:max-w-[600px]">
         <motion.h1
           initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: shouldReduceMotion ? 0.1 : 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[1.55rem] font-normal leading-[1.08] tracking-[-0.035em] text-white sm:text-[2rem] md:text-[2.35rem] lg:text-[2.8rem] xl:text-[3.1rem]">
+          className="font-display text-[1.75rem] font-normal leading-[1.08] tracking-[-0.035em] text-white sm:text-[2.3rem] md:text-[2.7rem] lg:text-[3.2rem] xl:text-[3.6rem]">
           <span className="block whitespace-nowrap" style={{ fontSize: "1.14em" }}>Powering brands</span>
-          <span className="relative block min-h-[1.08em] whitespace-nowrap text-white" style={{ fontSize: "0.8em" }} aria-live="polite" aria-label={rotatingWords[wordIndex]}>
+          <span className="relative block min-h-[1.08em] whitespace-nowrap text-white" style={{ fontSize: "0.86em" }} aria-live="polite" aria-label={rotatingWords[wordIndex]}>
             with{" "}
             <span className="inline-flex items-baseline font-extrabold">
               {typedWord}
