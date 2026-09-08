@@ -131,8 +131,8 @@ export default function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
-      <div className={`flex h-[60px] w-full items-center gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:gap-10 lg:px-5 xl:gap-14 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
-        <Link to="/" className="group flex shrink-0 items-center" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
+      <div className={`flex h-[60px] w-full items-center gap-5 px-6 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 sm:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-0 lg:px-5 xl:px-6 ${scrolled ? "border-b border-white/10 bg-[#050b1f]/82 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md" : "border-b border-transparent bg-transparent shadow-none"}`}>
+        <Link to="/" className="group flex shrink-0 items-center lg:justify-self-end lg:mr-6 xl:mr-10" onClick={closeMobileMenu} aria-label="Digital Points Home"><DigitalPointsLogo /></Link>
         <AnimatePresence>
           {activeDesktopMenu !== null && megaMenus[activeDesktopMenu] && (
             <motion.div
