@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import HeroImageColumns, { HeroImageStripMobile } from "./HeroImageColumns";
 
 const rotatingWords = [
-  "ai",
-  "technology",
+  "ai technology",
   "branding",
   "design",
   "marketing",
