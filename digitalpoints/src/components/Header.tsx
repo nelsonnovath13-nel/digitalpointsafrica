@@ -24,7 +24,7 @@ type MegaCategory = { title: string; route: string; items: string[] };
 const servicesMenu: MegaCategory[] = [
   {
     title: "Digital Marketing",
-    route: "/services",
+    route: "/digital-marketing",
     items: ["Social Media", "SEO", "Paid Ads", "Content Marketing", "Email Marketing", "Digital Campaigns", "Analytics & Reporting"],
   },
   {
@@ -53,7 +53,7 @@ const printMenuItems: MegaCategory[] = [
 ];
 
 const marketingMenu: MegaCategory[] = [
-  { title: "Digital Marketing", route: "/services", items: ["Social Media Marketing", "Social Media Management", "Paid Advertising", "Content Marketing"] },
+  { title: "Digital Marketing", route: "/digital-marketing", items: ["Social Media Marketing", "Social Media Management", "Paid Advertising", "Content Marketing"] },
   { title: "Social Media", route: "/services", items: ["Instagram", "Facebook", "TikTok", "LinkedIn", "Content Marketing"] },
   { title: "Campaign Content", route: "/services", items: ["Promotional Content", "Copywriting", "Creative Campaigns"] },
   { title: "Advertising", route: "/services", items: ["Meta Ads", "Google Ads", "Online Advertising Campaigns"] },

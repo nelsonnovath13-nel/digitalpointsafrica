@@ -19,8 +19,8 @@ const pillars: Pillar[] = [
     description:
       "Marketing systems built around one goal — turning attention into paying customers, not just followers. We plan the strategy, run the platforms, and report on what actually moved the needle.",
     items: ["Social Media", "SEO", "Paid Ads", "Content Marketing", "Email Marketing", "Digital Campaigns", "Analytics & Reporting"],
-    ctaLabel: "Request a Marketing Quote",
-    ctaHref: "/quotation",
+    ctaLabel: "View Digital Marketing",
+    ctaHref: "/digital-marketing",
   },
   {
     id: "web-app-systems",

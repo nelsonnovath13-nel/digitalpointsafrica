@@ -7,6 +7,7 @@ import { FloatingChatWidget, GetInTouchTab } from "./components/FloatingSupport"
 import Home from "./pages/Home";
 
 const Services = lazy(() => import("./pages/Services"));
+const DigitalMarketing = lazy(() => import("./pages/DigitalMarketing"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const CaseStudies = lazy(() => import("./pages/CaseStudies"));
 const About = lazy(() => import("./pages/About"));
@@ -40,6 +41,7 @@ function AppShell() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/digital-marketing" element={<DigitalMarketing />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/case-studies" element={<CaseStudies />} />
           <Route path="/training" element={<Training />} />
