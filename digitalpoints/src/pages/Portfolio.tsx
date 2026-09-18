@@ -101,13 +101,21 @@ export default function Portfolio() {
 
   useEffect(() => {
     let cancelled = false;
+    const timeoutError = new Error("timeout");
+
     async function load() {
       try {
-        const { data, error } = await supabase
+        const query = supabase
           .from("portfolio_projects")
           .select("id, title, slug, category, summary, cover_image_url")
           .eq("is_published", true)
           .order("display_order", { ascending: true });
+
+        const timeout = new Promise<never>((_, reject) => {
+          window.setTimeout(() => reject(timeoutError), 8000);
+        });
+
+        const { data, error } = await Promise.race([query, timeout]);
         if (cancelled) return;
         if (error) {
           setLoadError(true);
