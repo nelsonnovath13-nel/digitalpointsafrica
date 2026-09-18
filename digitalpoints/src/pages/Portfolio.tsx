@@ -25,6 +25,57 @@ const CATEGORY_FILTERS = [
 
 const FALLBACK_TONE = "linear-gradient(160deg,#0eab8f,#07090a)";
 
+const PLACEHOLDER_PROJECTS: PortfolioProject[] = [
+  {
+    id: "placeholder-website_design",
+    title: "Corporate Website Redesign",
+    slug: "placeholder-website-design",
+    category: "website_design",
+    summary: "A modern, fast website built to turn visitors into customers.",
+    cover_image_url: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=900&auto=format&fit=crop",
+  },
+  {
+    id: "placeholder-business_systems",
+    title: "Business Management System",
+    slug: "placeholder-business-systems",
+    category: "business_systems",
+    summary: "A custom system built to run day-to-day operations in one place.",
+    cover_image_url: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?q=80&w=900&auto=format&fit=crop",
+  },
+  {
+    id: "placeholder-branding_design",
+    title: "Brand Identity Refresh",
+    slug: "placeholder-branding-design",
+    category: "branding_design",
+    summary: "A complete visual identity — logo, colors, and brand guidelines.",
+    cover_image_url: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=900&auto=format&fit=crop",
+  },
+  {
+    id: "placeholder-photography",
+    title: "Product & Event Photography",
+    slug: "placeholder-photography",
+    category: "photography",
+    summary: "Clean, professional photography for products and live events.",
+    cover_image_url: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900&auto=format&fit=crop",
+  },
+  {
+    id: "placeholder-videography",
+    title: "Brand Story Video",
+    slug: "placeholder-videography",
+    category: "videography",
+    summary: "A short brand film built to communicate who you are, clearly.",
+    cover_image_url: "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?q=80&w=900&auto=format&fit=crop",
+  },
+  {
+    id: "placeholder-live_streaming",
+    title: "Conference Live Stream",
+    slug: "placeholder-live-streaming",
+    category: "live_streaming",
+    summary: "Multi-camera live streaming for a corporate conference.",
+    cover_image_url: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=900&auto=format&fit=crop",
+  },
+];
+
 function serviceLabel(category: string): string {
   return SERVICE_CATEGORIES.find((s) => s.value === category)?.label ?? category;
 }
@@ -75,7 +126,11 @@ export default function Portfolio() {
     };
   }, []);
 
-  const shown = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const realShown = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const placeholderShown =
+    filter === "All" ? PLACEHOLDER_PROJECTS : PLACEHOLDER_PROJECTS.filter((p) => p.category === filter);
+  const usingPlaceholders = !loading && !loadError && realShown.length === 0;
+  const shown = usingPlaceholders ? placeholderShown : realShown;
   const activeLabel = CATEGORY_FILTERS.find((c) => c.value === filter)?.label ?? filter;
 
   return (
@@ -174,7 +229,13 @@ export default function Portfolio() {
           )}
 
           {!loading && !loadError && shown.length > 0 && (
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <>
+              {usingPlaceholders && (
+                <p className="mx-auto mt-10 max-w-lg text-center text-xs text-ink-950/40">
+                  Sample projects shown below while we publish our full portfolio.
+                </p>
+              )}
+              <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {shown.map((p) => (
                 <motion.div
                   key={p.id}
@@ -194,6 +255,11 @@ export default function Portfolio() {
                   >
                     <span className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-point-400 to-accent-500 transition-transform duration-300 group-hover:scale-x-100" />
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.14),transparent_55%)]" />
+                    {usingPlaceholders && (
+                      <span className="absolute right-3 top-3 z-10 rounded-full bg-ink-950/60 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+                        Sample
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-1 flex-col p-6">
@@ -210,7 +276,8 @@ export default function Portfolio() {
                   </div>
                 </motion.div>
               ))}
-            </div>
+              </div>
+            </>
           )}
         </div>
       </div>
